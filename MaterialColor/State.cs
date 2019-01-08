@@ -3,18 +3,13 @@
     using JetBrains.Annotations;
     using MaterialColor.Data;
     using MaterialColor.IO;
-    using MaterialColor.IO.Json;
-    using ONI_Common.Json;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using UnityEngine;
-    using Logger = ONI_Common.IO.Logger;
 
     public static class State
     {
-        [NotNull]
-        private static readonly JsonFileLoader JsonLoader = new JsonFileLoader(new JsonManager(), Logger);
-
         // TODO: load from file instead
         [NotNull]
         public static readonly List<string> TileNames = new List<string>
@@ -27,14 +22,13 @@
             "GasPermeableMembrane",
             "TilePOI",
             "PlasticTile",
-            "MetalTile"
+            "MetalTile",
+            "CarpetTile",
         };
 
         private static MaterialColorState _configuratorState;
 
         private static Dictionary<SimHashes, ElementColor> _materialColors;
-
-        private static Logger _logger;
 
         [NotNull]
         public static MaterialColorState ConfiguratorState
@@ -47,7 +41,8 @@
                 }
 
                 MaterialColorState state;
-                JsonLoader.TryLoadConfiguratorState(out state);
+
+                state = JsonConvert.DeserializeObject<MaterialColorState>(Paths.MaterialColorStatePath);
 
                 ConfiguratorState = state;
 
@@ -64,8 +59,8 @@
                 }
                 catch (Exception e)
                 {
-                    State.Logger.Log("Error while creating new TextFilter object");
-                    State.Logger.Log(e);
+                    Debug.Log("Error while creating new TextFilter object");
+                    Debug.Log(e);
                 }
 			}
 		}
@@ -82,7 +77,7 @@
                     return _materialColors;
                 }
 
-                JsonLoader.TryLoadElementColors(out _materialColors);
+                _materialColors = JsonConvert.DeserializeObject<Dictionary<SimHashes, ElementColor>>(Paths.ElementColorInfosDirectory);
 
                 return _materialColors;
             }
@@ -93,31 +88,30 @@
 			}
 		}
 
-        [NotNull]
-        public static Logger Logger => _logger ?? (_logger = new ONI_Common.IO.Logger(Paths.ModsDirectory+ System.IO.Path.DirectorySeparatorChar + "_Logs" + System.IO.Path.DirectorySeparatorChar + Paths.MaterialColorLogFileName));
-
         public static bool TryReloadConfiguratorState()
         {
-            if (!JsonLoader.TryLoadConfiguratorState(out MaterialColorState state))
+            try
+            {
+                ConfiguratorState = JsonConvert.DeserializeObject<MaterialColorState>(Paths.MaterialConfigPath);
+                return true;
+            }
+            catch
             {
                 return false;
             }
-
-            ConfiguratorState = state;
-
-            return true;
         }
 
         public static bool TryReloadElementColorInfos()
         {
-            if (!JsonLoader.TryLoadElementColors(out Dictionary<SimHashes, ElementColor> colorInfos))
+            try
+            {
+                ElementColors = JsonConvert.DeserializeObject<Dictionary<SimHashes, ElementColor>>(Paths.ElementColorInfosDirectory);
+                return true;
+            }
+            catch
             {
                 return false;
             }
-
-            ElementColors = colorInfos;
-
-            return true;
         }
     }
 }

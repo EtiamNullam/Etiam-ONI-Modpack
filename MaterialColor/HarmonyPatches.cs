@@ -3,8 +3,6 @@
     using Harmony;
     using Extensions;
     using Helpers;
-    using ONI_Common.Core;
-    using ONI_Common.IO;
     using Rendering;
     using System;
     using System.Collections.Generic;
@@ -81,8 +79,8 @@
                 }
                 catch (Exception e)
                 {
-                    State.Logger.Log("EnterCell failed.");
-                    State.Logger.Log(e);
+                    Debug.Log("EnterCell failed.");
+                    Debug.Log(e);
                 }
             }
         }
@@ -113,7 +111,7 @@
 
                 if (State.ConfiguratorState.LogElementsData)
                 {
-                    State.Logger.Log("Element List:");
+                    Debug.Log("Element List:");
                     var values = Enum.GetNames(typeof(SimHashes));
                     Array.Sort(values);
                     string elementsLog = "";
@@ -121,7 +119,7 @@
                     {
                         elementsLog += Environment.NewLine+name;
                     }
-                    State.Logger.Log(elementsLog);
+                    Debug.Log(elementsLog);
                 }
 
                 try
@@ -140,7 +138,7 @@
                 }
                 catch (Exception e)
                 {
-                    State.Logger.Log("Keybindings failed:\n" + e);
+                    Debug.Log("Keybindings failed:\n" + e);
                     throw;
                 }
 
@@ -188,9 +186,20 @@
 				*/
 			}
 
+            // TODO: extract
             private static Sprite GetUISprite()
             {
-                return FileManager.LoadSpriteFromFile(Paths.MaterialColorOverlayIconPath, 256, 256);
+                var width = 256;
+                var height = 256;
+
+                byte[] bytes = File.ReadAllBytes("Mods" + Path.DirectorySeparatorChar + "MaterialColor" + Path.DirectorySeparatorChar + "Sprites" + "overlay_materialColor.png");
+                Texture2D texture = new Texture2D(width, height, TextureFormat.RGB24, false)
+                {
+                    filterMode = FilterMode.Trilinear
+                };
+                ImageConversion.LoadImage(texture, bytes);
+
+                return Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.0f), 1.0f);
             }
         }
 
@@ -213,8 +222,8 @@
                 }
                 catch (Exception e)
                 {
-                    State.Logger.Log("OverlayChangedEntry failed");
-                    State.Logger.Log(e);
+                    Debug.Log("OverlayChangedEntry failed");
+                    Debug.Log(e);
                 }
             }
         }
@@ -271,8 +280,8 @@
                 }
                 catch (Exception e)
                 {
-                    State.Logger.Log("EnterToggle failed.");
-                    State.Logger.Log(e);
+                    Debug.Log("EnterToggle failed.");
+                    Debug.Log(e);
                     return true;
                 }
             }
@@ -297,8 +306,8 @@
                 }
                 catch (Exception e)
                 {
-                    State.Logger.Log("MaterialColor init failed");
-                    State.Logger.Log(e);
+                    Debug.Log("MaterialColor init failed");
+                    Debug.Log(e);
                 }
             }
         }

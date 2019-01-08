@@ -49,8 +49,8 @@ namespace MaterialColor
             }
             catch (Exception e)
             {
-                State.Logger.Log("Error while filtering buildings");
-                State.Logger.Log(e);
+                Debug.Log("Error while filtering buildings");
+                Debug.Log(e);
             }
 
             ApplyColorToBuilding(building, color);
@@ -116,8 +116,8 @@ namespace MaterialColor
             }
             catch (Exception e)
             {
-                State.Logger.Log("Error while getting cell color");
-                State.Logger.Log(e);
+                Debug.Log("Error while getting cell color");
+                Debug.Log(e);
             }
         }
 
@@ -128,12 +128,12 @@ namespace MaterialColor
                 World.Instance.blockTileRenderer.Rebuild(ObjectLayer.FoundationTile, i);
             }
 
-            State.Logger.Log("All tiles rebuilt.");
+            Debug.Log("All tiles rebuilt.");
         }
 
         private static void UpdateBuildingsColors()
         {
-            State.Logger.Log($"Trying to update {Components.BuildingCompletes.Count} buildings.");
+            Debug.Log($"Trying to update {Components.BuildingCompletes.Count} buildings.");
 
             try
             {
@@ -142,12 +142,12 @@ namespace MaterialColor
                     UpdateBuildingColor(building);
                 }
 
-                State.Logger.Log("Buildings updated successfully.");
+                Debug.Log("Buildings updated successfully.");
             }
             catch (Exception e)
             {
-                State.Logger.Log("Buildings colors update failed.");
-                State.Logger.Log(e);
+                Debug.Log("Buildings colors update failed.");
+                Debug.Log(e);
             }
         }
     }

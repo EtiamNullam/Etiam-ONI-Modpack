@@ -1,5 +1,4 @@
-﻿using ONI_Common.IO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +10,9 @@ namespace MaterialColor.IO
     {
         private bool _configuratorStateChanged;
         private bool _elementColorInfosChanged;
+
+        FileSystemWatcher colorInfosWatcher;
+        FileSystemWatcher stateWatcher;
 
         public ConfigWatcher()
         {
@@ -26,22 +28,10 @@ namespace MaterialColor.IO
             }
         }
 
-        // TODO: too many parameters are needed for stopping file watch, fix oni-common
         public void Dispose()
         {
-            FileChangeNotifier.StopFileWatch
-            (
-                Paths.MaterialColorStateFileName,
-                Paths.MaterialConfigPath,
-                OnMaterialStateChanged
-            );
-
-            FileChangeNotifier.StopFileWatch
-            (
-                "*.json",
-                Paths.ElementColorInfosDirectory,
-                OnElementColorsInfosChanged
-            );
+            this.stateWatcher.Dispose();
+            this.colorInfosWatcher.Dispose();
         }
 
         private void OnMaterialStateChanged(object sender, FileSystemEventArgs e)
@@ -68,8 +58,8 @@ namespace MaterialColor.IO
             }
             catch (Exception ex)
             {
-                State.Logger.Log("ReloadElementColorInfos failed.");
-                State.Logger.Log(ex);
+                Debug.Log("ReloadElementColorInfos failed.");
+                Debug.Log(ex);
             }
 
             if (reloadColorInfosResult)
@@ -78,12 +68,12 @@ namespace MaterialColor.IO
 
                 const string message = "Element color infos changed.";
 
-                State.Logger.Log(message);
+                Debug.Log(message);
                 Debug.LogError(message);
             }
             else
             {
-                State.Logger.Log("Reload element color infos failed");
+                Debug.Log("Reload element color infos failed");
             }
         }
 
@@ -93,24 +83,16 @@ namespace MaterialColor.IO
 
             try
             {
-                FileChangeNotifier.StartFileWatch
-                (
-                    jsonFilter,
-                    Paths.ElementColorInfosDirectory,
-                    OnElementColorsInfosChanged
-                );
+                this.colorInfosWatcher = new FileSystemWatcher(Paths.ElementColorInfosDirectory, jsonFilter);
+                this.stateWatcher = new FileSystemWatcher(Paths.MaterialConfigPath, Paths.MaterialColorStateFileName);
 
-                FileChangeNotifier.StartFileWatch
-                (
-                    Paths.MaterialColorStateFileName,
-                    Paths.MaterialConfigPath,
-                    OnMaterialStateChanged
-                );
+                this.colorInfosWatcher.Changed += this.OnElementColorsInfosChanged;
+                this.stateWatcher.Changed += this.OnMaterialStateChanged;
             }
             catch (Exception e)
             {
-                State.Logger.Log("SubscribeToFileChangeNotifier failed");
-                State.Logger.Log(e);
+                Debug.Log("SubscribeToFileChangeNotifier failed");
+                Debug.Log(e);
             }
         }
     }
