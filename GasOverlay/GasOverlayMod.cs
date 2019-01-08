@@ -109,7 +109,7 @@ namespace GasOverlay
                     Mathf.Lerp(oldColor.H, targetColor.H, step),
                     Mathf.Lerp(oldColor.S, targetColor.S, step),
                     Mathf.Lerp(oldColor.V, targetColor.V, step),
-                    Mathf.Lerp(oldColor.A, targetColor.A, step)
+                    targetColor.A
                 );
             }
 
