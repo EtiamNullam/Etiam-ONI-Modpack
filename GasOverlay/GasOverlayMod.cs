@@ -102,13 +102,11 @@ namespace GasOverlay
 
             private static ColorHSV TransitToNewColor(ColorHSV oldColor, ColorHSV targetColor)
             {
-                var step = 0.025f;
-
                 return new ColorHSV
                 (
-                    Mathf.Lerp(oldColor.H, targetColor.H, step),
-                    Mathf.Lerp(oldColor.S, targetColor.S, step),
-                    Mathf.Lerp(oldColor.V, targetColor.V, step),
+                    Mathf.Lerp(oldColor.H, targetColor.H, Config.TransitionStep),
+                    Mathf.Lerp(oldColor.S, targetColor.S, Config.TransitionStep),
+                    Mathf.Lerp(oldColor.V, targetColor.V, Config.TransitionStep),
                     targetColor.A
                 );
             }
