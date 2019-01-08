@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using GasOverlay.HSV;
 using Harmony;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace GasOverlay
@@ -8,14 +10,29 @@ namespace GasOverlay
     public static class GasOverlayMod
     {
         public static ColorHSV?[] LastColors;
-
         private static readonly Color NotGasColor = new Color(0.6f, 0.6f, 0.6f);
+        public static Config Config = new Config();
+
+        [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
+        public static class SplashMessageScreen_OnSpawn
+        {
+            public static void Postfix()
+            {
+                try
+                {
+                    var path = "Mods" + Path.DirectorySeparatorChar + "GasOverlay" + Path.DirectorySeparatorChar + "Config";
+                    Config = JsonConvert.DeserializeObject<Config>(path);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log("GasOverlay: Error while loading config: " + e);
+                }
+            }
+        }
 
         [HarmonyPatch(typeof(SimDebugView), "GetOxygenMapColour")]
         public static class SimDebugView_GetOxygenMapColour
         {
-            public const float EarPopFloat = 5;
-
             public static bool Prefix(int cell, ref Color __result)
             {
                 float maxMass = Config.GasPressureEnd;
@@ -135,7 +152,7 @@ namespace GasOverlay
 
             private static ColorHSV MarkEarDrumPopPressure(ColorHSV color, float mass, SimHashes elementID)
             {
-                if (mass > EarPopFloat)
+                if (mass > Config.EarPopFloat)
                 {
                     if (elementID == SimHashes.CarbonDioxide)
                     {

@@ -1,11 +1,12 @@
 ﻿namespace GasOverlay
 {
-    public static class Config
+    public class Config
     {
-        public static float GasPressureEnd = 2.5f;
-        public static float MinimumGasColorIntensity { get; set; } = 0.25f;
-        public static bool ShowEarDrumPopMarker { get; set; } = true;
-		public static float FactorValueHSVGases { get; set; } = 0.5f;
-		public static float FactorValueHSVCarbonDioxide { get; set; } = 2f;
-	}
+        public float GasPressureEnd = 2.5f;
+        public float MinimumGasColorIntensity { get; set; } = 0.25f;
+        public bool ShowEarDrumPopMarker { get; set; } = true;
+		public float FactorValueHSVGases { get; set; } = 0.5f;
+		public float FactorValueHSVCarbonDioxide { get; set; } = 2f;
+        public float EarPopFloat { get; set; } = 5;
+    }
 }
