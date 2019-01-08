@@ -1,0 +1,12 @@
+{
+  "Enabled": true,
+  "LogElementsData": false,
+  "ShowMissingElementColorInfos": false,
+  "TypeFilterInfo": {
+    "Inclusive": false,					// false to exclude buildings
+		"ExactMatch": false,				// true to match to exact bulding id
+    "Rules": [
+			// "Battery"
+		]
+  }
+}
