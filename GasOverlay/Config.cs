@@ -1,6 +1,6 @@
-﻿namespace ImprovedGasColourMod
+﻿namespace GasOverlay
 {
-    public static class ImprovedGasOverlayConfig
+    public static class Config
     {
         public static float GasPressureEnd = 2.5f;
         public static float MinimumGasColorIntensity { get; set; } = 0.25f;

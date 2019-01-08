@@ -49,7 +49,7 @@
  * */
 
 // ReSharper disable All
-namespace ImprovedGasColourMod
+namespace GasOverlay.HSV
 {
     using UnityEngine;
 

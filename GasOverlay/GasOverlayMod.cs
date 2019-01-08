@@ -1,23 +1,24 @@
 ﻿using System;
+using GasOverlay.HSV;
 using Harmony;
 using UnityEngine;
 
-namespace ImprovedGasColourMod
+namespace GasOverlay
 {
-    public static class HarmonyPatches
+    public static class GasOverlayMod
     {
         public static ColorHSV?[] LastColors;
 
         private static readonly Color NotGasColor = new Color(0.6f, 0.6f, 0.6f);
 
         [HarmonyPatch(typeof(SimDebugView), "GetOxygenMapColour")]
-        public static class ImprovedGasOverlayMod
+        public static class SimDebugView_GetOxygenMapColour
         {
             public const float EarPopFloat = 5;
 
             public static bool Prefix(int cell, ref Color __result)
             {
-                float maxMass = ImprovedGasOverlayConfig.GasPressureEnd;
+                float maxMass = Config.GasPressureEnd;
 
                 Element element = Grid.Element[cell];
 
@@ -72,7 +73,7 @@ namespace ImprovedGasColourMod
 
                 colorHSV = ScaleColorToPressure(colorHSV, pressureFraction, elementID);
 				
-                if (ImprovedGasOverlayConfig.ShowEarDrumPopMarker)
+                if (Config.ShowEarDrumPopMarker)
                 {
                     colorHSV = MarkEarDrumPopPressure(colorHSV, mass, elementID);
                 }
@@ -99,12 +100,12 @@ namespace ImprovedGasColourMod
             {
                 if (elementID == SimHashes.CarbonDioxide)
                 {
-					color.V *= (1 - fraction) * ImprovedGasOverlayConfig.FactorValueHSVCarbonDioxide;
+					color.V *= (1 - fraction) * Config.FactorValueHSVCarbonDioxide;
 				}
                 else
                 {
                     color.S *= fraction * 1.25f;
-					color.V -= (1 - fraction) * ImprovedGasOverlayConfig.FactorValueHSVGases;
+					color.V -= (1 - fraction) * Config.FactorValueHSVGases;
 				}
 
                 return color;
@@ -122,9 +123,9 @@ namespace ImprovedGasColourMod
                 return overlayColor;
             }
 
-            private static float GetPressureFraction(float mass, float maxMass)
+            public static float GetPressureFraction(float mass, float maxMass)
             {
-                float minFraction = ImprovedGasOverlayConfig.MinimumGasColorIntensity;
+                float minFraction = Config.MinimumGasColorIntensity;
                 float fraction = mass / maxMass;
 
                 fraction = Mathf.Lerp(minFraction, 1, fraction);
