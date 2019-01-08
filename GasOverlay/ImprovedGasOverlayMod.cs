@@ -6,7 +6,7 @@ namespace ImprovedGasColourMod
 {
     public static class HarmonyPatches
     {
-        public static ColorHSV[] LastColors;
+        public static ColorHSV?[] LastColors;
 
         private static readonly Color NotGasColor = new Color(0.6f, 0.6f, 0.6f);
 
@@ -44,7 +44,14 @@ namespace ImprovedGasColourMod
 
                 try
                 {
-                    LastColors[cell] = __result = TransitToNewColor(LastColors[cell], newGasColor);
+                    if (LastColors[cell].HasValue)
+                    {
+                        LastColors[cell] = __result = TransitToNewColor(LastColors[cell].Value, newGasColor);
+                    }
+                    else
+                    {
+                        LastColors[cell] = __result = newGasColor;
+                    }
                 }
                 catch (ArgumentOutOfRangeException)
                 {
@@ -56,7 +63,7 @@ namespace ImprovedGasColourMod
 
             private static void ResetLastColors()
             {
-                LastColors = new ColorHSV[Grid.CellCount];
+                LastColors = new ColorHSV?[Grid.CellCount];
             }
 
             private static ColorHSV GetGasColor(SimHashes elementID, Color primaryColor, float pressureFraction, float mass)
@@ -77,7 +84,7 @@ namespace ImprovedGasColourMod
 
             private static ColorHSV TransitToNewColor(ColorHSV oldColor, ColorHSV targetColor)
             {
-                var step = 0.075f;
+                var step = 0.025f;
 
                 return new ColorHSV
                 (
