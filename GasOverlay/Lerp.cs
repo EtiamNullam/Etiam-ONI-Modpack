@@ -9,40 +9,16 @@ namespace GasOverlay
 {
     public static class Lerp
     {
-        public static ColorHSV HSV(ColorHSV a, ColorHSV b, float t)
+        public static ColorHSV HSV(ColorHSV a, ColorHSV b, float factor)
         {
-            // Hue interpolation
-            float h;
-            float d = b.H - a.H;
-            if (a.H > b.H)
-            {
-                // Swap (a.h, b.h)
-                var h3 = b.H;
-                b.H = a.H;
-                a.H = h3;
+            var resultVector = Vector3.Lerp(new Vector3(a.H, a.S, a.V), new Vector3(b.H, b.S, b.V), factor);
 
-                d = -d;
-                t = 1 - t;
-            }
-
-            if (d > 0.5) // 180deg
-            {
-                a.H = a.H + 1; // 360deg
-                h = (a.H + t * (b.H - a.H)) % 1; // 360deg
-            }
-            else //if (d <= 0.5) // 180deg
-            {
-                h = a.H + t * d;
-
-            }
-
-            // Interpolates the rest
             return new ColorHSV
             (
-                h,          // H
-                a.S + t * (b.S - a.S),  // S
-                a.V + t * (b.V - a.V),  // V
-                a.A + t * (b.A - a.A)   // A
+                resultVector.x,
+                resultVector.y,
+                resultVector.z,
+                1
             );
         }
     }
