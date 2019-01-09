@@ -11,7 +11,7 @@ namespace GasOverlay
     {
         public static ColorHSV?[] LastColors;
         private static readonly Color NotGasColor = new Color(0.6f, 0.6f, 0.6f);
-        public static Config Config = new Config();
+        private static Config Config = new Config();
 
         [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
         public static class SplashMessageScreen_OnSpawn
@@ -51,25 +51,11 @@ namespace GasOverlay
         {
             public static bool Prefix(int cell, ref Color __result)
             {
-                float maxMass = Config.GasPressureEnd;
-
                 Element element = Grid.Element[cell];
 
-                ColorHSV newGasColor;
-
-                if (!element.IsGas)
-                {
-                    newGasColor = NotGasColor;
-                }
-                else
-                {
-                    float mass = Grid.Mass[cell];
-                    SimHashes elementID = element.id;
-                    Color primaryColor = GetCellOverlayColor(cell);
-                    float pressureFraction = GetPressureFraction(mass, maxMass);
-
-                    newGasColor = GetGasColor(elementID, primaryColor, pressureFraction, mass);
-                }
+                ColorHSV newGasColor = !element.IsGas
+                    ? newGasColor = NotGasColor
+                    : newGasColor = GetGasColor(cell, element);
 
                 if (LastColors == null)
                 {
@@ -78,14 +64,11 @@ namespace GasOverlay
 
                 try
                 {
-                    if (LastColors[cell].HasValue)
-                    {
-                        LastColors[cell] = __result = TransitToNewColor(LastColors[cell].Value, newGasColor);
-                    }
-                    else
-                    {
-                        LastColors[cell] = __result = newGasColor;
-                    }
+                    __result = LastColors[cell].HasValue
+                        ? Lerp.HSV(LastColors[cell].Value, newGasColor, Config.Interpolation)
+                        : newGasColor;
+
+                    LastColors[cell] = __result;
                 }
                 catch (ArgumentOutOfRangeException)
                 {
@@ -100,8 +83,14 @@ namespace GasOverlay
                 LastColors = new ColorHSV?[Grid.CellCount];
             }
 
-            private static ColorHSV GetGasColor(SimHashes elementID, Color primaryColor, float pressureFraction, float mass)
+            private static ColorHSV GetGasColor(int cell, Element element)
             {
+                SimHashes elementID = element.id;
+                Color primaryColor = GetCellOverlayColor(cell);
+                float mass = Grid.Mass[cell];
+                float maxMass = Config.GasPressureEnd;
+                float pressureFraction = GetPressureFraction(mass, maxMass);
+
                 ColorHSV colorHSV = primaryColor.ToHSV();
 
                 colorHSV = ScaleColorToPressure(colorHSV, pressureFraction, elementID);
@@ -114,17 +103,6 @@ namespace GasOverlay
                 colorHSV = colorHSV.Clamp();
 
                 return colorHSV;
-            }
-
-            private static ColorHSV TransitToNewColor(ColorHSV oldColor, ColorHSV targetColor)
-            {
-                return new ColorHSV
-                (
-                    Mathf.Lerp(oldColor.H, targetColor.H, Config.TransitionSteps[0]),
-                    Mathf.Lerp(oldColor.S, targetColor.S, Config.TransitionSteps[1]),
-                    Mathf.Lerp(oldColor.V, targetColor.V, Config.TransitionSteps[2]),
-                    targetColor.A
-                );
             }
 
             private static ColorHSV ScaleColorToPressure(ColorHSV color, float fraction, SimHashes elementID)

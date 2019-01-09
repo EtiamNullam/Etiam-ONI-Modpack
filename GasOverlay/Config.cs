@@ -12,11 +12,6 @@
         /// <summary>
         /// 0-1, where 1 means instant and 0 means no change.
         /// </summary>
-        public float[] TransitionSteps = new float[]
-        {
-            0.04f,
-            0.04f,
-            0.04f
-        };
+        public float Interpolation = 0.08f;
     }
 }
