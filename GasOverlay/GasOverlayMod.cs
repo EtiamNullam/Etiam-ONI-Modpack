@@ -16,17 +16,33 @@ namespace GasOverlay
         [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
         public static class SplashMessageScreen_OnSpawn
         {
+            public static readonly string directoryPath = "Mods" + Path.DirectorySeparatorChar + "GasOverlay";
+            public static readonly string filePath = directoryPath + Path.DirectorySeparatorChar + "Config.json";
+
             public static void Postfix()
             {
                 try
                 {
-                    var path = "Mods" + Path.DirectorySeparatorChar + "GasOverlay" + Path.DirectorySeparatorChar + "Config";
-                    Config = JsonConvert.DeserializeObject<Config>(path);
+                    ReloadConfig();
+                    SetWatcher();
                 }
                 catch (Exception e)
                 {
                     Debug.Log("GasOverlay: Error while loading config: " + e);
                 }
+            }
+
+            private static void ReloadConfig()
+            {
+                Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(filePath));
+                Debug.Log("GasOverlay: config reloaded");
+            }
+
+            private static void SetWatcher()
+            {
+                var watcher = new FileSystemWatcher(directoryPath, "*.json");
+                watcher.Changed += (o, e) => ReloadConfig();
+                watcher.EnableRaisingEvents = true;
             }
         }
 
@@ -104,9 +120,9 @@ namespace GasOverlay
             {
                 return new ColorHSV
                 (
-                    Mathf.Lerp(oldColor.H, targetColor.H, Config.TransitionStep),
-                    Mathf.Lerp(oldColor.S, targetColor.S, Config.TransitionStep),
-                    Mathf.Lerp(oldColor.V, targetColor.V, Config.TransitionStep),
+                    Mathf.Lerp(oldColor.H, targetColor.H, Config.TransitionSteps[0]),
+                    Mathf.Lerp(oldColor.S, targetColor.S, Config.TransitionSteps[1]),
+                    Mathf.Lerp(oldColor.V, targetColor.V, Config.TransitionSteps[2]),
                     targetColor.A
                 );
             }
