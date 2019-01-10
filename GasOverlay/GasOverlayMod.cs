@@ -23,8 +23,8 @@ namespace GasOverlay
             {
                 try
                 {
-                    ReloadConfig();
                     SetWatcher();
+                    ReloadConfig();
                 }
                 catch (Exception e)
                 {
