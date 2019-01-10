@@ -71,7 +71,6 @@
     <Compile Include="HSV\ColorHSV.cs" />
     <Compile Include="GasOverlayMod.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Lerp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
