@@ -12,6 +12,6 @@
         /// <summary>
         /// 0-1, where 1 means instant and 0 means no change.
         /// </summary>
-        public float Interpolation = 0.08f;
+        public float InterpFactor = 0.08f;
     }
 }
