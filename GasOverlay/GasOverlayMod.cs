@@ -9,7 +9,7 @@ namespace GasOverlay
 {
     public static class GasOverlayMod
     {
-        public static ColorHSV?[] LastColors;
+        public static Color?[] LastColors;
         private static readonly Color NotGasColor = new Color(0.6f, 0.6f, 0.6f);
         private static Config Config = new Config();
 
@@ -64,7 +64,7 @@ namespace GasOverlay
             {
                 Element element = Grid.Element[cell];
 
-                ColorHSV newGasColor = !element.IsGas
+                Color newGasColor = !element.IsGas
                     ? newGasColor = NotGasColor
                     : newGasColor = GetGasColor(cell, element);
 
@@ -76,7 +76,7 @@ namespace GasOverlay
                 try
                 {
                     __result = LastColors[cell].HasValue
-                        ? Color.Lerp(LastColors[cell].Value, newGasColor, Config.InterpFactor).ToHSV()
+                        ? Color.Lerp(LastColors[cell].Value, newGasColor, Config.InterpFactor)
                         : newGasColor;
 
                     LastColors[cell] = __result;
@@ -91,10 +91,10 @@ namespace GasOverlay
 
             private static void ResetLastColors()
             {
-                LastColors = new ColorHSV?[Grid.CellCount];
+                LastColors = new Color?[Grid.CellCount];
             }
 
-            private static ColorHSV GetGasColor(int cell, Element element)
+            private static Color GetGasColor(int cell, Element element)
             {
                 SimHashes elementID = element.id;
                 Color primaryColor = GetCellOverlayColor(cell);
@@ -113,7 +113,7 @@ namespace GasOverlay
 
                 colorHSV = colorHSV.Clamp();
 
-                return colorHSV;
+                return colorHSV.ToRgb();
             }
 
             private static ColorHSV ScaleColorToPressure(ColorHSV color, float fraction, SimHashes elementID)
