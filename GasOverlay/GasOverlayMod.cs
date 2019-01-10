@@ -24,6 +24,14 @@ namespace GasOverlay
                 try
                 {
                     SetWatcher();
+                }
+                catch (Exception e)
+                {
+                    Debug.Log("GasOverlay: Error while starting file watcher: " + e);
+                }
+
+                try
+                {
                     ReloadConfig();
                 }
                 catch (Exception e)
@@ -34,8 +42,11 @@ namespace GasOverlay
 
             private static void ReloadConfig()
             {
-                Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(filePath));
-                Debug.Log("GasOverlay: config reloaded");
+                if (File.Exists(filePath))
+                {
+                    Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(filePath));
+                    Debug.Log("GasOverlay: config reloaded");
+                }
             }
 
             private static void SetWatcher()
