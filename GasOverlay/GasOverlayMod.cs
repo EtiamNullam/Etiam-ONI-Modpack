@@ -64,20 +64,13 @@ namespace GasOverlay
             {
                 Element element = Grid.Element[cell];
 
-                Color newGasColor = !element.IsGas
-                    ? newGasColor = NotGasColor
-                    : newGasColor = GetGasColor(cell, element);
-
-                if (LastColors == null)
-                {
-                    ResetLastColors();
-                }
+                Color newGasColor = element.IsGas
+                    ? GetGasColor(cell, element)
+                    : NotGasColor;
 
                 try
                 {
-                    __result = Color.Lerp(LastColors[cell], newGasColor, Config.InterpFactor);
-
-                    LastColors[cell] = __result;
+                    LastColors[cell] = __result = Color.Lerp(LastColors[cell], newGasColor, Config.InterpFactor);
                 }
                 catch
                 {
@@ -95,7 +88,7 @@ namespace GasOverlay
             private static Color GetGasColor(int cell, Element element)
             {
                 SimHashes elementID = element.id;
-                Color primaryColor = GetCellOverlayColor(cell);
+                Color primaryColor = GetCellOverlayColor(cell, element);
                 float mass = Grid.Mass[cell];
                 float maxMass = Config.GasPressureEnd;
                 float pressureFraction = GetPressureFraction(mass, maxMass);
@@ -129,11 +122,9 @@ namespace GasOverlay
                 return color;
             }
 
-            public static Color GetCellOverlayColor(int cellIndex)
+            public static Color GetCellOverlayColor(int cellIndex, Element element)
             {
-                Element element = Grid.Element[cellIndex];
                 Substance substance = element.substance;
-
                 Color32 overlayColor = substance.conduitColour;
 
                 overlayColor.a = byte.MaxValue;
