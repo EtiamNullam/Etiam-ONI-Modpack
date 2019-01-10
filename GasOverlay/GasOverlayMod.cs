@@ -9,7 +9,7 @@ namespace GasOverlay
 {
     public static class GasOverlayMod
     {
-        public static Color?[] LastColors;
+        public static Color[] LastColors;
         private static readonly Color NotGasColor = new Color(0.6f, 0.6f, 0.6f);
         private static Config Config = new Config();
 
@@ -75,13 +75,11 @@ namespace GasOverlay
 
                 try
                 {
-                    __result = LastColors[cell].HasValue
-                        ? Color.Lerp(LastColors[cell].Value, newGasColor, Config.InterpFactor)
-                        : newGasColor;
+                    __result = Color.Lerp(LastColors[cell], newGasColor, Config.InterpFactor);
 
                     LastColors[cell] = __result;
                 }
-                catch (ArgumentOutOfRangeException)
+                catch
                 {
                     ResetLastColors();
                 }
@@ -91,7 +89,7 @@ namespace GasOverlay
 
             private static void ResetLastColors()
             {
-                LastColors = new Color?[Grid.CellCount];
+                LastColors = new Color[Grid.CellCount];
             }
 
             private static Color GetGasColor(int cell, Element element)
