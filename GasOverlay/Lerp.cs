@@ -9,28 +9,24 @@ namespace GasOverlay
 {
     public static class Lerp
     {
-        public static ColorHSV HSV(ColorHSV a, ColorHSV b, float factor)
+        public static ColorHSV HSV(ColorHSV first, ColorHSV second, float factor)
         {
-            var resultVector = Vector3.Lerp(new Vector3(a.H, a.S, a.V), new Vector3(b.H, b.S, b.V), factor);
-
             return new ColorHSV
             (
-                resultVector.x,
-                resultVector.y,
-                resultVector.z,
+                Mathf.Lerp(first.H, second.H, factor),
+                Mathf.Lerp(first.S, second.S, factor),
+                Mathf.Lerp(first.V, second.V, factor),
                 1
             );
         }
 
-        public static Color RGB(Color a, Color b, float factor)
+        public static Color RGB(Color first, Color second, float factor)
         {
-            // var resultVector = Vector3.Lerp(new Vector3(a.r, a.g, a.b), new Vector3(b.r, b.g, b.b), factor);
-
             return new Color
             (
-                Mathf.Lerp(a.r, b.r, factor),
-                Mathf.Lerp(a.g, b.g, factor),
-                Mathf.Lerp(a.b, b.b, factor),
+                Mathf.Lerp(first.r, second.r, factor),
+                Mathf.Lerp(first.g, second.g, factor),
+                Mathf.Lerp(first.b, second.b, factor),
                 1
             );
         }
