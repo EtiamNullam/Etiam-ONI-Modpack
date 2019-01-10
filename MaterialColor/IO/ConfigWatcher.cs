@@ -11,8 +11,8 @@ namespace MaterialColor.IO
         private bool _configuratorStateChanged;
         private bool _elementColorInfosChanged;
 
-        FileSystemWatcher colorInfosWatcher;
-        FileSystemWatcher stateWatcher;
+        private FileSystemWatcher _colorInfosWatcher;
+        private FileSystemWatcher _mainConfigWatcher;
 
         public ConfigWatcher()
         {
@@ -30,50 +30,39 @@ namespace MaterialColor.IO
 
         public void Dispose()
         {
-            this.stateWatcher.Dispose();
-            this.colorInfosWatcher.Dispose();
+            this._mainConfigWatcher.Dispose();
+            this._colorInfosWatcher.Dispose();
         }
 
-        private void OnMaterialStateChanged(object sender, FileSystemEventArgs e)
+        private void MainConfigChanged(object sender, FileSystemEventArgs e)
         {
-            if (!State.TryReloadConfiguratorState())
+            try
             {
-                return;
+                State.Config = State.LoadMainConfig();
+                this._configuratorStateChanged = true;
+
+                Debug.Log("Configurator state changed.");
             }
-
-            _configuratorStateChanged = true;
-
-            const string message = "Configurator state changed.";
-
-            Debug.Log(message);
+            catch (Exception ex)
+            {
+                Debug.Log("Configurator state load failed.");
+                Debug.Log(ex);
+            }
         }
 
         private void OnElementColorsInfosChanged(object sender, FileSystemEventArgs e)
         {
-            bool reloadColorInfosResult = false;
-
             try
             {
-                reloadColorInfosResult = State.TryReloadElementColorInfos();
+                State.ElementColors = State.LoadElementColors();
+                this._elementColorInfosChanged = true;
+
+                Debug.Log("Element color infos changed.");
             }
             catch (Exception ex)
             {
-                Debug.Log("ReloadElementColorInfos failed.");
+                Debug.Log("ElementColors load failed.");
                 Debug.Log(ex);
-            }
-
-            if (reloadColorInfosResult)
-            {
-                _elementColorInfosChanged = true;
-
-                const string message = "Element color infos changed.";
-
-                Debug.Log(message);
-                Debug.LogError(message);
-            }
-            else
-            {
-                Debug.Log("Reload element color infos failed");
             }
         }
 
@@ -83,11 +72,13 @@ namespace MaterialColor.IO
 
             try
             {
-                this.colorInfosWatcher = new FileSystemWatcher(Paths.ElementColorInfosDirectory, jsonFilter);
-                this.stateWatcher = new FileSystemWatcher(Paths.MaterialConfigPath, Paths.MaterialColorStateFileName);
+                this._colorInfosWatcher = new FileSystemWatcher(Paths.ElementColorInfosDirectory, jsonFilter);
+                this._mainConfigWatcher = new FileSystemWatcher(Paths.MaterialConfigPath, "Config.json");
 
-                this.colorInfosWatcher.Changed += this.OnElementColorsInfosChanged;
-                this.stateWatcher.Changed += this.OnMaterialStateChanged;
+                this._colorInfosWatcher.Changed += this.OnElementColorsInfosChanged;
+                this._mainConfigWatcher.Changed += this.MainConfigChanged;
+
+                this._mainConfigWatcher.EnableRaisingEvents = this._colorInfosWatcher.EnableRaisingEvents = true;
             }
             catch (Exception e)
             {

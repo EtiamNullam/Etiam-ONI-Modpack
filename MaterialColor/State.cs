@@ -6,7 +6,9 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using UnityEngine;
+    using System.Linq;
 
     public static class State
     {
@@ -26,36 +28,28 @@
             "CarpetTile",
         };
 
-        private static MaterialColorState _configuratorState;
-
-        private static Dictionary<SimHashes, ElementColor> _materialColors;
+        private static Config _config;
+        private static Dictionary<SimHashes, ElementColor> _elementColors;
 
         [NotNull]
-        public static MaterialColorState ConfiguratorState
+        public static Config Config
         {
             get
             {
-                if (_configuratorState != null)
+                if (_config != null)
                 {
-                    return _configuratorState;
+                    return _config;
                 }
 
-                MaterialColorState state;
-
-                state = JsonConvert.DeserializeObject<MaterialColorState>(Paths.MaterialColorStatePath);
-
-                ConfiguratorState = state;
-
-                return state;
+                return LoadMainConfig();
             }
-
-            private set
+            set
             {
-                _configuratorState = value;
+                _config = value;
 
                 try
                 {
-                    TypeFilter = new TextFilter(_configuratorState.TypeFilterInfo);
+                    TypeFilter = new TextFilter(_config.TypeFilterInfo);
                 }
                 catch (Exception e)
                 {
@@ -72,46 +66,36 @@
         {
             get
             {
-                if (_materialColors != null)
+                if (_elementColors != null)
                 {
-                    return _materialColors;
+                    return _elementColors;
                 }
 
-                _materialColors = JsonConvert.DeserializeObject<Dictionary<SimHashes, ElementColor>>(Paths.ElementColorInfosDirectory);
-
-                return _materialColors;
+                return LoadElementColors();
             }
-
-			private set
+			set
 			{
-				_materialColors = value;
+				_elementColors = value;
 			}
 		}
 
-        public static bool TryReloadConfiguratorState()
+        public static Config LoadMainConfig()
         {
-            try
-            {
-                ConfiguratorState = JsonConvert.DeserializeObject<MaterialColorState>(Paths.MaterialConfigPath);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return File.Exists(Paths.MaterialConfigPath)
+                ? JsonConvert.DeserializeObject<Config>(File.ReadAllText(Paths.MaterialConfigPath))
+                : new Config();
         }
 
-        public static bool TryReloadElementColorInfos()
+        public static Dictionary<SimHashes, ElementColor> LoadElementColors()
         {
-            try
+            var newElementColors = new Dictionary<SimHashes, ElementColor>();
+            foreach (string filePath in Directory.GetFiles(Paths.ElementColorInfosDirectory))
             {
-                ElementColors = JsonConvert.DeserializeObject<Dictionary<SimHashes, ElementColor>>(Paths.ElementColorInfosDirectory);
-                return true;
+                string json = File.ReadAllText(filePath);
+                var fileElementColors = JsonConvert.DeserializeObject<Dictionary<SimHashes, ElementColor>>(json);
+                newElementColors.Concat(fileElementColors);
             }
-            catch
-            {
-                return false;
-            }
+            return newElementColors;
         }
     }
 }

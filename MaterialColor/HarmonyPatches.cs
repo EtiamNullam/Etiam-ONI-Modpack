@@ -1,23 +1,22 @@
-﻿namespace MaterialColor
+﻿using Harmony;
+using MaterialColor.Extensions;
+using MaterialColor.Helpers;
+using Rendering;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+using JetBrains.Annotations;
+
+using UnityEngine;
+using static KInputController;
+using System.Reflection;
+using MaterialColor.Data;
+using MaterialColor.IO;
+
+namespace MaterialColor
 {
-    using Harmony;
-    using Extensions;
-    using Helpers;
-    using Rendering;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-
-    using JetBrains.Annotations;
-
-    using UnityEngine;
-    using Action = Action;
-	using static KInputController;
-	using System.Reflection;
-    using MaterialColor.Data;
-    using MaterialColor.IO;
-
     public static class HarmonyPatches
     {
         private static ConfigWatcher Watcher;
@@ -69,7 +68,7 @@
                 {
                     if
                     (
-                        State.ConfiguratorState.Enabled &&
+                        State.Config.Enabled &&
                         ColorHelper.TileColors.Length > cell &&
                         ColorHelper.TileColors[cell].HasValue
                     )
@@ -109,7 +108,7 @@
             public static void Postfix(ref BindingEntry[] __result)
             {
 
-                if (State.ConfiguratorState.LogElementsData)
+                if (State.Config.LogElementsData)
                 {
                     Debug.Log("Element List:");
                     var values = Enum.GetNames(typeof(SimHashes));
@@ -192,7 +191,8 @@
                 var width = 256;
                 var height = 256;
 
-                byte[] bytes = File.ReadAllBytes("Mods" + Path.DirectorySeparatorChar + "MaterialColor" + Path.DirectorySeparatorChar + "Sprites" + "overlay_materialColor.png");
+                byte[] bytes = File.ReadAllBytes(Paths.IconPath);
+
                 Texture2D texture = new Texture2D(width, height, TextureFormat.RGB24, false)
                 {
                     filterMode = FilterMode.Trilinear
@@ -272,7 +272,7 @@
                         return true;
                     }
 
-                    State.ConfiguratorState.Enabled = !State.ConfiguratorState.Enabled;
+                    State.Config.Enabled = !State.Config.Enabled;
 
                     Painter.Refresh();
 

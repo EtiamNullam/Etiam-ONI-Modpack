@@ -2,7 +2,7 @@
 
 namespace MaterialColor.Data
 {
-    public class MaterialColorState
+    public class Config
     {
         public bool Enabled { get; set; } = true;
 
