@@ -21,5 +21,18 @@ namespace GasOverlay
                 1
             );
         }
+
+        public static Color RGB(Color a, Color b, float factor)
+        {
+            // var resultVector = Vector3.Lerp(new Vector3(a.r, a.g, a.b), new Vector3(b.r, b.g, b.b), factor);
+
+            return new Color
+            (
+                Mathf.Lerp(a.r, b.r, factor),
+                Mathf.Lerp(a.g, b.g, factor),
+                Mathf.Lerp(a.b, b.b, factor),
+                1
+            );
+        }
     }
 }

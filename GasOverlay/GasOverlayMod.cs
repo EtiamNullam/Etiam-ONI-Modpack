@@ -65,7 +65,7 @@ namespace GasOverlay
                 try
                 {
                     __result = LastColors[cell].HasValue
-                        ? Lerp.HSV(LastColors[cell].Value, newGasColor, Config.Interpolation)
+                        ? Lerp.RGB(LastColors[cell].Value, newGasColor, Config.Interpolation).ToHSV()
                         : newGasColor;
 
                     LastColors[cell] = __result;
