@@ -10,7 +10,7 @@ namespace MaterialColor.Data
 
         public bool LogElementsData { get; set; } = false;
 
-        public bool ShowMissingElementColorInfos { get; set; }
+        public bool ShowMissingElements { get; set; }
 
         public FilterInfo TypeFilterInfo { get; set; } = new FilterInfo();
     }
