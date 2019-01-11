@@ -34,5 +34,10 @@ namespace MaterialColor.Data
                 a = this.DarkMode ? 1 : 0
             };
         }
+
+        public override string ToString()
+        {
+            return $"ElementColor({this.Red}, {this.Green}, {this.Blue}, DarkMode: {this.DarkMode})";
+        }
     }
 }

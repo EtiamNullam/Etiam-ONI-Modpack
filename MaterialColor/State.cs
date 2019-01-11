@@ -74,7 +74,7 @@
             {
                 string json = File.ReadAllText(filePath);
                 var fileElementColors = JsonConvert.DeserializeObject<Dictionary<SimHashes, ElementColor>>(json);
-                newElementColors.Concat(fileElementColors);
+                newElementColors = newElementColors.Concat(fileElementColors).ToDictionary(pair => pair.Key, pair => pair.Value);
             }
             return newElementColors;
         }
