@@ -70,7 +70,7 @@ namespace MaterialColor.IO
         {
             const string jsonFilter = "*.json";
 
-            this._colorInfosWatcher = new FileSystemWatcher(Paths.ElementColorInfosDirectory, jsonFilter);
+            this._colorInfosWatcher = new FileSystemWatcher(Paths.ElementColorsDirectory, jsonFilter);
             this._mainConfigWatcher = new FileSystemWatcher(Paths.MaterialConfigPath, "Config.json");
 
             this._colorInfosWatcher.Changed += this.OnElementColorsInfosChanged;

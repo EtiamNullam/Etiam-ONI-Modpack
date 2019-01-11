@@ -12,7 +12,7 @@ namespace MaterialColor.IO
         public static readonly string MaterialConfigPath = MaterialMainPath + Path.DirectorySeparatorChar + "Config";
         public static readonly string SpritesPath = MaterialMainPath + Path.DirectorySeparatorChar + "Sprites";
 
-        public static readonly string ElementColorInfosDirectory = MaterialConfigPath + Path.DirectorySeparatorChar + "ElementColors";
+        public static readonly string ElementColorsDirectory = MaterialConfigPath + Path.DirectorySeparatorChar + "ElementColors";
 
         public static readonly string MainConfigPath = MaterialConfigPath + Path.DirectorySeparatorChar + MainConfigFileName;
 

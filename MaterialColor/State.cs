@@ -70,7 +70,7 @@
         public static Dictionary<SimHashes, ElementColor> LoadElementColors()
         {
             var newElementColors = new Dictionary<SimHashes, ElementColor>();
-            foreach (string filePath in Directory.GetFiles(Paths.ElementColorInfosDirectory))
+            foreach (string filePath in Directory.GetFiles(Paths.ElementColorsDirectory))
             {
                 string json = File.ReadAllText(filePath);
                 var fileElementColors = JsonConvert.DeserializeObject<Dictionary<SimHashes, ElementColor>>(json);
