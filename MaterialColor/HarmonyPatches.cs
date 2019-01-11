@@ -21,21 +21,37 @@ namespace MaterialColor
     {
         private static ConfigWatcher Watcher;
 
+        private static void Log(object message)
+        {
+            if (State.Config.Debug)
+            {
+                Debug.Log(message);
+            }
+        }
+
         [HarmonyPatch(typeof(Ownable), "UpdateTint")]
         public static class Ownable_UpdateTint
         {
             public static void Postfix(Ownable __instance)
             {
-                Color color = ColorHelper.GetComponentMaterialColor(__instance);
-                bool owned = __instance.assignee != null;
-
-                if (owned)
+                try
                 {
-                    KAnimControllerBase animBase = __instance.GetComponent<KAnimControllerBase>();
-                    if (animBase != null)
+                    Color color = ColorHelper.GetComponentMaterialColor(__instance);
+                    bool owned = __instance.assignee != null;
+
+                    if (owned)
                     {
-                        animBase.TintColour = color;
+                        KAnimControllerBase animBase = __instance.GetComponent<KAnimControllerBase>();
+                        if (animBase != null)
+                        {
+                            animBase.TintColour = color;
+                        }
                     }
+                }
+                catch (Exception e)
+                {
+                    Log("Ownable_UpdateTint.Postfix");
+                    Log(e);
                 }
             }
         }
@@ -45,16 +61,24 @@ namespace MaterialColor
         {
             public static void Postfix(KMonoBehaviour ___root, Tag[] tags)
             {
-                Color color = ColorHelper.GetComponentMaterialColor(___root);
-                bool active = tags != null && tags.Length != 0;
-
-                if (active)
+                try
                 {
-                    KAnimControllerBase animBase = ___root.GetComponent<KAnimControllerBase>();
-                    if (animBase != null)
+                    Color color = ColorHelper.GetComponentMaterialColor(___root);
+                    bool active = tags != null && tags.Length != 0;
+
+                    if (active)
                     {
-                        animBase.TintColour = color;
+                        KAnimControllerBase animBase = ___root.GetComponent<KAnimControllerBase>();
+                        if (animBase != null)
+                        {
+                            animBase.TintColour = color;
+                        }
                     }
+                }
+                catch (Exception e)
+                {
+                    Log("FilteredStorage_OnFilterChanged.Postfix");
+                    Log(e);
                 }
             }
         }
@@ -78,8 +102,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Debug.Log("EnterCell failed.");
-                    Debug.Log(e);
+                    Log("EnterCell failed.");
+                    Log(e);
                 }
             }
         }
@@ -89,10 +113,17 @@ namespace MaterialColor
         {
             public static void Postfix(Deconstructable __instance)
             {
-                ResetCell(__instance.GetCell());
+                try
+                {
+                    ResetCell(__instance.GetCell());
+                }
+                catch (Exception e)
+                {
+                    Log(e);
+                }
             }
 
-            public static void ResetCell(int cellIndex)
+            private static void ResetCell(int cellIndex)
             {
                 if (ColorHelper.TileColors.Length > cellIndex)
                 {
@@ -107,40 +138,48 @@ namespace MaterialColor
         {
             public static void Postfix(ref BindingEntry[] __result)
             {
-
-                if (State.Config.LogElementsData)
-                {
-                    Debug.Log("Element List:");
-                    var values = Enum.GetNames(typeof(SimHashes));
-                    Array.Sort(values);
-                    string elementsLog = "";
-                    foreach (var name in values)
-                    {
-                        elementsLog += Environment.NewLine+name;
-                    }
-                    Debug.Log(elementsLog);
-                }
-
                 try
                 {
-                    List<BindingEntry> bind = __result.ToList();
-                    BindingEntry entry = new BindingEntry(
-                                                          "Root",
-                                                          GamepadButton.NumButtons,
-                                                          KKeyCode.F6,
-                                                          Modifier.Alt,
-                                                          (Action)IDs.ToggleMaterialColorOverlayAction,
-                                                          true,
-                                                          true);
-                    bind.Add(entry);
-                    __result = bind.ToArray();
+                    if (State.Config.LogElementsData)
+                    {
+                        Debug.Log("Element List:");
+                        var values = Enum.GetNames(typeof(SimHashes));
+                        Array.Sort(values);
+                        string elementsLog = "";
+                        foreach (var name in values)
+                        {
+                            elementsLog += Environment.NewLine + name;
+                        }
+                        Debug.Log(elementsLog);
+                    }
+
+                    try
+                    {
+                        List<BindingEntry> bind = __result.ToList();
+                        BindingEntry entry = new BindingEntry
+                        (
+                            "Root",
+                            GamepadButton.NumButtons,
+                            KKeyCode.F6,
+                            Modifier.Alt,
+                            (Action)IDs.ToggleMaterialColorOverlayAction,
+                            true,
+                            true
+                        );
+                        bind.Add(entry);
+                        __result = bind.ToArray();
+                    }
+                    catch (Exception e)
+                    {
+                        Log("Keybindings failed:\n" + e);
+                        throw;
+                    }
                 }
                 catch (Exception e)
                 {
-                    Debug.Log("Keybindings failed:\n" + e);
-                    throw;
+                    Log("Global_GenerateDefaultBindings.Postfix");
+                    Log(e);
                 }
-
             }
         }
 
@@ -151,38 +190,46 @@ namespace MaterialColor
             // TODO: read from file instead
             public static void Postfix(OverlayMenu __instance)
             {
-                FieldInfo overlayToggleInfosFI = AccessTools.Field(typeof(OverlayMenu), "overlayToggleInfos");
-                var overlayToggleInfos = (List<KIconToggleMenu.ToggleInfo> )overlayToggleInfosFI.GetValue(__instance);
+                try
+                {
+                    FieldInfo overlayToggleInfosFI = AccessTools.Field(typeof(OverlayMenu), "overlayToggleInfos");
+                    var overlayToggleInfos = (List<KIconToggleMenu.ToggleInfo>)overlayToggleInfosFI.GetValue(__instance);
 
-                                Type oti = AccessTools.Inner(typeof(OverlayMenu), "OverlayToggleInfo");
-				
-				ConstructorInfo ci =  oti.GetConstructor(new Type[] { typeof(string), typeof(string), typeof(HashedString), typeof(string), typeof(Action), typeof(string), typeof(string) });
-				object ooti = ci.Invoke(new object[] {
-						"Toggle MaterialColor",
-						"overlay_materialcolor",
-						IDs.MaterialColorOverlayHS,
-						string.Empty,
-						(Action)IDs.ToggleMaterialColorOverlayAction,
-						"Toggles MaterialColor overlay",
-						"MaterialColor"
-				});
-				((KIconToggleMenu.ToggleInfo)ooti).getSpriteCB = GetUISprite;
+                    Type oti = AccessTools.Inner(typeof(OverlayMenu), "OverlayToggleInfo");
 
-                overlayToggleInfos.Add((KIconToggleMenu.ToggleInfo)ooti);
+                    ConstructorInfo ci = oti.GetConstructor(new Type[] { typeof(string), typeof(string), typeof(HashedString), typeof(string), typeof(Action), typeof(string), typeof(string) });
+                    object ooti = ci.Invoke(new object[] {
+                        "Toggle MaterialColor",
+                        "overlay_materialcolor",
+                        IDs.MaterialColorOverlayHS,
+                        string.Empty,
+                        (Action)IDs.ToggleMaterialColorOverlayAction,
+                        "Toggles MaterialColor overlay",
+                        "MaterialColor"
+                });
+                    ((KIconToggleMenu.ToggleInfo)ooti).getSpriteCB = GetUISprite;
 
-				/*
-				__result.Add(
-                             new OverlayMenu.OverlayToggleInfo(
-                                                               "Toggle MaterialColor",
-                                                               "overlay_materialcolor",
-                                                               (SimViewMode)IDs.ToggleMaterialColorOverlayID,
-                                                               string.Empty,
-                                                               (Action)IDs.ToggleMaterialColorOverlayAction,
-                                                               "Toggles MaterialColor overlay",
-                                                               "MaterialColor") {
-                                                                                   getSpriteCB = () => GetUISprite()
-                                                                                });
-				*/
+                    overlayToggleInfos.Add((KIconToggleMenu.ToggleInfo)ooti);
+
+                    /*
+                    __result.Add(
+                                 new OverlayMenu.OverlayToggleInfo(
+                                                                   "Toggle MaterialColor",
+                                                                   "overlay_materialcolor",
+                                                                   (SimViewMode)IDs.ToggleMaterialColorOverlayID,
+                                                                   string.Empty,
+                                                                   (Action)IDs.ToggleMaterialColorOverlayAction,
+                                                                   "Toggles MaterialColor overlay",
+                                                                   "MaterialColor") {
+                                                                                       getSpriteCB = () => GetUISprite()
+                                                                                    });
+                    */
+                }
+                catch (Exception e)
+                {
+                    Log("OverlayMenu_InitializeToggles.Postfix: Icon set error");
+                    Log(e);
+                }
 			}
 
             // TODO: extract
@@ -222,8 +269,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Debug.Log("OverlayChangedEntry failed");
-                    Debug.Log(e);
+                    Log("OverlayChangedEntry.Prefix failed");
+                    Log(e);
                 }
             }
         }
@@ -232,25 +279,38 @@ namespace MaterialColor
 		[HarmonyPatch(new Type[] {typeof(KKeyCode), typeof(Modifier) })]
 		public static class KeyDef_Constructor
 		{
-			[HarmonyPostfix]
+            // ReSharper disable once InconsistentNaming
+            public static void Postfix(KeyDef __instance)
+            {
+                try
+                {
+                    __instance.mActionFlags = new bool[1000];
+                }
+                catch (Exception e)
+                {
+                    Log("KeyDef_Constructor.Postfix");
+                    Log(e);
+                }
+            }
+        }
 
-			// ReSharper disable once InconsistentNaming
-			public static void ExitKeyDef(KeyDef __instance)
-			{
-				__instance.mActionFlags = new bool[1000];
-			}
-		}
-
-		[HarmonyPatch(typeof(KInputController), MethodType.Constructor)]
+        [HarmonyPatch(typeof(KInputController), MethodType.Constructor)]
 		[HarmonyPatch(new Type[] { typeof(bool) })]
 		public static class KInputController_Constructor
 		{
 			[HarmonyPostfix]
-
 			// ReSharper disable once InconsistentNaming
 			public static void KInputControllerMod(ref bool[] ___mActionState)
 			{
-				___mActionState = new bool[1000];
+                try
+                {
+                    ___mActionState = new bool[1000];
+                }
+                catch (Exception e)
+                {
+                    Log("KInputController_Constructor.KInputControllerMod");
+                    Log(e);
+                }
 			}
 		}
 
@@ -258,7 +318,6 @@ namespace MaterialColor
         public static class OverlayMenu_OnToggleSelect_MatCol
         {
             [HarmonyPrefix]
-
             // ReSharper disable once InconsistentNaming
             public static bool EnterToggle(OverlayMenu __instance, KIconToggleMenu.ToggleInfo toggle_info)
             {
@@ -280,8 +339,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Debug.Log("EnterToggle failed.");
-                    Debug.Log(e);
+                    Log("EnterToggle failed.");
+                    Log(e);
                     return true;
                 }
             }
@@ -306,8 +365,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Debug.Log("MaterialColor init failed");
-                    Debug.Log(e);
+                    Log("MaterialColor init failed");
+                    Log(e);
                 }
             }
         }
@@ -317,9 +376,17 @@ namespace MaterialColor
         {
             public static void Postfix()
             {
-                SimAndRenderScheduler.instance.render1000ms.Remove(Watcher);
-                Watcher.Dispose();
-                Watcher = null;
+                try
+                {
+                    SimAndRenderScheduler.instance.render1000ms.Remove(Watcher);
+                    Watcher.Dispose();
+                    Watcher = null;
+                }
+                catch (Exception e)
+                {
+                    Log("Game_DestroyInstances.Postfix");
+                    Log(e);
+                }
             }
         }
     }

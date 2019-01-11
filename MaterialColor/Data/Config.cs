@@ -6,7 +6,9 @@ namespace MaterialColor.Data
     {
         public bool Enabled { get; set; } = true;
 
-        public bool LogElementsData { get; set; } = true;
+        public bool Debug { get; set; } = false; // TODO: change it to FALSE on RELEASE
+
+        public bool LogElementsData { get; set; } = false;
 
         public bool ShowMissingElementColorInfos { get; set; }
 
