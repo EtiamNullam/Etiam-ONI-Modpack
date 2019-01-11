@@ -57,7 +57,7 @@ namespace MaterialColor.IO
                 State.ElementColors = State.LoadElementColors();
                 this._elementColorInfosChanged = true;
 
-                Logger.Log("Element color infos changed.");
+                Logger.Log("Element colors changed.");
             }
             catch (Exception ex)
             {
