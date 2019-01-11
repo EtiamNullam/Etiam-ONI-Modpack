@@ -41,12 +41,12 @@ namespace MaterialColor.IO
                 State.Config = State.LoadMainConfig();
                 this._configuratorStateChanged = true;
 
-                Debug.Log("Configurator state changed.");
+                Logger.Log("Configurator state changed.");
             }
             catch (Exception ex)
             {
-                Debug.Log("Configurator state load failed.");
-                Debug.Log(ex);
+                Logger.Log("Configurator state load failed.");
+                Logger.LogDebug(ex);
             }
         }
 
@@ -57,12 +57,12 @@ namespace MaterialColor.IO
                 State.ElementColors = State.LoadElementColors();
                 this._elementColorInfosChanged = true;
 
-                Debug.Log("Element color infos changed.");
+                Logger.Log("Element color infos changed.");
             }
             catch (Exception ex)
             {
-                Debug.Log("ElementColors load failed.");
-                Debug.Log(ex);
+                Logger.Log("ElementColors load failed.");
+                Logger.LogDebug(ex);
             }
         }
 
@@ -70,21 +70,13 @@ namespace MaterialColor.IO
         {
             const string jsonFilter = "*.json";
 
-            try
-            {
-                this._colorInfosWatcher = new FileSystemWatcher(Paths.ElementColorInfosDirectory, jsonFilter);
-                this._mainConfigWatcher = new FileSystemWatcher(Paths.MaterialConfigPath, "Config.json");
+            this._colorInfosWatcher = new FileSystemWatcher(Paths.ElementColorInfosDirectory, jsonFilter);
+            this._mainConfigWatcher = new FileSystemWatcher(Paths.MaterialConfigPath, "Config.json");
 
-                this._colorInfosWatcher.Changed += this.OnElementColorsInfosChanged;
-                this._mainConfigWatcher.Changed += this.MainConfigChanged;
+            this._colorInfosWatcher.Changed += this.OnElementColorsInfosChanged;
+            this._mainConfigWatcher.Changed += this.MainConfigChanged;
 
-                this._mainConfigWatcher.EnableRaisingEvents = this._colorInfosWatcher.EnableRaisingEvents = true;
-            }
-            catch (Exception e)
-            {
-                Debug.Log("SubscribeToFileChangeNotifier failed");
-                Debug.Log(e);
-            }
+            this._mainConfigWatcher.EnableRaisingEvents = this._colorInfosWatcher.EnableRaisingEvents = true;
         }
     }
 }

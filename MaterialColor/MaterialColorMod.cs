@@ -26,20 +26,45 @@ namespace MaterialColor
         {
             public static void Postfix()
             {
+                TryStartConfigWatch();
+                TryLoadConfig();
+                TryInitMod();
+            }
+
+            private static void TryInitMod()
+            {
                 try
                 {
                     Components.BuildingCompletes.OnAdd += Painter.UpdateBuildingColor;
-
-                    State.Config = State.LoadMainConfig();
-                    State.ElementColors = State.LoadElementColors();
-                    Watcher = new ConfigWatcher();
-
-                    SimAndRenderScheduler.instance.render1000ms.Add(Watcher);
                     Painter.Refresh();
                 }
                 catch (Exception e)
                 {
-                    Logger.Log("GameLaunch failed");
+                    Logger.Log(e);
+                }
+            }
+
+            private static void TryLoadConfig()
+            {
+                try
+                {
+                    State.Config = State.LoadMainConfig();
+                    State.ElementColors = State.LoadElementColors();
+                }
+                catch (Exception e)
+                {
+                    Logger.Log(e);
+                }
+            }
+
+            private static void TryStartConfigWatch()
+            {
+                try
+                {
+                    SimAndRenderScheduler.instance.render1000ms.Add(Watcher = new ConfigWatcher());
+                }
+                catch (Exception e)
+                {
                     Logger.Log(e);
                 }
             }
@@ -269,7 +294,7 @@ namespace MaterialColor
                 catch (Exception e)
                 {
                     Logger.LogOnce("GetUISprite failed");
-                    Logger.LogOnce(e);
+                    Logger.LogDebug(e);
 
                     // TODO: set some placeholder sprite here
                     return null;

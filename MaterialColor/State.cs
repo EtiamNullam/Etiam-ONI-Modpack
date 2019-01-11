@@ -48,8 +48,8 @@
                 }
                 catch (Exception e)
                 {
-                    Debug.Log("Error while creating new TextFilter object");
-                    Debug.Log(e);
+                    Logger.LogOnce("Error while creating new TextFilter object");
+                    Logger.LogDebug(e);
                 }
 			}
 		}
