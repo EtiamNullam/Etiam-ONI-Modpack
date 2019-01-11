@@ -13,16 +13,20 @@ Requires [@javisar](https://github.com/javisar)'s mod loader - [GitHub](https://
 ### MaterialColor
 
 ![lavatories.png](Preview/Images/lavatories.png)
+
 ![blocks.png](Preview/Images/blocks.png)
+
 ![forges.png](Preview/Images/forges.png)
+
 ![mushers.png](Preview/Images/mushers.png)
+
 ![pipes.png](Preview/Images/pipes.png)
 
 ### GasOverlay
 
-![meteor_shower](https://media.giphy.com/media/1wogZv7RfqvyGq0Mg3/giphy.gif)
+![meteor_shower.gif](Preview/Gifs/meteor-shower)
 
-![electrolyzer_show](https://media.giphy.com/media/5k3LGTDoJMu388aSDm/giphy.gif)
+![electrolyzer show.gif](Preview/Gifs/electrolyzer-show)
 
 ## Contribution
 
