@@ -49,8 +49,8 @@ namespace MaterialColor
             }
             catch (Exception e)
             {
-                Debug.Log("Error while filtering buildings");
-                Debug.Log(e);
+                Logger.LogDebug("Error while filtering buildings");
+                Logger.LogDebug(e);
             }
 
             ApplyColorToBuilding(building, color);
@@ -97,7 +97,7 @@ namespace MaterialColor
             }
             else
             {
-                Debug.Log($"MaterialColor: Invalid building <{building}> and its not a registered tile.");
+                Logger.LogDebug($"MaterialColor: Invalid building <{building}> and its not a registered tile.");
             }
         }
 
@@ -116,8 +116,8 @@ namespace MaterialColor
             }
             catch (Exception e)
             {
-                Debug.Log("Error while getting cell color");
-                Debug.Log(e);
+                Logger.LogDebug("Error while getting cell color");
+                Logger.LogDebug(e);
             }
         }
 
@@ -128,12 +128,12 @@ namespace MaterialColor
                 World.Instance.blockTileRenderer.Rebuild(ObjectLayer.FoundationTile, i);
             }
 
-            Debug.Log("All tiles rebuilt.");
+            Logger.LogDebug("All tiles rebuilt.");
         }
 
         private static void UpdateBuildingsColors()
         {
-            Debug.Log($"Trying to update {Components.BuildingCompletes.Count} buildings.");
+            Logger.LogDebug($"Trying to update {Components.BuildingCompletes.Count} buildings.");
 
             try
             {
@@ -142,12 +142,12 @@ namespace MaterialColor
                     UpdateBuildingColor(building);
                 }
 
-                Debug.Log("Buildings updated successfully.");
+                Logger.LogDebug("Buildings updated successfully.");
             }
             catch (Exception e)
             {
-                Debug.Log("Buildings colors update failed.");
-                Debug.Log(e);
+                Logger.LogDebug("Buildings colors update failed.");
+                Logger.LogDebug(e);
             }
         }
     }

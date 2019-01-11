@@ -28,20 +28,15 @@
             "CarpetTile",
         };
 
-        private static Config _config;
-        private static Dictionary<SimHashes, ElementColor> _elementColors;
+        private static Config _config = new Config();
 
         [NotNull]
+        // TODO: load on game start
         public static Config Config
         {
             get
             {
-                if (_config != null)
-                {
-                    return _config;
-                }
-
-                return _config = LoadMainConfig();
+                return _config;
             }
             set
             {
@@ -62,22 +57,8 @@
         public static TextFilter TypeFilter { get; set; }
 
         [NotNull]
-        public static Dictionary<SimHashes, ElementColor> ElementColors
-        {
-            get
-            {
-                if (_elementColors != null)
-                {
-                    return _elementColors;
-                }
-
-                return _elementColors = LoadElementColors();
-            }
-			set
-			{
-				_elementColors = value;
-			}
-		}
+        // TODO: load on game start
+        public static Dictionary<SimHashes, ElementColor> ElementColors { get; set; } = new Dictionary<SimHashes, ElementColor>();
 
         public static Config LoadMainConfig()
         {

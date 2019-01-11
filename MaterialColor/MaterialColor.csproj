@@ -84,6 +84,7 @@
     <Compile Include="Helpers\DebugHelper.cs" />
     <Compile Include="Data\FilterInfo.cs" />
     <Compile Include="IO\ConfigWatcher.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Painter.cs" />
     <Compile Include="TextFilter.cs" />
     <Compile Include="IO\Paths.cs" />

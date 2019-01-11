@@ -21,11 +21,12 @@ namespace MaterialColor
     {
         private static ConfigWatcher Watcher;
 
-        private static void Log(object message)
+        [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
+        public static class SplashMessageScreen_OnSpawn
         {
-            if (State.Config.Debug)
+            public static void Postfix()
             {
-                Debug.Log(message);
+                // TODO: load initial config files here
             }
         }
 
@@ -50,8 +51,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Log("Ownable_UpdateTint.Postfix");
-                    Log(e);
+                    Logger.LogDebug("Ownable_UpdateTint.Postfix");
+                    Logger.LogDebug(e);
                 }
             }
         }
@@ -77,8 +78,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Log("FilteredStorage_OnFilterChanged.Postfix");
-                    Log(e);
+                    Logger.LogDebug("FilteredStorage_OnFilterChanged.Postfix");
+                    Logger.LogDebug(e);
                 }
             }
         }
@@ -102,8 +103,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Log("EnterCell failed.");
-                    Log(e);
+                    Logger.LogDebug("EnterCell failed.");
+                    Logger.LogDebug(e);
                 }
             }
         }
@@ -119,7 +120,7 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Log(e);
+                    Logger.LogDebug(e);
                 }
             }
 
@@ -142,7 +143,7 @@ namespace MaterialColor
                 {
                     if (State.Config.LogElementsData)
                     {
-                        Debug.Log("Element List:");
+                        Logger.Log("Element List:");
                         var values = Enum.GetNames(typeof(SimHashes));
                         Array.Sort(values);
                         string elementsLog = "";
@@ -150,7 +151,7 @@ namespace MaterialColor
                         {
                             elementsLog += Environment.NewLine + name;
                         }
-                        Debug.Log(elementsLog);
+                        Logger.Log(elementsLog);
                     }
 
                     try
@@ -171,14 +172,14 @@ namespace MaterialColor
                     }
                     catch (Exception e)
                     {
-                        Log("Keybindings failed:\n" + e);
+                        Logger.LogDebug("Keybindings failed:\n" + e);
                         throw;
                     }
                 }
                 catch (Exception e)
                 {
-                    Log("Global_GenerateDefaultBindings.Postfix");
-                    Log(e);
+                    Logger.LogDebug("Global_GenerateDefaultBindings.Postfix");
+                    Logger.LogDebug(e);
                 }
             }
         }
@@ -227,26 +228,37 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Log("OverlayMenu_InitializeToggles.Postfix: Icon set error");
-                    Log(e);
+                    Logger.LogDebug("OverlayMenu_InitializeToggles.Postfix: Icon set error");
+                    Logger.LogDebug(e);
                 }
 			}
 
             // TODO: extract
             private static Sprite GetUISprite()
             {
-                var width = 256;
-                var height = 256;
-
-                byte[] bytes = File.ReadAllBytes(Paths.IconPath);
-
-                Texture2D texture = new Texture2D(width, height, TextureFormat.RGB24, false)
+                try
                 {
-                    filterMode = FilterMode.Trilinear
-                };
-                ImageConversion.LoadImage(texture, bytes);
+                    var width = 256;
+                    var height = 256;
 
-                return Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.0f), 1.0f);
+                    byte[] bytes = File.ReadAllBytes(Paths.IconPath);
+
+                    Texture2D texture = new Texture2D(width, height, TextureFormat.RGB24, false)
+                    {
+                        filterMode = FilterMode.Trilinear
+                    };
+                    ImageConversion.LoadImage(texture, bytes);
+
+                    return Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.0f), 1.0f);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogOnce("GetUISprite failed");
+                    Logger.LogOnce(e);
+
+                    // TODO: set some placeholder sprite here
+                    return null;
+                }
             }
         }
 
@@ -269,8 +281,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Log("OverlayChangedEntry.Prefix failed");
-                    Log(e);
+                    Logger.LogDebug("OverlayChangedEntry.Prefix failed");
+                    Logger.LogDebug(e);
                 }
             }
         }
@@ -288,8 +300,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Log("KeyDef_Constructor.Postfix");
-                    Log(e);
+                    Logger.LogDebug("KeyDef_Constructor.Postfix failed");
+                    Logger.LogDebug(e);
                 }
             }
         }
@@ -308,8 +320,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Log("KInputController_Constructor.KInputControllerMod");
-                    Log(e);
+                    Logger.LogDebug("KInputController_Constructor.KInputControllerMod failed");
+                    Logger.LogDebug(e);
                 }
 			}
 		}
@@ -339,8 +351,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Log("EnterToggle failed.");
-                    Log(e);
+                    Logger.LogDebug("EnterToggle failed.");
+                    Logger.LogDebug(e);
                     return true;
                 }
             }
@@ -365,8 +377,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Log("MaterialColor init failed");
-                    Log(e);
+                    Logger.LogDebug("MaterialColor init failed");
+                    Logger.LogDebug(e);
                 }
             }
         }
@@ -384,8 +396,8 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Log("Game_DestroyInstances.Postfix");
-                    Log(e);
+                    Logger.LogDebug("Game_DestroyInstances.Postfix");
+                    Logger.LogDebug(e);
                 }
             }
         }
