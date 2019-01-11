@@ -6,7 +6,7 @@ namespace MaterialColor.Data
     {
         public bool Enabled { get; set; } = true;
 
-        public bool Debug { get; set; } = false;
+        public bool Debug { get; set; } = true;
 
         public bool LogElementsData { get; set; } = false;
 
