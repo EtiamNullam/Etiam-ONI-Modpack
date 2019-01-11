@@ -105,12 +105,12 @@ namespace MaterialColor
         {
             try
             {
-                if (ColorHelper.TileColors == null)
+                if (MaterialColorMod.TileColors == null)
                 {
-                    ColorHelper.TileColors = new Color?[Grid.CellCount];
+                    MaterialColorMod.TileColors = new Color?[Grid.CellCount];
                 }
 
-                ColorHelper.TileColors[Grid.PosToCell(building.gameObject)] = color.ToTileColor();
+                MaterialColorMod.TileColors[Grid.PosToCell(building.gameObject)] = color.ToTileColor();
 
                 return;
             }

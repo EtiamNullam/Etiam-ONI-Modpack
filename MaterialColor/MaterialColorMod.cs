@@ -20,6 +20,7 @@ namespace MaterialColor
     public static class MaterialColorMod
     {
         private static ConfigWatcher Watcher;
+        public static Color?[] TileColors;
 
         [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
         public static class GameLaunch
@@ -68,7 +69,7 @@ namespace MaterialColor
             {
                 try
                 {
-                    ColorHelper.TileColors = new Color?[Grid.CellCount];
+                    TileColors = new Color?[Grid.CellCount];
                     Components.BuildingCompletes.OnAdd += Painter.UpdateBuildingColor;
                     Painter.Refresh();
                 }
@@ -143,11 +144,11 @@ namespace MaterialColor
                     if
                     (
                         State.Config.Enabled &&
-                        ColorHelper.TileColors.Length > cell &&
-                        ColorHelper.TileColors[cell].HasValue
+                        TileColors.Length > cell &&
+                        TileColors[cell].HasValue
                     )
                     {
-                        __result *= ColorHelper.TileColors[cell].Value;
+                        __result *= TileColors[cell].Value;
                     }
                 }
                 catch (Exception e)
@@ -175,9 +176,9 @@ namespace MaterialColor
 
             private static void ResetCell(int cellIndex)
             {
-                if (ColorHelper.TileColors.Length > cellIndex)
+                if (TileColors.Length > cellIndex)
                 {
-                    ColorHelper.TileColors[cellIndex] = null;
+                    TileColors[cellIndex] = null;
                 }
             }
         }
