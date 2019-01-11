@@ -28,20 +28,6 @@ namespace MaterialColor
             {
                 TryStartConfigWatch();
                 TryLoadConfig();
-                TryInitMod();
-            }
-
-            private static void TryInitMod()
-            {
-                try
-                {
-                    Components.BuildingCompletes.OnAdd += Painter.UpdateBuildingColor;
-                    Painter.Refresh();
-                }
-                catch (Exception e)
-                {
-                    Logger.Log(e);
-                }
             }
 
             private static void TryLoadConfig()
@@ -62,6 +48,29 @@ namespace MaterialColor
                 try
                 {
                     SimAndRenderScheduler.instance.render1000ms.Add(Watcher = new ConfigWatcher());
+                }
+                catch (Exception e)
+                {
+                    Logger.Log(e);
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(Game), "OnSpawn")]
+        public static class GameStart
+        {
+            public static void Postfix()
+            {
+                TryInitMod();
+            }
+
+            private static void TryInitMod()
+            {
+                try
+                {
+                    ColorHelper.TileColors = new Color?[Grid.CellCount];
+                    Components.BuildingCompletes.OnAdd += Painter.UpdateBuildingColor;
+                    Painter.Refresh();
                 }
                 catch (Exception e)
                 {
