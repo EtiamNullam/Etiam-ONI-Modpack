@@ -24,9 +24,9 @@ Requires [@javisar](https://github.com/javisar)'s mod loader - [GitHub](https://
 
 ### GasOverlay
 
-![meteor_shower.gif](Preview/Gifs/meteor-shower)
+![meteor-shower.gif](Preview/Gifs/meteor-shower.gif)
 
-![electrolyzer show.gif](Preview/Gifs/electrolyzer-show)
+![electrolyzer-show.gif](Preview/Gifs/electrolyzer-show.gif)
 
 ## Contribution
 
