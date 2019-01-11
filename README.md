@@ -12,7 +12,11 @@ Requires [@javisar](https://github.com/javisar)'s mod loader - [GitHub](https://
 
 ### MaterialColor
 
-TODO
+![lavatories.png](Preview/Images/lavatories.png)
+![blocks.png](Preview/Images/blocks.png)
+![forges.png](Preview/Images/forges.png)
+![mushers.png](Preview/Images/mushers.png)
+![pipes.png](Preview/Images/pipes.png)
 
 ### GasOverlay
 
