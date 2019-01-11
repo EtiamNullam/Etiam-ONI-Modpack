@@ -12,6 +12,7 @@
 
         /// <summary>
         /// Tries to get material color for given component, if not possible extracts substance.conduitColour, then uses white color as last fallback.
+        /// </summary>
         public static Color GetComponentMaterialColor(Component component)
         {
             if (State.Config.Enabled)
