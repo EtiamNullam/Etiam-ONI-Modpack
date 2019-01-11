@@ -144,7 +144,6 @@ namespace MaterialColor
                     if
                     (
                         State.Config.Enabled &&
-                        TileColors.Length > cell &&
                         TileColors[cell].HasValue
                     )
                     {
@@ -166,19 +165,11 @@ namespace MaterialColor
             {
                 try
                 {
-                    ResetCell(__instance.GetCell());
+                    TileColors[__instance.GetCell()] = null;
                 }
                 catch (Exception e)
                 {
                     Logger.LogDebug(e);
-                }
-            }
-
-            private static void ResetCell(int cellIndex)
-            {
-                if (TileColors.Length > cellIndex)
-                {
-                    TileColors[cellIndex] = null;
                 }
             }
         }

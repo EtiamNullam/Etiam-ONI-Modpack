@@ -105,14 +105,7 @@ namespace MaterialColor
         {
             try
             {
-                if (MaterialColorMod.TileColors == null)
-                {
-                    MaterialColorMod.TileColors = new Color?[Grid.CellCount];
-                }
-
                 MaterialColorMod.TileColors[Grid.PosToCell(building.gameObject)] = color.ToTileColor();
-
-                return;
             }
             catch (Exception e)
             {
