@@ -41,7 +41,7 @@
                     return _config;
                 }
 
-                return LoadMainConfig();
+                return _config = LoadMainConfig();
             }
             set
             {
@@ -71,7 +71,7 @@
                     return _elementColors;
                 }
 
-                return LoadElementColors();
+                return _elementColors = LoadElementColors();
             }
 			set
 			{
