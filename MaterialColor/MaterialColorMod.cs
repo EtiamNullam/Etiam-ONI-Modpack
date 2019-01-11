@@ -17,16 +17,31 @@ using MaterialColor.IO;
 
 namespace MaterialColor
 {
-    public static class HarmonyPatches
+    public static class MaterialColorMod
     {
         private static ConfigWatcher Watcher;
 
         [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
-        public static class SplashMessageScreen_OnSpawn
+        public static class GameLaunch
         {
             public static void Postfix()
             {
-                // TODO: load initial config files here
+                try
+                {
+                    Components.BuildingCompletes.OnAdd += Painter.UpdateBuildingColor;
+
+                    State.Config = State.LoadMainConfig();
+                    State.ElementColors = State.LoadElementColors();
+                    Watcher = new ConfigWatcher();
+
+                    SimAndRenderScheduler.instance.render1000ms.Add(Watcher);
+                    Painter.Refresh();
+                }
+                catch (Exception e)
+                {
+                    Logger.Log("GameLaunch failed");
+                    Logger.Log(e);
+                }
             }
         }
 
@@ -354,31 +369,6 @@ namespace MaterialColor
                     Logger.LogDebug("EnterToggle failed.");
                     Logger.LogDebug(e);
                     return true;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Material + element color
-        /// </summary>
-        [HarmonyPatch(typeof(Game), "OnPrefabInit")]
-        public static class Game_OnPrefabInit
-        {
-            [HarmonyPostfix]
-            private static void Postfix()
-            {
-                try
-                {
-                    Components.BuildingCompletes.OnAdd += Painter.UpdateBuildingColor;
-
-                    Watcher = new ConfigWatcher();
-                    SimAndRenderScheduler.instance.render1000ms.Add(Watcher);
-                    Painter.Refresh();
-                }
-                catch (Exception e)
-                {
-                    Logger.LogDebug("MaterialColor init failed");
-                    Logger.LogDebug(e);
                 }
             }
         }

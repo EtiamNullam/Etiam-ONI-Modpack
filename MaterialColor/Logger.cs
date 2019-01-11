@@ -7,13 +7,7 @@ namespace MaterialColor
 {
     public static class Logger
     {
-        public static void LogDebug(object message)
-        {
-            if (State.Config.Debug)
-            {
-                Debug.Log(message);
-            }
-        }
+        private const string ModName = "MaterialColor";
 
         // TODO: try printing all messages on crash/exit
         private static List<object> Messages = new List<object>();
@@ -23,15 +17,23 @@ namespace MaterialColor
             // TODO: check probably wont work with "object" type
             if (!Messages.Contains(message))
             {
-                Debug.Log(message);
+                Log(message);
                 Messages.Add(message);
             }
             else LogDebug(message);
         }
 
+        public static void LogDebug(object message)
+        {
+            if (State.Config.Debug)
+            {
+                Log(message);
+            }
+        }
+
         public static void Log(object message)
         {
-            Debug.Log(message);
+            Debug.Log(ModName + ": " + message);
         }
     }
 }
