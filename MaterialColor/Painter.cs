@@ -97,7 +97,7 @@ namespace MaterialColor
             }
             else
             {
-                Logger.LogDebug($"MaterialColor: Invalid building <{building}> and its not a registered tile.");
+                Logger.LogDebug("Invalid building <{building}> and its not a registered tile.");
             }
         }
 
