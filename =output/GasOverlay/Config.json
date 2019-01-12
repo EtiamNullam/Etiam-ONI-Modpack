@@ -1,0 +1,9 @@
+{
+    "GasPressureEnd": 2.5,
+    "MinimumGasColorIntensity": 0.25,
+    "ShowEarDrumPopMarker": true,
+    "FactorValueHSVGases": 0.5,
+    "FactorValueHSVCarbonDioxide": 2,
+    "EarPopFloat": 5,
+    "InterpFactor": 0.08
+}

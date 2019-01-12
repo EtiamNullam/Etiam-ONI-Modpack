@@ -46,6 +46,7 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\=libs\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -73,9 +74,15 @@
     <Compile Include="Config.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)=output\$(TargetName).dll"</PostBuildEvent>
+    <PostBuildEvent>robocopy /E "$(TargetDir)..\$(ConfigurationName)" "$(SolutionDir)=output\$(ProjectName)"
+if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions />
 </Project>
