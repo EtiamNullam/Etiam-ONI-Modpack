@@ -8,6 +8,8 @@ I would never be able to do it without help of Cairath, javisar, octoshrimpy, Ki
 
 Requires [@javisar](https://github.com/javisar)'s mod loader - [GitHub](https://github.com/javisar/ONI-Modloader) / [Forum Thread](https://forums.kleientertainment.com/forums/topic/88186-mods05-oni-modloader/)
 
+After installation of modloader copy over contents of `=Output` directory to `Mods` directory in Oxygen Not Included installation directory.
+
 ## Mods preview
 
 ### MaterialColor
@@ -27,9 +29,3 @@ Requires [@javisar](https://github.com/javisar)'s mod loader - [GitHub](https://
 ![meteor-shower.gif](Preview/Gifs/meteor-shower.gif)
 
 ![electrolyzer-show.gif](Preview/Gifs/electrolyzer-show.gif)
-
-## Contribution
-
-### Preparing solution
-
-TODO
