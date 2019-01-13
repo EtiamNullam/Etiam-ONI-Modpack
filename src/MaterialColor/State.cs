@@ -31,7 +31,6 @@
         private static Config _config = new Config();
 
         [NotNull]
-        // TODO: load on game start
         public static Config Config
         {
             get
@@ -57,7 +56,6 @@
         public static TextFilter TypeFilter { get; set; }
 
         [NotNull]
-        // TODO: load on game start
         public static Dictionary<SimHashes, ElementColor> ElementColors { get; set; } = new Dictionary<SimHashes, ElementColor>();
 
         public static Config LoadMainConfig()
