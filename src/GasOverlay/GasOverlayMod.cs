@@ -90,14 +90,14 @@ namespace GasOverlay
                 SimHashes elementID = element.id;
                 Color primaryColor = GetCellOverlayColor(cell, element);
                 float mass = Grid.Mass[cell];
-                float maxMass = Config.GasPressureEnd;
+                float maxMass = Config.MaxMass;
                 float pressureFraction = GetPressureFraction(mass, maxMass);
 
                 ColorHSV colorHSV = primaryColor.ToHSV();
 
                 colorHSV = ScaleColorToPressure(colorHSV, pressureFraction, elementID);
 				
-                if (Config.ShowEarDrumPopMarker && mass > Config.EarPopFloat)
+                if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
                 {
                     colorHSV = MarkEarDrumPopPressure(colorHSV, mass, elementID);
                 }
@@ -111,12 +111,12 @@ namespace GasOverlay
             {
                 if (elementID == SimHashes.CarbonDioxide)
                 {
-					color.V *= (1 - fraction) * Config.FactorValueHSVCarbonDioxide;
+					color.V *= (1 - fraction) * Config.ValueFactorCarbonDioxide;
 				}
                 else
                 {
-                    color.S *= fraction * 1.25f;
-					color.V -= (1 - fraction) * Config.FactorValueHSVGases;
+                    color.S *= fraction * Config.SaturationFactor;
+					color.V -= (1 - fraction) * Config.ValueFactor;
 				}
 
                 return color;
@@ -134,7 +134,7 @@ namespace GasOverlay
 
             public static float GetPressureFraction(float mass, float maxMass)
             {
-                float minFraction = Config.MinimumGasColorIntensity;
+                float minFraction = Config.MinimumIntensity;
                 float fraction = mass / maxMass;
 
                 fraction = Mathf.Lerp(minFraction, 1, fraction);
