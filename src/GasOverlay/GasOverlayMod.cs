@@ -97,7 +97,7 @@ namespace GasOverlay
 
                 colorHSV = ScaleColorToPressure(colorHSV, pressureFraction, elementID);
 				
-                if (Config.ShowEarDrumPopMarker)
+                if (Config.ShowEarDrumPopMarker && mass > Config.EarPopFloat)
                 {
                     colorHSV = MarkEarDrumPopPressure(colorHSV, mass, elementID);
                 }
@@ -144,17 +144,14 @@ namespace GasOverlay
 
             private static ColorHSV MarkEarDrumPopPressure(ColorHSV color, float mass, SimHashes elementID)
             {
-                if (mass > Config.EarPopFloat)
+                if (elementID == SimHashes.CarbonDioxide)
                 {
-                    if (elementID == SimHashes.CarbonDioxide)
-                    {
-                        color.V += 0.3f;
-                        color.S += 0.4f;
-                    }
-                    else
-                    {
-                        color.H += 0.1f;
-                    }
+                    color.V += 0.3f;
+                    color.S += 0.4f;
+                }
+                else
+                {
+                    color.H += 0.1f;
                 }
 
                 return color;
