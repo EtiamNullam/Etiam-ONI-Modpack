@@ -14,7 +14,7 @@ namespace MaterialColor
     /// </summary>
     public static class Painter
     {
-        private static readonly List<Type> _storageTypes = new List<Type>()
+        private static readonly List<Type> _storageTypes = new List<Type>
         {
             typeof(RationBox),
             typeof(Refrigerator),

@@ -70,7 +70,8 @@ namespace GasOverlay
 
                 try
                 {
-                    LastColors[cell] = __result = Color.Lerp(LastColors[cell], newGasColor, Config.InterpFactor);
+                    __result = Color.Lerp(LastColors[cell], newGasColor, Config.InterpFactor);
+                    LastColors[cell] = __result;
                 }
                 catch
                 {

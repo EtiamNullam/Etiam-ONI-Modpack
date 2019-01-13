@@ -33,7 +33,7 @@ namespace MaterialColor
         /// <summary>
         /// Checks if value passes through the filter's ruleset.
         /// </summary>
-        public Func<string, bool> Check;
+        public Func<string, bool> Check { get; set; }
 
         private readonly bool MatchId;
 

@@ -48,7 +48,8 @@ namespace MaterialColor
             {
                 try
                 {
-                    SimAndRenderScheduler.instance.render1000ms.Add(Watcher = new ConfigWatcher());
+                    Watcher = new ConfigWatcher();
+                    SimAndRenderScheduler.instance.render1000ms.Add(Watcher);
                 }
                 catch (Exception e)
                 {
