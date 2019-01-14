@@ -37,7 +37,7 @@
             {
                 return _config;
             }
-            set
+            private set
             {
                 _config = value;
 
@@ -47,8 +47,7 @@
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("Error while creating new TextFilter object");
-                    Logger.LogDebug(e);
+                    Logger.LogOnce("Error while creating new TextFilter object", e);
                 }
 			}
 		}
@@ -56,16 +55,23 @@
         public static TextFilter TypeFilter { get; set; }
 
         [NotNull]
-        public static Dictionary<SimHashes, ElementColor> ElementColors { get; set; } = new Dictionary<SimHashes, ElementColor>();
+        public static Dictionary<SimHashes, ElementColor> ElementColors { get; private set; } = new Dictionary<SimHashes, ElementColor>();
 
-        public static Config LoadMainConfig()
+        public static void LoadMainConfig()
         {
-            return File.Exists(Paths.MaterialConfigPath)
-                ? JsonConvert.DeserializeObject<Config>(File.ReadAllText(Paths.MaterialConfigPath))
-                : new Config();
+            string path = Paths.MainConfigPath;
+
+            if (File.Exists(path))
+            {
+                Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(path));
+            }
+            else
+            {
+                Logger.Log("Trying to load config from " + path + " but it doesn't exist.");
+            }
         }
 
-        public static Dictionary<SimHashes, ElementColor> LoadElementColors()
+        public static void LoadElementColors()
         {
             var newElementColors = new Dictionary<SimHashes, ElementColor>();
             foreach (string filePath in Directory.GetFiles(Paths.ElementColorsDirectory, "*.json"))
@@ -74,7 +80,8 @@
                 var fileElementColors = JsonConvert.DeserializeObject<Dictionary<SimHashes, ElementColor>>(json);
                 newElementColors = newElementColors.Concat(fileElementColors).ToDictionary(pair => pair.Key, pair => pair.Value);
             }
-            return newElementColors;
+
+            ElementColors = newElementColors;
         }
     }
 }

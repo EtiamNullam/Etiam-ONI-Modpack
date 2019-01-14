@@ -49,8 +49,7 @@ namespace MaterialColor
             }
             catch (Exception e)
             {
-                Logger.LogDebug("Error while filtering buildings");
-                Logger.LogDebug(e);
+                Logger.LogOnce("Error while filtering buildings", e);
             }
 
             ApplyColorToBuilding(building, color);
@@ -97,7 +96,7 @@ namespace MaterialColor
             }
             else
             {
-                Logger.LogDebug("Invalid building <{building}> and its not a registered tile.");
+                Logger.LogOnce("Invalid building <{building}> and its not a registered tile.");
             }
         }
 
@@ -109,8 +108,7 @@ namespace MaterialColor
             }
             catch (Exception e)
             {
-                Logger.LogDebug("Error while getting cell color");
-                Logger.LogDebug(e);
+                Logger.LogOnce("Error while getting cell color", e);
             }
         }
 
@@ -137,8 +135,7 @@ namespace MaterialColor
             }
             catch (Exception e)
             {
-                Logger.Log("Buildings colors update failed.");
-                Logger.LogDebug(e);
+                Logger.Log("Buildings colors update failed.", e);
             }
         }
     }

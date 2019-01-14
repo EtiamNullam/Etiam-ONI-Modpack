@@ -38,15 +38,14 @@ namespace MaterialColor.IO
         {
             try
             {
-                State.Config = State.LoadMainConfig();
+                State.LoadMainConfig();
                 this._configuratorStateChanged = true;
 
                 Logger.Log("Configurator state changed.");
             }
             catch (Exception ex)
             {
-                Logger.Log("Configurator state load failed.");
-                Logger.LogDebug(ex);
+                Logger.Log("Configurator state load failed.", ex);
             }
         }
 
@@ -54,15 +53,14 @@ namespace MaterialColor.IO
         {
             try
             {
-                State.ElementColors = State.LoadElementColors();
+                State.LoadElementColors();
                 this._elementColorInfosChanged = true;
 
                 Logger.Log("Element colors changed.");
             }
             catch (Exception ex)
             {
-                Logger.Log("ElementColors load failed.");
-                Logger.LogDebug(ex);
+                Logger.Log("Element colors load failed.", ex);
             }
         }
 

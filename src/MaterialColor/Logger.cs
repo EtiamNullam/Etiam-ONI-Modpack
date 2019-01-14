@@ -10,30 +10,51 @@ namespace MaterialColor
         private const string ModName = "MaterialColor";
 
         // TODO: try printing all messages on crash/exit
-        private static List<object> Messages = new List<object>();
+        public static readonly HashSet<string> Messages = new HashSet<string>();
 
-        public static void LogOnce(object message)
+        public static void LogOnce(string message, object data)
         {
-            // TODO: check probably wont work with "object" type
             if (!Messages.Contains(message))
             {
-                Log(message);
+                Log(message + Environment.NewLine + data);
                 Messages.Add(message);
             }
-            else LogDebug(message);
+            else
+            {
+                LogDebug(message);
+            }
         }
 
-        public static void LogDebug(object message)
+        public static void LogOnce(object data)
+        {
+            var message = data.ToString();
+            if (!Messages.Contains(message))
+            {
+                Log(data);
+                Messages.Add(message);
+            }
+            else
+            {
+                LogDebug(data);
+            }
+        }
+
+        public static void LogDebug(object data)
         {
             if (State.Config.Debug)
             {
-                Log(message);
+                Log(data);
             }
         }
 
-        public static void Log(object message)
+        public static void Log(string message, object data)
         {
-            Debug.Log(ModName + ": " + message);
+            Debug.Log(ModName + ": " + message + Environment.NewLine + data);
+        }
+
+        public static void Log(object data)
+        {
+            Debug.Log(ModName + ": " + data);
         }
     }
 }

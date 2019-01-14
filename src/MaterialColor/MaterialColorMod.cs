@@ -35,8 +35,8 @@ namespace MaterialColor
             {
                 try
                 {
-                    State.Config = State.LoadMainConfig();
-                    State.ElementColors = State.LoadElementColors();
+                    State.LoadMainConfig();
+                    State.LoadElementColors();
                 }
                 catch (Exception e)
                 {
@@ -102,8 +102,7 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Logger.LogDebug("Ownable_UpdateTint.Postfix");
-                    Logger.LogDebug(e);
+                    Logger.LogOnce("Ownable_UpdateTint.Postfix", e);
                 }
             }
         }
@@ -129,8 +128,7 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Logger.LogDebug("FilteredStorage_OnFilterChanged.Postfix");
-                    Logger.LogDebug(e);
+                    Logger.LogOnce("FilteredStorage_OnFilterChanged.Postfix", e);
                 }
             }
         }
@@ -153,8 +151,7 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Logger.LogDebug("EnterCell failed.");
-                    Logger.LogDebug(e);
+                    Logger.LogOnce("EnterCell failed.", e);
                 }
             }
         }
@@ -170,7 +167,7 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Logger.LogDebug(e);
+                    Logger.LogOnce(e);
                 }
             }
         }
@@ -185,7 +182,6 @@ namespace MaterialColor
                 {
                     if (State.Config.LogElementsData)
                     {
-                        Logger.Log("Element List:");
                         var values = Enum.GetNames(typeof(SimHashes));
                         Array.Sort(values);
                         string elementsLog = "";
@@ -193,7 +189,7 @@ namespace MaterialColor
                         {
                             elementsLog += Environment.NewLine + name;
                         }
-                        Logger.Log(elementsLog);
+                        Logger.Log("Elements list: " + elementsLog);
                     }
 
                     try
@@ -214,14 +210,13 @@ namespace MaterialColor
                     }
                     catch (Exception e)
                     {
-                        Logger.LogDebug("Keybindings failed:\n" + e);
+                        Logger.LogOnce("Keybindings failed:\n", e);
                         throw;
                     }
                 }
                 catch (Exception e)
                 {
-                    Logger.LogDebug("Global_GenerateDefaultBindings.Postfix");
-                    Logger.LogDebug(e);
+                    Logger.LogOnce("Global_GenerateDefaultBindings.Postfix", e);
                 }
             }
         }
@@ -270,8 +265,7 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Logger.LogDebug("OverlayMenu_InitializeToggles.Postfix: Icon set error");
-                    Logger.LogDebug(e);
+                    Logger.LogOnce("OverlayMenu_InitializeToggles.Postfix: Icon set error", e);
                 }
 			}
 
@@ -295,8 +289,7 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("GetUISprite failed");
-                    Logger.LogDebug(e);
+                    Logger.LogOnce("GetUISprite failed", e);
 
                     // TODO: set some placeholder sprite here
                     return null;
@@ -323,8 +316,7 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Logger.LogDebug("OverlayChangedEntry.Prefix failed");
-                    Logger.LogDebug(e);
+                    Logger.LogOnce("OverlayChangedEntry.Prefix failed", e);
                 }
             }
         }
@@ -342,8 +334,7 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Logger.LogDebug("KeyDef_Constructor.Postfix failed");
-                    Logger.LogDebug(e);
+                    Logger.LogOnce("KeyDef_Constructor.Postfix failed", e);
                 }
             }
         }
@@ -362,8 +353,7 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Logger.LogDebug("KInputController_Constructor.KInputControllerMod failed");
-                    Logger.LogDebug(e);
+                    Logger.LogOnce("KInputController_Constructor.KInputControllerMod failed", e);
                 }
 			}
 		}
@@ -393,8 +383,7 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Logger.LogDebug("EnterToggle failed.");
-                    Logger.LogDebug(e);
+                    Logger.LogOnce("EnterToggle failed.", e);
                     return true;
                 }
             }
@@ -413,8 +402,7 @@ namespace MaterialColor
                 }
                 catch (Exception e)
                 {
-                    Logger.LogDebug("Game_DestroyInstances.Postfix");
-                    Logger.LogDebug(e);
+                    Logger.LogOnce("Game_DestroyInstances.Postfix failed", e);
                 }
             }
         }
