@@ -64,6 +64,7 @@
             if (File.Exists(path))
             {
                 Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(path));
+                Logger.Log("Main config loaded", JsonConvert.SerializeObject(Config));
             }
             else
             {

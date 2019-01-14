@@ -40,12 +40,10 @@ namespace MaterialColor.IO
             {
                 State.LoadMainConfig();
                 this._configuratorStateChanged = true;
-
-                Logger.Log("Configurator state changed.");
             }
             catch (Exception ex)
             {
-                Logger.Log("Configurator state load failed.", ex);
+                Logger.Log("Main config load failed.", ex);
             }
         }
 

@@ -12,6 +12,7 @@ namespace GasOverlay
         public static Color[] LastColors;
         private static readonly Color NotGasColor = new Color(0.6f, 0.6f, 0.6f);
         private static Config Config = new Config();
+        private const string ModName = "GasOverlay";
 
         [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
         public static class SplashMessageScreen_OnSpawn
@@ -27,7 +28,7 @@ namespace GasOverlay
                 }
                 catch (Exception e)
                 {
-                    Debug.Log("GasOverlay: Error while starting file watcher: " + e);
+                    Debug.Log(ModName + ": Error while starting file watcher: " + e);
                 }
 
                 try
@@ -36,7 +37,7 @@ namespace GasOverlay
                 }
                 catch (Exception e)
                 {
-                    Debug.Log("GasOverlay: Error while loading config: " + e);
+                    Debug.Log(ModName + ": Error while loading config: " + e);
                 }
             }
 
@@ -45,7 +46,7 @@ namespace GasOverlay
                 if (File.Exists(filePath))
                 {
                     Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(filePath));
-                    Debug.Log("GasOverlay: config reloaded");
+                    Debug.Log(ModName + ": Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(Config));
                 }
             }
 
