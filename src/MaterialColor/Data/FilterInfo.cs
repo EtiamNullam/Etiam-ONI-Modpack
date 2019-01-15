@@ -13,10 +13,8 @@ namespace MaterialColor.Data
     {
         /// <param name="rules">Rules to check against</param>
         /// <param name="inclusive">True: check if there is rule for it, False: check if there is no rule for it</param>
-        public FilterInfo(IEnumerable<string> rules = null, bool inclusive = false, bool exactMatch = false)
+        public FilterInfo(IEnumerable<string> rules = null)
         {
-            this.Inclusive = inclusive;
-            this.ExactMatch = exactMatch;
             this.Rules = new List<string>();
 
             if (rules != null)
@@ -25,8 +23,8 @@ namespace MaterialColor.Data
             }
         }
 
-        public readonly bool Inclusive;
-        public readonly bool ExactMatch;
-        public readonly List<string> Rules;
+        public bool Inclusive { get; set; } = false;
+        public bool ExactMatch { get; set; } = false;
+        public List<string> Rules { get; private set; }
     }
 }

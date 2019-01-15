@@ -52,7 +52,7 @@
 			}
 		}
 
-        public static TextFilter TypeFilter { get; set; }
+        public static TextFilter TypeFilter { get; private set; }
 
         [NotNull]
         public static Dictionary<SimHashes, ElementColor> ElementColors { get; private set; } = new Dictionary<SimHashes, ElementColor>();
