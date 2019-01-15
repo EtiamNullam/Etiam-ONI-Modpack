@@ -21,10 +21,10 @@ namespace MaterialColor.IO
 
         void IRender1000ms.Render1000ms(float dt)
         {
-            if (_elementColorInfosChanged || _configuratorStateChanged)
+            if (this._elementColorInfosChanged || this._configuratorStateChanged)
             {
                 Painter.Refresh();
-                _elementColorInfosChanged = _configuratorStateChanged = false;
+                _elementColorInfosChanged = this._configuratorStateChanged = false;
             }
         }
 
