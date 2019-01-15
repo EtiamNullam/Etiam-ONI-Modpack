@@ -18,39 +18,48 @@ namespace MaterialColor
         public TextFilter(FilterInfo info)
         {
             this.Rules = info.Rules;
-            this.MatchId = info.ExactMatch;
 
             if (info.Inclusive)
             {
-                this.Check = this.InclusiveCheck;
+                if (info.ExactMatch)
+                {
+                    this.Check = this.InclusiveExactCheck;
+                }
+                else
+                {
+                    this.Check = this.InclusiveContainsCheck;
+                }
             }
             else
             {
-                this.Check = this.ExclusiveCheck;
+                if (info.ExactMatch)
+                {
+                    this.Check = this.ExclusiveExactCheck;
+                }
+                else
+                {
+                    this.Check = this.ExclusiveContainsCheck;
+                }
             }
         }
 
         /// <summary>
         /// Checks if value passes through the filter's ruleset.
         /// </summary>
-        public Func<string, bool> Check { get; set; }
-
-        private readonly bool MatchId;
+        public Func<string, bool> Check { get; private set; }
 
         private readonly List<string> Rules;
 
-        private bool InclusiveCheck(string value)
-        {
-            return this.Rules.Any(rule => this.MatchId
-                ? value.Equals(rule)
-                : value.Contains(rule));
-        }
+        private bool InclusiveExactCheck(string value)
+            => this.Rules.Any(rule => value.Equals(rule));
 
-        private bool ExclusiveCheck(string value)
-        {
-            return !this.Rules.Any(rule => this.MatchId
-                ? value.Equals(rule)
-                : value.Contains(rule));
-        }
+        private bool ExclusiveExactCheck(string value)
+            => !this.Rules.Any(rule => value.Equals(rule));
+
+        private bool InclusiveContainsCheck(string value)
+            => this.Rules.Any(rule => value.Contains(rule));
+
+        private bool ExclusiveContainsCheck(string value)
+            => !this.Rules.Any(rule => value.Contains(rule));
     }
 }
