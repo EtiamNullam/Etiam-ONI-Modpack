@@ -11,11 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreeCamera", "FreeCamera\Fr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoveDailyReports", "SaveNoDailyReports\RemoveDailyReports.csproj", "{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{1F044442-F653-43D6-A7FD-7C740EC0272A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkGasOverlay", "Tools\BenchmarkGasOverlay\BenchmarkGasOverlay.csproj", "{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearRegolith", "Tools\ClearRegolith\ClearRegolith.csproj", "{886D1096-5D6B-4F42-A793-1CDF6F73E96B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTemperatureOverlay", "CustomTemperatureOverlay\CustomTemperatureOverlay.csproj", "{92E021FE-3CCC-43B1-984D-9C48CA427610}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,21 +35,13 @@ Global
 		{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{886D1096-5D6B-4F42-A793-1CDF6F73E96B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{886D1096-5D6B-4F42-A793-1CDF6F73E96B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{886D1096-5D6B-4F42-A793-1CDF6F73E96B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{886D1096-5D6B-4F42-A793-1CDF6F73E96B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92E021FE-3CCC-43B1-984D-9C48CA427610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92E021FE-3CCC-43B1-984D-9C48CA427610}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92E021FE-3CCC-43B1-984D-9C48CA427610}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92E021FE-3CCC-43B1-984D-9C48CA427610}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E} = {1F044442-F653-43D6-A7FD-7C740EC0272A}
-		{886D1096-5D6B-4F42-A793-1CDF6F73E96B} = {1F044442-F653-43D6-A7FD-7C740EC0272A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04275AE4-9475-4B12-9048-311A0F8E22A7}
