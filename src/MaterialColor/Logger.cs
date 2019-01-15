@@ -21,7 +21,7 @@ namespace MaterialColor
             }
             else
             {
-                LogDebug(message);
+                LogDebug(message, data);
             }
         }
 
@@ -36,6 +36,14 @@ namespace MaterialColor
             else
             {
                 LogDebug(data);
+            }
+        }
+
+        public static void LogDebug(string message, object data)
+        {
+            if (State.Config.Debug)
+            {
+                Log(message + Environment.NewLine + data);
             }
         }
 
