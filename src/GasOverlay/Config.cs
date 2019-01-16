@@ -13,6 +13,6 @@
         /// <summary>
         /// 0-1, where 1 means instant and 0 means no change.
         /// </summary>
-        public float InterpFactor { get; set; } = 0.08f;
+        public float InterpFactor { get; set; } = 0.025f;
     }
 }
