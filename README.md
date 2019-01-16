@@ -26,8 +26,8 @@ After installation of modloader copy over contents of `=Output` directory to `Mo
 
 ### GasOverlay
 
+![natural-overview.png](https://i.imgur.com/mgsPJH6.png)
+
 ![meteor-shower.gif](https://media.giphy.com/media/g0mvuCu4RmSygunTTj/giphy.gif)
 
 ![electrolyzer-show.gif](https://media.giphy.com/media/mx8i1ZZHeNbOUpUcN8/giphy.gif)
-
-![natural-overview.png](https://i.imgur.com/mgsPJH6.png)
