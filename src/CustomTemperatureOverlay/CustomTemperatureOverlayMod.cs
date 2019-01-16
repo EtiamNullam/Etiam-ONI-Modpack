@@ -13,6 +13,7 @@ namespace CustomTemperatureOverlay
         // TODO: load config from file
         // TODO: set filewatcher on config
         // TODO: set keybind to set ranges to currently visible (adaptive overlay)
+        // TODO: benchmark vanilla temp overlay vs new
 
         [HarmonyPatch(typeof(SimDebugView), nameof(SimDebugView.NormalizedTemperature))]
         public static class SimDebugView_NormalizedTemperature
@@ -69,42 +70,42 @@ namespace CustomTemperatureOverlay
                 {
                     new SimDebugView.ColorThreshold // Exact Absolute Zero
                     {
-                        color = new UnityEngine.Color(1,1,1,1),
+                        color = new Color(1,1,1,1),
                         value = 0
                     },
                     new SimDebugView.ColorThreshold // Near Absolute Zero
                     {
-                        color = new UnityEngine.Color(0.7f,0,1,1),
+                        color = new Color(0.7f,0,1,1),
                         value = 5
                     },
                     new SimDebugView.ColorThreshold // Coldest Ice Biome
                     {
-                        color = new UnityEngine.Color(0,0,1,0.75f),
+                        color = new Color(0,0,1,0.75f),
                         value = 273-60
                     },
                     new SimDebugView.ColorThreshold // Temperate
                     {
-                        color = new UnityEngine.Color(0,1,0,0.75f),
+                        color = new Color(0,1,0,0.75f),
                         value = 273+20
                     },
                     new SimDebugView.ColorThreshold // Spare2
                     {
-                        color = new UnityEngine.Color(1,0.75f,0,0.75f),
+                        color = new Color(1,0.75f,0,0.75f),
                         value = 273+50
                     },
                     new SimDebugView.ColorThreshold // Hot Steam
                     {
-                        color = new UnityEngine.Color(1,0,0,0.75f),
+                        color = new Color(1,0,0,0.75f),
                         value = 273+125
                     },
                     new SimDebugView.ColorThreshold // Magma
                     {
-                        color = new UnityEngine.Color(1,0,0.35f,0.75f),
+                        color = new Color(1,0,0.35f,0.75f),
                         value = 273+1250
                     },
                     new SimDebugView.ColorThreshold // Hot Magma
                     {
-                        color = new UnityEngine.Color(1,0,0.7f,0.75f),
+                        color = new Color(1,0,0.7f,0.75f),
                         value = 273+2000
                     },
                 };
