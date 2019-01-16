@@ -14,20 +14,20 @@ After installation of modloader copy over contents of `=Output` directory to `Mo
 
 ### MaterialColor
 
-![lavatories.png](Preview/Images/lavatories.png)
+![lavatories.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/MaterialColor/lavatories.png)
 
-![blocks.png](Preview/Images/blocks.png)
+![blocks.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/MaterialColor/blocks.png)
 
-![forges.png](Preview/Images/forges.png)
+![forges.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/MaterialColor/forges.png)
 
-![mushers.png](Preview/Images/mushers.png)
+![mushers.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/MaterialColor/mushers.png)
 
-![pipes.png](Preview/Images/pipes.png)
+![pipes.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/MaterialColor/pipes.png)
 
 ### GasOverlay
 
-![natural-overview.png](https://i.imgur.com/mgsPJH6.png)
+![natural-overview.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/GasOverlay/natural-overview.gif)
 
-![meteor-shower.gif](https://media.giphy.com/media/g0mvuCu4RmSygunTTj/giphy.gif)
+![meteor-shower.gif](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/GasOverlay/meteor-shower.gif)
 
-![electrolyzer-show.gif](https://media.giphy.com/media/mx8i1ZZHeNbOUpUcN8/giphy.gif)
+![electrolyzer-show.gif](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/GasOverlay/electrolyzers.gif)
