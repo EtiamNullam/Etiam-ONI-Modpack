@@ -64,7 +64,7 @@
             if (File.Exists(path))
             {
                 Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(path));
-                Logger.Log("Main config loaded", JsonConvert.SerializeObject(Config));
+                Logger.Log("Main config loaded: ", JsonConvert.SerializeObject(Config));
             }
             else
             {
@@ -83,6 +83,8 @@
             }
 
             ElementColors = newElementColors;
+
+            Logger.Log("Element colors loaded.");
         }
     }
 }
