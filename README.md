@@ -2,6 +2,8 @@
 
 A bunch of mods made for [Klei](https://www.klei.com/)'s Oxygen Not Included.
 
+![modpack_preview.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/Modpack.png)
+
 ### Many thanks to:
 - [@pardeike](https://github.com/pardeike) for his patching library - [Harmony](https://github.com/pardeike/Harmony)
 - [@javisar](https://github.com/javisar) for the [ModLoader](https://github.com/javisar/ONI-Modloader)
