@@ -44,6 +44,6 @@ Replaces vanilla "breathable overlay" with an overlay which shows every gas in i
 
 ### FreeCamera
 
-Allows camera to move out of world boundaries without debug mode. Helps working around the edges.
+Allows camera to move out of world boundaries without debug mode. Helps with working around the edges.
 
 ![free-camera.png](https://i.imgur.com/EotAJcg.png)
