@@ -26,7 +26,7 @@ After installation of modloader copy over contents of `=Output` directory to `Mo
 
 ### GasOverlay
 
-![natural-overview.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/GasOverlay/natural-overview.gif)
+![natural-overview.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/GasOverlay/natural-overview.png)
 
 ![meteor-shower.gif](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/GasOverlay/meteor-shower.gif)
 
