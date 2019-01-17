@@ -11,7 +11,7 @@ A bunch of mods made for [Klei](https://www.klei.com/)'s Oxygen Not Included.
 
 ### Download
 
-https://github.com/EtiamNullam/Etiam-ONI-Modpack/archive/master.zip
+Use this: [Modpack Link](https://github.com/EtiamNullam/Etiam-ONI-Modpack/archive/master.zip) or press `"Clone or download" -> "Download ZIP"`
 
 ### Modloader
 
