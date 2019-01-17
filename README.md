@@ -1,8 +1,11 @@
 # ONI Modpack by Etiam
 
-A bunch of mods made for Klei's Oxygen Not Included
+A bunch of mods made for [Klei](https://www.klei.com/)'s Oxygen Not Included.
 
-I would never be able to do it without help of Cairath, javisar, octoshrimpy, Killface80 and others.
+### Many thanks to:
+- [@pardeike](https://github.com/pardeike) for his patching library - [Harmony](https://github.com/pardeike/Harmony)
+- [@javisar](https://github.com/javisar) for the [ModLoader](https://github.com/javisar/ONI-Modloader)
+- Everyone else involved.
 
 ## Installation
 
