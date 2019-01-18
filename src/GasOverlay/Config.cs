@@ -3,7 +3,7 @@
     public class Config
     {
         public float MaxMass { get; set; } = 2.5f;
-        public float MinimumIntensity { get; set; } = 0.25f;
+        public float MinimumIntensity { get; set; } = 0.5f;
         public bool ShowEarDrumPopMarker { get; set; } = true;
         public float ValueFactor { get; set; } = 0.5f;
         public float ValueFactorCarbonDioxide { get; set; } = 2f;

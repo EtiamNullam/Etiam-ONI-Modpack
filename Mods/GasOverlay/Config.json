@@ -1,6 +1,6 @@
 { 
   "MaxMass": 2.5,
-  "InterpFactor": 0.025,
+  "InterpFactor": 0.05,
   "MinimumIntensity": 0.25,
   "ShowEarDrumPopMarker": true,
   "ValueFactor": 0.5,
