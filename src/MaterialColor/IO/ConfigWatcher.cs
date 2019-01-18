@@ -24,7 +24,7 @@ namespace MaterialColor.IO
             if (this._elementColorInfosChanged || this._configuratorStateChanged)
             {
                 Painter.Refresh();
-                _elementColorInfosChanged = this._configuratorStateChanged = false;
+                this._elementColorInfosChanged = this._configuratorStateChanged = false;
             }
         }
 

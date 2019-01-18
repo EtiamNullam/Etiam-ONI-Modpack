@@ -1,177 +1,18 @@
 ﻿using Harmony;
-using MaterialColor.Extensions;
-using MaterialColor.Helpers;
-using Rendering;
+using MaterialColor.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
-using JetBrains.Annotations;
-
+using System.Reflection;
+using System.Text;
 using UnityEngine;
 using static KInputController;
-using System.Reflection;
-using MaterialColor.Data;
-using MaterialColor.IO;
 
-namespace MaterialColor
+namespace MaterialColor.Patches
 {
-    public static class MaterialColorMod
+    public static class OverlayAndHotkey
     {
-        private static ConfigWatcher Watcher;
-        public static Color?[] TileColors;
-
-        [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
-        public static class GameLaunch
-        {
-            public static void Postfix()
-            {
-                TryStartConfigWatch();
-                TryLoadConfig();
-            }
-
-            private static void TryLoadConfig()
-            {
-                try
-                {
-                    State.LoadMainConfig();
-                    State.LoadElementColors();
-                }
-                catch (Exception e)
-                {
-                    Logger.Log(e);
-                }
-            }
-
-            private static void TryStartConfigWatch()
-            {
-                try
-                {
-                    Watcher = new ConfigWatcher();
-                    SimAndRenderScheduler.instance.render1000ms.Add(Watcher);
-                }
-                catch (Exception e)
-                {
-                    Logger.Log(e);
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(Game), "OnSpawn")]
-        public static class GameStart
-        {
-            public static void Postfix()
-            {
-                TryInitMod();
-            }
-
-            private static void TryInitMod()
-            {
-                try
-                {
-                    TileColors = new Color?[Grid.CellCount];
-                    Components.BuildingCompletes.OnAdd += Painter.UpdateBuildingColor;
-                    Painter.Refresh();
-                }
-                catch (Exception e)
-                {
-                    Logger.Log(e);
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(Ownable), "UpdateTint")]
-        public static class Ownable_UpdateTint
-        {
-            public static void Postfix(Ownable __instance)
-            {
-                try
-                {
-                    Color color = ColorHelper.GetComponentMaterialColor(__instance);
-                    bool owned = __instance.assignee != null;
-
-                    if (owned)
-                    {
-                        KAnimControllerBase animBase = __instance.GetComponent<KAnimControllerBase>();
-                        if (animBase != null)
-                        {
-                            animBase.TintColour = color;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.LogOnce("Ownable_UpdateTint.Postfix", e);
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(FilteredStorage), "OnFilterChanged")]
-        public static class FilteredStorage_OnFilterChanged
-        {
-            public static void Postfix(KMonoBehaviour ___root, Tag[] tags)
-            {
-                try
-                {
-                    Color color = ColorHelper.GetComponentMaterialColor(___root);
-                    bool active = tags != null && tags.Length != 0;
-
-                    if (active)
-                    {
-                        KAnimControllerBase animBase = ___root.GetComponent<KAnimControllerBase>();
-                        if (animBase != null)
-                        {
-                            animBase.TintColour = color;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.LogOnce("FilteredStorage_OnFilterChanged.Postfix", e);
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(BlockTileRenderer), nameof(BlockTileRenderer.GetCellColour))]
-        public static class BlockTileRenderer_GetCellColour
-        {
-            public static void Postfix(int cell, SimHashes element, BlockTileRenderer __instance, ref Color __result)
-            {
-                try
-                {
-                    if
-                    (
-                        State.Config.Enabled &&
-                        TileColors[cell].HasValue
-                    )
-                    {
-                        __result *= TileColors[cell].Value;
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.LogOnce("EnterCell failed.", e);
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(Deconstructable), "OnCompleteWork")]
-        public static class Deconstructable_OnCompleteWork_MatCol
-        {
-            public static void Postfix(Deconstructable __instance)
-            {
-                try
-                {
-                    TileColors[__instance.GetCell()] = null;
-                }
-                catch (Exception e)
-                {
-                    Logger.LogOnce(e);
-                }
-            }
-        }
-        
         // TODO: still needs rework
         [HarmonyPatch(typeof(Global), "GenerateDefaultBindings")]
         public static class Global_GenerateDefaultBindings
@@ -385,24 +226,6 @@ namespace MaterialColor
                 {
                     Logger.LogOnce("EnterToggle failed.", e);
                     return true;
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(Game), "DestroyInstances")]
-        public static class Game_DestroyInstances
-        {
-            public static void Postfix()
-            {
-                try
-                {
-                    SimAndRenderScheduler.instance.render1000ms.Remove(Watcher);
-                    Watcher.Dispose();
-                    Watcher = null;
-                }
-                catch (Exception e)
-                {
-                    Logger.LogOnce("Game_DestroyInstances.Postfix failed", e);
                 }
             }
         }

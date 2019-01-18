@@ -1,6 +1,7 @@
 ﻿using Harmony;
 using MaterialColor.Extensions;
 using MaterialColor.Helpers;
+using MaterialColor.Patches;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,7 +105,7 @@ namespace MaterialColor
         {
             try
             {
-                MaterialColorMod.TileColors[Grid.PosToCell(building.gameObject)] = color.ToTileColor();
+                State.TileColors[Grid.PosToCell(building.gameObject)] = color.ToTileColor();
             }
             catch (Exception e)
             {

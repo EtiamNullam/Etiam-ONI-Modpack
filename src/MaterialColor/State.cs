@@ -12,6 +12,8 @@
 
     public static class State
     {
+        public static Color?[] TileColors;
+
         // TODO: load from file instead
         [NotNull]
         public static readonly List<string> TileNames = new List<string>
