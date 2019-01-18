@@ -12,16 +12,23 @@ namespace RemoveDailyReports.Patches
     {
         public static void Postfix(ref List<ReportManager.DailyReport> ___dailyReports)
         {
-            int recentReportsToSpare = 5;
-            int dailyReportsCount = ___dailyReports.Count();
-
-            if (dailyReportsCount > recentReportsToSpare)
+            try
             {
-                var reportsToClear = ___dailyReports.Take(dailyReportsCount - recentReportsToSpare);
-                foreach (var report in reportsToClear)
+                int recentReportsToSpare = 5;
+                int dailyReportsCount = ___dailyReports.Count();
+
+                if (dailyReportsCount > recentReportsToSpare)
                 {
-                    report.reportEntries.Clear();
+                    var reportsToClear = ___dailyReports.Take(dailyReportsCount - recentReportsToSpare);
+                    foreach (var report in reportsToClear)
+                    {
+                        report.reportEntries.Clear();
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Error while clearing old reports at night: " + e);
             }
         }
     }

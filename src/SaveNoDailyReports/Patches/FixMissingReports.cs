@@ -34,7 +34,6 @@ namespace RemoveDailyReports.Patches
 
                         }
                         ___dailyReports.InsertRange(0, missingDailyReports);
-                        Debug.Log("new reports count: " + ___dailyReports.Count());
                     }
                 }
                 catch (Exception e)
