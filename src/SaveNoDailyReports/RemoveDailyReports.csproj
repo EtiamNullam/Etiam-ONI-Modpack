@@ -7,8 +7,8 @@
     <ProjectGuid>{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SaveNoDailyReports</RootNamespace>
-    <AssemblyName>SaveNoDailyReports</AssemblyName>
+    <RootNamespace>RemoveDailyReports</RootNamespace>
+    <AssemblyName>RemoveDailyReports</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -76,7 +76,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SaveNoDailyReportsMod.cs" />
+    <Compile Include="Patches\DisableNightReports.cs" />
+    <Compile Include="Patches\DisableValueReporting.cs" />
+    <Compile Include="Patches\NoReportsInReportManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
