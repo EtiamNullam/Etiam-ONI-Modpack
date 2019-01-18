@@ -52,3 +52,7 @@ Replaces vanilla "breathable overlay" with an overlay which shows every gas in i
 Allows camera to move out of world boundaries without debug mode. Helps with working around the edges.
 
 ![free-camera.png](https://i.imgur.com/EotAJcg.png)
+
+### RemoveDailyReports
+
+Removes old daily reports to decrease saving time and save file size. Might be useful on very high cycle count worlds.
