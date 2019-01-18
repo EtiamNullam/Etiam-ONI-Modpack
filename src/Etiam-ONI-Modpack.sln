@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaterialColor", "MaterialCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreeCamera", "FreeCamera\FreeCamera.csproj", "{3E4C5F26-692B-4FCD-B683-6D5FAAEFF7D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaveNoDailyReports", "SaveNoDailyReports\SaveNoDailyReports.csproj", "{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3E4C5F26-692B-4FCD-B683-6D5FAAEFF7D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E4C5F26-692B-4FCD-B683-6D5FAAEFF7D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E4C5F26-692B-4FCD-B683-6D5FAAEFF7D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
