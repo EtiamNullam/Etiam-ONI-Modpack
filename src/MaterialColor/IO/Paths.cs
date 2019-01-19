@@ -5,17 +5,29 @@ namespace MaterialColor.IO
     // TODO: refactor, split
     public static class Paths
     {
-        public static readonly string MaterialMainPath = "Mods" + Path.DirectorySeparatorChar + "MaterialColor";
+        public const string ModsPath = "Mods";
+        public const string ModName = "MaterialColor";
+
+        /// <summary>
+        /// Replaced on runtime by ConfigWatch.SetPaths
+        /// </summary>
+        public static string MaterialMainPath = ModsPath + Path.DirectorySeparatorChar + ModName;
 
         public const string MainConfigFileName = "Config.json";
 
-        public static readonly string MaterialConfigPath = MaterialMainPath + Path.DirectorySeparatorChar + "Config";
-        public static readonly string SpritesPath = MaterialMainPath + Path.DirectorySeparatorChar + "Sprites";
+        public static string MaterialConfigPath
+            => MaterialMainPath + Path.DirectorySeparatorChar + "Config";
 
-        public static readonly string ElementColorsDirectory = MaterialConfigPath + Path.DirectorySeparatorChar + "ElementColors";
+        public static string SpritesPath
+            => MaterialMainPath + Path.DirectorySeparatorChar + "Sprites";
 
-        public static readonly string MainConfigPath = MaterialConfigPath + Path.DirectorySeparatorChar + MainConfigFileName;
+        public static string ElementColorsDirectory
+            => MaterialConfigPath + Path.DirectorySeparatorChar + "ElementColors";
 
-        public static readonly string IconPath = SpritesPath + Path.DirectorySeparatorChar + "overlay_materialColor.png";
+        public static string MainConfigPath
+            => MaterialConfigPath + Path.DirectorySeparatorChar + MainConfigFileName;
+
+        public static string IconPath
+            => SpritesPath + Path.DirectorySeparatorChar + "overlay_materialColor.png";
     }
 }

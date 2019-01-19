@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using GasOverlay.HSV;
 using Harmony;
 using Newtonsoft.Json;
@@ -17,13 +18,15 @@ namespace GasOverlay
         [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
         public static class SplashMessageScreen_OnSpawn
         {
-            public static readonly string directoryPath = "Mods" + Path.DirectorySeparatorChar + "GasOverlay";
-            public static readonly string filePath = directoryPath + Path.DirectorySeparatorChar + "Config.json";
+            public const string configFileName = "Config.json";
+            public static string configDirectoryPath = "Mods" + Path.DirectorySeparatorChar + "GasOverlay";
+            public static string ConfigFilePath => configDirectoryPath + Path.DirectorySeparatorChar + configFileName;
 
             public static void Postfix()
             {
                 try
                 {
+                    SetModRootPath();
                     SetWatcher();
                 }
                 catch (Exception e)
@@ -41,18 +44,41 @@ namespace GasOverlay
                 }
             }
 
+            // TODO: extract to some common library
+            private static void SetModRootPath()
+            {
+                try
+                {
+                    var directories = Directory.GetDirectories("Mods", ModName, SearchOption.AllDirectories);
+                    var modRootPath = directories.FirstOrDefault();
+
+                    if (modRootPath != null)
+                    {
+                        configDirectoryPath = modRootPath;
+                    }
+                    else
+                    {
+                        Debug.Log(ModName + ": Couldn't find mod root path.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(ModName + ": Error while searching for mod root path." + Environment.NewLine + e);
+                }
+            }
+
             private static void ReloadConfig()
             {
-                if (File.Exists(filePath))
+                if (File.Exists(ConfigFilePath))
                 {
-                    Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(filePath));
+                    Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(ConfigFilePath));
                     Debug.Log(ModName + ": Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(Config));
                 }
             }
 
             private static void SetWatcher()
             {
-                var watcher = new FileSystemWatcher(directoryPath, "*.json");
+                var watcher = new FileSystemWatcher(configDirectoryPath, "*.json");
                 watcher.Changed += (o, e) => ReloadConfig();
                 watcher.EnableRaisingEvents = true;
             }

@@ -2,6 +2,7 @@
 using MaterialColor.IO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -16,8 +17,32 @@ namespace MaterialColor.Patches
         {
             public static void Postfix()
             {
+                SetModRootPath();
                 TryStartConfigWatch();
                 TryLoadConfig();
+            }
+
+            // TODO: extract to some common library
+            private static void SetModRootPath()
+            {
+                try
+                {
+                    var directories = Directory.GetDirectories(Paths.ModsPath, Paths.ModName, SearchOption.AllDirectories);
+                    var modRootPath = directories.FirstOrDefault();
+
+                    if (modRootPath != null)
+                    {
+                        Paths.MaterialMainPath = modRootPath;
+                    }
+                    else
+                    {
+                        Logger.Log("Couldn't find mod root path.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Log("Error while searching for mod root path.", e);
+                }
             }
 
             private static void TryLoadConfig()
