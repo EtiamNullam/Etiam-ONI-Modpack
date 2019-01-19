@@ -13,13 +13,17 @@ A bunch of mods made for [Klei](https://www.klei.com/)'s Oxygen Not Included.
 
 ### Download
 
-Use this: [Modpack Link](https://github.com/EtiamNullam/Etiam-ONI-Modpack/archive/master.zip) or press `"Clone or download" -> "Download ZIP"`
+Use this: [Download Link](https://github.com/EtiamNullam/Etiam-ONI-Modpack/archive/master.zip) or press `"Clone or download" -> "Download ZIP"`
 
 ### Modloader
 
 Requires [@javisar](https://github.com/javisar)'s mod loader - [GitHub](https://github.com/javisar/ONI-Modloader) / [Forum Thread](https://forums.kleientertainment.com/forums/topic/88186-mods05-oni-modloader/)
 
 After installation of modloader copy over contents of `Mods` directory to `Mods` directory in Oxygen Not Included installation directory.
+
+## Donate
+
+[![Support me on Patreon](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/become-a-patron.png)](https://www.patreon.com/bePatron?u=16564340)
 
 ## Mods preview
 
