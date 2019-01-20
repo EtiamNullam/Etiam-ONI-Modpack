@@ -1,67 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using CustomTemperatureOverlay.HSV;
 using Harmony;
+using Newtonsoft.Json;
 using UnityEngine;
 
-namespace CustomTemperatureOverlay
+namespace CustomTemperatureOverlay.Patches
 {
     public static class CustomTemperatureOverlayMod
     {
-        // TODO: load config from file
-        // TODO: set filewatcher on config
         // TODO: set keybind to set ranges to currently visible (adaptive overlay)
+
+        public const string ModName = "CustomTemperatureOverlay";
+        public const string configFileName = "Config.json";
+
+        public static string configDirectoryPath = "Mods" + Path.DirectorySeparatorChar + ModName;
+
+        public static string ConfigFilePath
+            => configDirectoryPath + Path.DirectorySeparatorChar + configFileName;
 
         [HarmonyPatch(typeof(SimDebugView), "OnPrefabInit")]
         public static class SimDebugView_OnPrefabInit
         {
-            public static void Postfix(SimDebugView __instance)
+            public static void Postfix()
             {
-                __instance.temperatureThresholds = new SimDebugView.ColorThreshold[]
+                SetModRootPath();
+                SetWatcher();
+                ReloadConfig();
+            }
+
+            // TODO: extract to some common library
+            private static void SetModRootPath()
+            {
+                try
                 {
-                    new SimDebugView.ColorThreshold // Exact Absolute Zero
+                    var directories = Directory.GetDirectories("Mods", ModName, SearchOption.AllDirectories);
+                    var modRootPath = directories.FirstOrDefault();
+
+                    if (modRootPath != null)
                     {
-                        color = new Color(1,1,1,0.7f),
-                        value = 0
-                    },
-                    new SimDebugView.ColorThreshold // Near Absolute Zero
+                        configDirectoryPath = modRootPath;
+                    }
+                    else
                     {
-                        color = new Color(0.65f,0,1,0.9f),
-                        value = 5
-                    },
-                    new SimDebugView.ColorThreshold // Coldest Ice Biome
-                    {
-                        color = new Color(0,0,1,0.75f),
-                        value = 273-60
-                    },
-                    new SimDebugView.ColorThreshold // Temperate
-                    {
-                        color = new Color(0,1,0,0.75f),
-                        value = 273+20
-                    },
-                    new SimDebugView.ColorThreshold // Warm
-                    {
-                        color = new Color(0.9f,0.5f,0,0.75f),
-                        value = 273+50
-                    },
-                    new SimDebugView.ColorThreshold // Hot Steam
-                    {
-                        color = new Color(0.9f,0,0,0.75f),
-                        value = 273+125
-                    },
-                    new SimDebugView.ColorThreshold // Hot Magma
-                    {
-                        color = new Color(1,0,0.35f,0.9f),
-                        value = 273+2000
-                    },
-                    new SimDebugView.ColorThreshold // Spare
-                    {
-                        color = new Color(1,0,0.35f,0.9f),
-                        value = 273+2001
-                    },
-                };
+                        Debug.Log(ModName + ": Couldn't find mod root path.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(ModName + ": Error while searching for mod root path." + Environment.NewLine + e);
+                }
+            }
+
+            private static void ReloadConfig()
+            {
+                if (File.Exists(ConfigFilePath))
+                {
+                    State.Thresholds = JsonConvert.DeserializeObject<SimDebugView.ColorThreshold[]>(File.ReadAllText(ConfigFilePath));
+                    Debug.Log(ModName + ": Config loaded");//: " + Environment.NewLine + JsonConvert.SerializeObject(State.Thresholds));
+                }
+                SimDebugView.Instance.temperatureThresholds = State.Thresholds;
+            }
+
+            private static void SetWatcher()
+            {
+                var watcher = new FileSystemWatcher(configDirectoryPath, "*.json");
+                watcher.Changed += (o, e) => ReloadConfig();
+                watcher.EnableRaisingEvents = true;
             }
         }
     }

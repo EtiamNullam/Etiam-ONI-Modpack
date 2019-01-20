@@ -1,0 +1,74 @@
+﻿[
+  { // Exact Absolute Zero
+    "color": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 0.7
+    },
+    "value": 0
+  },
+  { // Near Absolute Zero
+    "color": {
+      "r": 0.65,
+      "g": 0,
+      "b": 1,
+      "a": 0.9
+    },
+    "value": 5
+  },
+  { // Coldest Ice Biome
+    "color": {
+      "r": 0,
+      "g": 0,
+      "b": 1,
+      "a": 0.75
+    },
+    "value": 213
+  },
+  { // Temperate
+    "color": {
+      "r": 0,
+      "g": 1,
+      "b": 0,
+      "a": 0.75
+    },
+    "value": 293
+  },
+  { // Warm
+    "color": {
+      "r": 0.9,
+      "g": 0.5,
+      "b": 0,
+      "a": 0.75
+    },
+    "value": 323
+  },
+  { // Hot Steam
+    "color": {
+      "r": 0.9,
+      "g": 0,
+      "b": 0,
+      "a": 0.75
+    },
+    "value": 398
+  },
+  { // Hot Magma
+    "color": {
+      "r": 1,
+      "g": 0,
+      "b": 0.35,
+      "a": 0.9
+    },
+    "value": 2273
+  },
+  { // Spare
+    "color": {
+      "r": 1,
+      "g": 0,
+      "b": 0.35,
+      "a": 0.9
+    },
+    "value": 2274
+  }
+]
