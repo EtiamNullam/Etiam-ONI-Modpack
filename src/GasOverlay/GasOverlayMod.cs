@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Common;
 using GasOverlay.HSV;
 using Harmony;
 using Newtonsoft.Json;
@@ -27,7 +28,7 @@ namespace GasOverlay
                 try
                 {
                     SetModRootPath();
-                    SetWatcher();
+                    ConfigWatcher.SetWatcher(configDirectoryPath, configFileName, (o, e) => ReloadConfig());
                 }
                 catch (Exception e)
                 {
@@ -74,13 +75,6 @@ namespace GasOverlay
                     Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(ConfigFilePath));
                     Debug.Log(ModName + ": Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(Config));
                 }
-            }
-
-            private static void SetWatcher()
-            {
-                var watcher = new FileSystemWatcher(configDirectoryPath, "*.json");
-                watcher.Changed += (o, e) => ReloadConfig();
-                watcher.EnableRaisingEvents = true;
             }
         }
 
