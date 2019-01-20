@@ -12,6 +12,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoveDailyReports", "SaveNoDailyReports\RemoveDailyReports.csproj", "{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTemperatureOverlay", "CustomTemperatureOverlay\CustomTemperatureOverlay.csproj", "{92E021FE-3CCC-43B1-984D-9C48CA427610}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B0FE7A0A-C62D-41AE-94B3-DA3429806A29} = {B0FE7A0A-C62D-41AE-94B3-DA3429806A29}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{4B020951-E9C9-4F45-8649-B12F004B239C}"
 EndProject
