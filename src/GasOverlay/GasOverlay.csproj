@@ -44,7 +44,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Common">
-      <HintPath>..\=lib\Common\Common.dll</HintPath>
+      <HintPath>Common\Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -87,10 +87,17 @@
   <ItemGroup>
     <EmbeddedResource Include="Common\Common.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Common\=WARNING.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>robocopy /E "$(TargetDir)..\$(ConfigurationName)" "$(SolutionDir)..\Mods\$(ProjectName)"
 if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>robocopy /E "$(SolutionDir)Common" "$(ProjectDir)Common"
+if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25</PreBuildEvent>
   </PropertyGroup>
   <ProjectExtensions />
 </Project>

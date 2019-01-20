@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace GasOverlay.Common
+namespace Common
 {
     public static class LoadCommon
     {
