@@ -6,7 +6,9 @@ A bunch of mods made for [Klei](https://www.klei.com/)'s Oxygen Not Included.
 
 ### Many thanks to:
 - [@pardeike](https://github.com/pardeike) for his patching library - [Harmony](https://github.com/pardeike/Harmony)
-- [@javisar](https://github.com/javisar) for the [ModLoader](https://github.com/javisar/ONI-Modloader)
+- [@javisar](https://github.com/javisar) for taking care of my mods in [his repo](https://github.com/javisar/ONI-Modloader-Mods) while I was absent and for the [ModLoader](https://github.com/javisar/ONI-Modloader)
+- [@Killface80](https://github.com/Killface1980) for porting my mods to ModLoader and for great contributions to the GasOverlay.
+- [@Moonkis](https://github.com/Moonkis) for OnionPatcher and its merge with my modpack.
 - Everyone else involved.
 
 ## Installation
