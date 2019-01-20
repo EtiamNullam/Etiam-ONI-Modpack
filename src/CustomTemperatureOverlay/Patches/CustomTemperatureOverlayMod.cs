@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Common;
 using CustomTemperatureOverlay.HSV;
 using Harmony;
 using Newtonsoft.Json;
@@ -28,7 +29,7 @@ namespace CustomTemperatureOverlay.Patches
             public static void Postfix()
             {
                 SetModRootPath();
-                SetWatcher();
+                ConfigWatcher.SetWatcher(configDirectoryPath, configFileName, (o, e) => ReloadConfig());
                 ReloadConfig();
             }
 
@@ -63,13 +64,6 @@ namespace CustomTemperatureOverlay.Patches
                     Debug.Log(ModName + ": Config loaded");//: " + Environment.NewLine + JsonConvert.SerializeObject(State.Thresholds));
                 }
                 SimDebugView.Instance.temperatureThresholds = State.Thresholds;
-            }
-
-            private static void SetWatcher()
-            {
-                var watcher = new FileSystemWatcher(configDirectoryPath, "*.json");
-                watcher.Changed += (o, e) => ReloadConfig();
-                watcher.EnableRaisingEvents = true;
             }
         }
     }
