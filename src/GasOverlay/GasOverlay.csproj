@@ -73,7 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\LoadCommon.cs" />
+    <EmbeddedResource Include="Common\LoadCommon.cs" />
     <Compile Include="HSV\ColorHSV.cs" />
     <Compile Include="GasOverlayMod.cs" />
     <Compile Include="Config.cs" />

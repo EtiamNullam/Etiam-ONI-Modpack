@@ -82,7 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\=WARNING.txt" />
-    <Content Include="Common\Common.dll" />
+    <EmbeddedResource Include="Common\Common.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
