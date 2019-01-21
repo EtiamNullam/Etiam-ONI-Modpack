@@ -28,6 +28,7 @@ namespace CustomTemperatureOverlay.Patches
         {
             public static void Postfix()
             {
+                Common.ModState.Name = ModName;
                 SetModRootPath();
                 ConfigWatcher.SetWatcher(configDirectoryPath, configFileName, (o, e) => ReloadConfig());
                 ReloadConfig();
@@ -47,12 +48,12 @@ namespace CustomTemperatureOverlay.Patches
                     }
                     else
                     {
-                        Debug.Log(ModName + ": Couldn't find mod root path.");
+                        Common.Logger.Log("Couldn't find mod root path.");
                     }
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(ModName + ": Error while searching for mod root path." + Environment.NewLine + e);
+                    Common.Logger.Log("Error while searching for mod root path." + Environment.NewLine + e);
                 }
             }
 
@@ -61,7 +62,7 @@ namespace CustomTemperatureOverlay.Patches
                 if (File.Exists(ConfigFilePath))
                 {
                     State.Thresholds = JsonConvert.DeserializeObject<SimDebugView.ColorThreshold[]>(File.ReadAllText(ConfigFilePath));
-                    Debug.Log(ModName + ": Config loaded");//: " + Environment.NewLine + JsonConvert.SerializeObject(State.Thresholds));
+                    Common.Logger.Log("Config loaded");//: " + Environment.NewLine + JsonConvert.SerializeObject(State.Thresholds));
                 }
                 SimDebugView.Instance.temperatureThresholds = State.Thresholds;
             }

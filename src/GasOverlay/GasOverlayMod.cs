@@ -27,12 +27,13 @@ namespace GasOverlay
             {
                 try
                 {
+                    Common.ModState.Name = ModName;
                     SetModRootPath();
                     ConfigWatcher.SetWatcher(configDirectoryPath, configFileName, (o, e) => ReloadConfig());
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(ModName + ": Error while starting file watcher: " + e);
+                    Common.Logger.Log("Error while starting file watcher: " + e);
                 }
 
                 try
@@ -41,7 +42,7 @@ namespace GasOverlay
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(ModName + ": Error while loading config: " + e);
+                    Common.Logger.Log("Error while loading config: " + e);
                 }
             }
 
@@ -59,12 +60,12 @@ namespace GasOverlay
                     }
                     else
                     {
-                        Debug.Log(ModName + ": Couldn't find mod root path.");
+                        Common.Logger.Log("Couldn't find mod root path.");
                     }
                 }
                 catch (Exception e)
                 {
-                    Debug.Log(ModName + ": Error while searching for mod root path." + Environment.NewLine + e);
+                    Common.Logger.Log("Error while searching for mod root path." + Environment.NewLine + e);
                 }
             }
 
@@ -73,7 +74,7 @@ namespace GasOverlay
                 if (File.Exists(ConfigFilePath))
                 {
                     Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(ConfigFilePath));
-                    Debug.Log(ModName + ": Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(Config));
+                    Common.Logger.Log("Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(Config));
                 }
             }
         }
