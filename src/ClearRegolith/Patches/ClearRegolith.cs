@@ -19,7 +19,7 @@ namespace ClearRegolith
 
                 if (element != null && element.ElementID == SimHashes.Regolith)
                 {
-                    element.Units /= 4;
+                    element.Units /= 10;
                 }
             }
         } 
