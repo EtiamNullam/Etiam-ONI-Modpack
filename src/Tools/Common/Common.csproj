@@ -45,13 +45,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="=MixedOutput\LoadCommon.cs" />
     <Compile Include="ModState.cs" />
     <Compile Include="ConfigWatcher.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="=MixedOutput\=WARNING.txt" />
+    <Content Include="=MixedOutput\Common.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetDir)Common.dll" "$(SolutionDir)Common\Common.dll"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y "$(TargetDir)Common.dll" "$(ProjectDir)\=MixedOutput"</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -90,7 +90,7 @@
 if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>robocopy /E "$(SolutionDir)Common" "$(ProjectDir)Common"
+    <PreBuildEvent>robocopy /E "$(SolutionDir)Tools\Common\=MixedOutput" "$(ProjectDir)Common"
 if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25</PreBuildEvent>
   </PropertyGroup>
 </Project>
