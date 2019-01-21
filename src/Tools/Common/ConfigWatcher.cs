@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Common
 {
+    // TODO: rename from - it doesnt have to do anything with config yet
     public static class ConfigWatcher
     {
         // TODO: add remove watcher too? is it neede though?
