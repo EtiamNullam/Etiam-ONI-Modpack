@@ -4,8 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GasOverlay", "GasOverlay\GasOverlay.csproj", "{4475E088-4830-4BB4-BC97-FC8ACC18AFCB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B0FE7A0A-C62D-41AE-94B3-DA3429806A29} = {B0FE7A0A-C62D-41AE-94B3-DA3429806A29}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaterialColor", "MaterialColor\MaterialColor.csproj", "{FAAB5987-0B05-4114-808E-6C95D9EEA378}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B0FE7A0A-C62D-41AE-94B3-DA3429806A29} = {B0FE7A0A-C62D-41AE-94B3-DA3429806A29}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreeCamera", "FreeCamera\FreeCamera.csproj", "{3E4C5F26-692B-4FCD-B683-6D5FAAEFF7D9}"
 EndProject
