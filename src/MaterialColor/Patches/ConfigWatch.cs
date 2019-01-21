@@ -17,6 +17,8 @@ namespace MaterialColor.Patches
         {
             public static void Postfix()
             {
+                // TODO: remove magic string
+                Common.ModState.Name = "MaterialColor";
                 SetModRootPath();
                 TryStartConfigWatch();
                 TryLoadConfig();
@@ -36,12 +38,12 @@ namespace MaterialColor.Patches
                     }
                     else
                     {
-                        Logger.Log("Couldn't find mod root path.");
+                        Common.Logger.Log("Couldn't find mod root path.");
                     }
                 }
                 catch (Exception e)
                 {
-                    Logger.Log("Error while searching for mod root path.", e);
+                    Common.Logger.Log("Error while searching for mod root path.", e);
                 }
             }
 
@@ -54,7 +56,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Logger.Log(e);
+                    Common.Logger.Log(e);
                 }
             }
 
@@ -67,7 +69,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Logger.Log(e);
+                    Common.Logger.Log(e);
                 }
             }
         }
@@ -85,7 +87,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("Game_DestroyInstances.Postfix failed", e);
+                    Common.Logger.LogOnce("Game_DestroyInstances.Postfix failed", e);
                 }
             }
         }

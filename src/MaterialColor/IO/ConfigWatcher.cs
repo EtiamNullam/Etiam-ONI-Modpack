@@ -43,7 +43,7 @@ namespace MaterialColor.IO
             }
             catch (Exception ex)
             {
-                Logger.Log("Main config load failed.", ex);
+                Common.Logger.Log("Main config load failed.", ex);
             }
         }
 
@@ -56,7 +56,7 @@ namespace MaterialColor.IO
             }
             catch (Exception ex)
             {
-                Logger.Log("Element colors load failed.", ex);
+                Common.Logger.Log("Element colors load failed.", ex);
             }
         }
 

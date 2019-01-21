@@ -49,7 +49,7 @@
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("Error while creating new TextFilter object", e);
+                    Common.Logger.LogOnce("Error while creating new TextFilter object", e);
                 }
 			}
 		}
@@ -66,11 +66,11 @@
             if (File.Exists(path))
             {
                 Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(path));
-                Logger.Log("Main config loaded: ", JsonConvert.SerializeObject(Config));
+                Common.Logger.Log("Main config loaded: ", JsonConvert.SerializeObject(Config));
             }
             else
             {
-                Logger.Log("Trying to load config from " + path + " but it doesn't exist.");
+                Common.Logger.Log("Trying to load config from " + path + " but it doesn't exist.");
             }
         }
 
@@ -86,7 +86,7 @@
 
             ElementColors = newElementColors;
 
-            Logger.Log("Element colors loaded.");
+            Common.Logger.Log("Element colors loaded.");
         }
     }
 }
