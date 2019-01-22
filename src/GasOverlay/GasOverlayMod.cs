@@ -161,14 +161,13 @@ namespace GasOverlay
                     }
                 }
 
-                //colorHSV = colorHSV.Clamp();
+                colorHSV = colorHSV.Clamp();
 
                 return colorHSV.ToRgb();
             }
 
             private static ColorHSV ScaleColorToPressureGas(ColorHSV color, float fraction)
             {
-                color.S *= fraction * Config.SaturationFactor;
                 color.V -= (1 - fraction) * Config.ValueFactor;
 
                 return color;
