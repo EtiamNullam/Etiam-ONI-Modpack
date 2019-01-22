@@ -11,20 +11,75 @@ namespace GasOverlay
 {
     public static class GasOverlayMod
     {
-        // TODO: think of a better name
-        //private class CachedColorSet
-        //{
-        //    public Color Min;
-        //    public Color Max;
-        //    public Color Pop;
-        //}
-
         public static Color[] LastColors;
-        // TODO: use these dictionarie to cache colors, use HSV though?
-        //private static Dictionary<SimHashes, CachedColorSet> CachedColors = new Dictionary<SimHashes, CachedColorSet>();
         private static readonly Color NotGasColor = new Color(0.6f, 0.6f, 0.6f);
         private static Config Config = new Config();
         private const string ModName = "GasOverlay";
+
+        private static void ResetLastColors()
+        {
+            LastColors = new Color[Grid.CellCount];
+
+            for (int i = 0; i < LastColors.Length; i++)
+            {
+                LastColors[i] = NotGasColor;
+            }
+        }
+
+        private static ColorHSV ScaleToPressure_Other(ColorHSV hsv, float fraction, float mass)
+        {
+            hsv.V = Mathf.LerpUnclamped(0, hsv.V, fraction);
+
+            if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
+            {
+                hsv = MarkEarDrumPopPressure_Other(hsv, mass);
+            }
+
+            return hsv;
+        }
+
+        private static ColorHSV ScaleToPressure_CO2(ColorHSV hsv, float fraction, float mass)
+        {
+            hsv.V = Mathf.LerpUnclamped(hsv.V, 0, fraction);
+
+            if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
+            {
+                hsv = MarkEarDrumPopPressure_CO2(hsv, mass);
+            }
+
+            return hsv;
+        }
+
+        private static ColorHSV MarkEarDrumPopPressure_CO2(ColorHSV color, float mass)
+        {
+            color.V += 0.3f;
+            color.S += 0.4f;
+
+            return color;
+        }
+
+        private static ColorHSV MarkEarDrumPopPressure_Other(ColorHSV color, float mass)
+        {
+            color.H += 0.1f;
+
+            return color;
+        }
+
+        private static Color ProcessColor(Color newColor, int cell)
+        {
+            try
+            {
+                // TODO: lerp over HSV?
+                var result = Color.Lerp(LastColors[cell], newColor, Config.InterpFactor);
+                LastColors[cell] = result;
+                return result;
+            }
+            catch
+            {
+                ResetLastColors();
+                return NotGasColor;
+            }
+        }
 
         [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
         public static class SplashMessageScreen_OnSpawn
@@ -78,6 +133,11 @@ namespace GasOverlay
                 }
             }
 
+            private static void OnConfigChange(object sender, EventArgs e)
+            {
+                ReloadConfig();
+            }
+
             private static void ReloadConfig()
             {
                 if (File.Exists(ConfigFilePath))
@@ -90,7 +150,7 @@ namespace GasOverlay
             private static void SetWatcher()
             {
                 var watcher = new FileSystemWatcher(configDirectoryPath, "*.json");
-                watcher.Changed += (o, e) => ReloadConfig();
+                watcher.Changed += OnConfigChange;
                 watcher.EnableRaisingEvents = true;
             }
         }
@@ -105,84 +165,46 @@ namespace GasOverlay
                 if (element.IsGas)
                 {
                     var newGasColor = GetGasColor(cell, element);
-
-                    try
-                    {
-                        __result = Color.Lerp(LastColors[cell], newGasColor, Config.InterpFactor);
-                        LastColors[cell] = __result;
-                    }
-                    catch
-                    {
-                        ResetLastColors();
-                    }
+                    __result = ProcessColor(newGasColor, cell);
                 }
                 else
                 {
+                    // TODO: reset lastcolor at cell?
                     __result = NotGasColor;
                 }
 
                 return false;
             }
 
-            private static void ResetLastColors()
-            {
-                LastColors = new Color[Grid.CellCount];
-
-                for (int i = 0; i < LastColors.Length; i++)
-                {
-                    LastColors[i] = NotGasColor;
-                }
-            }
-
             private static Color GetGasColor(int cell, Element element)
             {
-                SimHashes elementID = element.id;
-                Color primaryColor = GetCellOverlayColor(element);
                 float mass = Grid.Mass[cell];
                 float maxMass = Config.MaxMass;
+
                 float pressureFraction = GetPressureFraction(mass, maxMass);
 
-                ColorHSV colorHSV = primaryColor.ToHSV();
+                Color primaryColor = GetCellOverlayColor(element);
+                ColorHSV hsv = primaryColor.ToHSV();
+
+                SimHashes elementID = element.id;
 
                 if (elementID == SimHashes.CarbonDioxide)
                 {
-                    colorHSV = ScaleColorToPressureCO2(colorHSV, pressureFraction);
-                    if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
-                    {
-                        colorHSV = MarkEarDrumPopPressureCO2(colorHSV, mass);
-                    }
+                    ScaleToPressure_CO2(hsv, pressureFraction, mass);
                 }
                 else
                 {
-                    colorHSV = ScaleColorToPressureGas(colorHSV, pressureFraction);
-                    if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
-                    {
-                        colorHSV = MarkEarDrumPopPressureGas(colorHSV, mass);
-                    }
+                    ScaleToPressure_Other(hsv, pressureFraction, mass);
                 }
 
-                colorHSV = colorHSV.Clamp();
+                hsv = hsv.Clamp();
 
-                return colorHSV.ToRgb();
-            }
-
-            private static ColorHSV ScaleColorToPressureGas(ColorHSV color, float fraction)
-            {
-                color.V = Mathf.LerpUnclamped(0, color.V, fraction);
-
-                return color;
-            }
-
-            private static ColorHSV ScaleColorToPressureCO2(ColorHSV color, float fraction)
-            {
-                color.V = Mathf.LerpUnclamped(color.V, 0, fraction);
-                return color;
+                return hsv.ToRgb();
             }
 
             public static Color GetCellOverlayColor(Element element)
             {
-                Substance substance = element.substance;
-                Color32 overlayColor = substance.colour;
+                Color32 overlayColor = element.substance.colour;
 
                 overlayColor.a = byte.MaxValue;
 
@@ -194,25 +216,9 @@ namespace GasOverlay
                 float minFraction = Config.MinimumIntensity;
                 float fraction = mass / maxMass;
 
-                // TODO: test removal of this lerp
                 fraction = Mathf.Lerp(minFraction, 1, fraction);
 
                 return fraction;
-            }
-
-            private static ColorHSV MarkEarDrumPopPressureCO2(ColorHSV color, float mass)
-            {
-                color.V += 0.3f;
-                color.S += 0.4f;
-
-                return color;
-            }
-
-            private static ColorHSV MarkEarDrumPopPressureGas(ColorHSV color, float mass)
-            {
-                color.H += 0.1f;
-
-                return color;
             }
         }
     }
