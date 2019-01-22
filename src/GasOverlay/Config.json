@@ -3,8 +3,5 @@
   "InterpFactor": 0.05,
   "MinimumIntensity": 0.25,
   "ShowEarDrumPopMarker": true,
-  "ValueFactor": 0.5,
-  "ValueFactorCarbonDioxide": 2.0,
-  "SaturationFactor": 1.25,
   "EarPopMass": 5.0
 }

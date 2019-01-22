@@ -168,14 +168,14 @@ namespace GasOverlay
 
             private static ColorHSV ScaleColorToPressureGas(ColorHSV color, float fraction)
             {
-                color.V -= (1 - fraction) * Config.ValueFactor;
+                color.V = Mathf.LerpUnclamped(0, color.V, fraction);
 
                 return color;
             }
 
             private static ColorHSV ScaleColorToPressureCO2(ColorHSV color, float fraction)
             {
-                color.V *= (1 - fraction) * Config.ValueFactorCarbonDioxide;
+                color.V = Mathf.LerpUnclamped(color.V, 0, fraction);
                 return color;
             }
 
