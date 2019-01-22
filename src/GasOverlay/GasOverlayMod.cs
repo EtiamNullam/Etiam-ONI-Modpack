@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GasOverlay.HSV;
@@ -10,7 +11,17 @@ namespace GasOverlay
 {
     public static class GasOverlayMod
     {
+        // TODO: think of a better name
+        //private class CachedColorSet
+        //{
+        //    public Color Min;
+        //    public Color Max;
+        //    public Color Pop;
+        //}
+
         public static Color[] LastColors;
+        // TODO: use these dictionarie to cache colors, use HSV though?
+        //private static Dictionary<SimHashes, CachedColorSet> CachedColors = new Dictionary<SimHashes, CachedColorSet>();
         private static readonly Color NotGasColor = new Color(0.6f, 0.6f, 0.6f);
         private static Config Config = new Config();
         private const string ModName = "GasOverlay";
@@ -126,41 +137,50 @@ namespace GasOverlay
             private static Color GetGasColor(int cell, Element element)
             {
                 SimHashes elementID = element.id;
-                Color primaryColor = GetCellOverlayColor(cell, element);
+                Color primaryColor = GetCellOverlayColor(element);
                 float mass = Grid.Mass[cell];
                 float maxMass = Config.MaxMass;
                 float pressureFraction = GetPressureFraction(mass, maxMass);
 
                 ColorHSV colorHSV = primaryColor.ToHSV();
 
-                colorHSV = ScaleColorToPressure(colorHSV, pressureFraction, elementID);
-				
-                if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
+                if (elementID == SimHashes.CarbonDioxide)
                 {
-                    colorHSV = MarkEarDrumPopPressure(colorHSV, mass, elementID);
+                    colorHSV = ScaleColorToPressureCO2(colorHSV, pressureFraction);
+                    if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
+                    {
+                        colorHSV = MarkEarDrumPopPressureCO2(colorHSV, mass);
+                    }
+                }
+                else
+                {
+                    colorHSV = ScaleColorToPressureGas(colorHSV, pressureFraction);
+                    if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
+                    {
+                        colorHSV = MarkEarDrumPopPressureGas(colorHSV, mass);
+                    }
                 }
 
-                colorHSV = colorHSV.Clamp();
+                //colorHSV = colorHSV.Clamp();
 
                 return colorHSV.ToRgb();
             }
 
-            private static ColorHSV ScaleColorToPressure(ColorHSV color, float fraction, SimHashes elementID)
+            private static ColorHSV ScaleColorToPressureGas(ColorHSV color, float fraction)
             {
-                if (elementID == SimHashes.CarbonDioxide)
-                {
-					color.V *= (1 - fraction) * Config.ValueFactorCarbonDioxide;
-				}
-                else
-                {
-                    color.S *= fraction * Config.SaturationFactor;
-					color.V -= (1 - fraction) * Config.ValueFactor;
-				}
+                color.S *= fraction * Config.SaturationFactor;
+                color.V -= (1 - fraction) * Config.ValueFactor;
 
                 return color;
             }
 
-            public static Color GetCellOverlayColor(int cellIndex, Element element)
+            private static ColorHSV ScaleColorToPressureCO2(ColorHSV color, float fraction)
+            {
+                color.V *= (1 - fraction) * Config.ValueFactorCarbonDioxide;
+                return color;
+            }
+
+            public static Color GetCellOverlayColor(Element element)
             {
                 Substance substance = element.substance;
                 Color32 overlayColor = substance.colour;
@@ -175,22 +195,23 @@ namespace GasOverlay
                 float minFraction = Config.MinimumIntensity;
                 float fraction = mass / maxMass;
 
+                // TODO: test removal of this lerp
                 fraction = Mathf.Lerp(minFraction, 1, fraction);
 
                 return fraction;
             }
 
-            private static ColorHSV MarkEarDrumPopPressure(ColorHSV color, float mass, SimHashes elementID)
+            private static ColorHSV MarkEarDrumPopPressureCO2(ColorHSV color, float mass)
             {
-                if (elementID == SimHashes.CarbonDioxide)
-                {
-                    color.V += 0.3f;
-                    color.S += 0.4f;
-                }
-                else
-                {
-                    color.H += 0.1f;
-                }
+                color.V += 0.3f;
+                color.S += 0.4f;
+
+                return color;
+            }
+
+            private static ColorHSV MarkEarDrumPopPressureGas(ColorHSV color, float mass)
+            {
+                color.H += 0.1f;
 
                 return color;
             }

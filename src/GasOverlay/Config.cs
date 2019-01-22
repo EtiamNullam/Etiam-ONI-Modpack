@@ -2,17 +2,17 @@
 {
     public class Config
     {
-        public float MaxMass { get; set; } = 2.5f;
-        public float MinimumIntensity { get; set; } = 0.5f;
-        public bool ShowEarDrumPopMarker { get; set; } = true;
-        public float ValueFactor { get; set; } = 0.5f;
-        public float ValueFactorCarbonDioxide { get; set; } = 2f;
-        public float SaturationFactor { get; set; } = 1.25f;
-        public float EarPopMass { get; set; } = 5;
+        public float MaxMass = 2.5f;
+        public float MinimumIntensity = 0.5f;
+        public bool ShowEarDrumPopMarker = true;
+        public float ValueFactor = 0.5f;
+        public float ValueFactorCarbonDioxide = 2f;
+        public float SaturationFactor = 1.25f;
+        public float EarPopMass = 5;
 
         /// <summary>
         /// 0-1, where 1 means instant and 0 means no change.
         /// </summary>
-        public float InterpFactor { get; set; } = 0.025f;
+        public float InterpFactor = 0.025f;
     }
 }
