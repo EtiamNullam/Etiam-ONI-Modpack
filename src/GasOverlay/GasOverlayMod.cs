@@ -153,7 +153,7 @@ namespace GasOverlay
             public static Color GetCellOverlayColor(int cellIndex, Element element)
             {
                 Substance substance = element.substance;
-                Color32 overlayColor = substance.conduitColour;
+                Color32 overlayColor = substance.colour;
 
                 overlayColor.a = byte.MaxValue;
 
