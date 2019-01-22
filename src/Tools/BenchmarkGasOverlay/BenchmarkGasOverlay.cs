@@ -8,11 +8,11 @@ using System.Text;
 
 namespace BenchmarkGasOverlay
 {
-    [HarmonyPatch(typeof(SimDebugView))]
-    [HarmonyPatch("OnSpawn")]
+    [HarmonyPatch(typeof(AttackTool))]
+    [HarmonyPatch("OnActivateTool")]
     public static class BenchmarkGasOverlay
     {
-        public static void Postfix()
+        public static void Prefix()
         {
             BenchmarkElement(SimHashes.CarbonDioxide);
             BenchmarkElement(SimHashes.Oxygen);
@@ -22,10 +22,20 @@ namespace BenchmarkGasOverlay
 
         private static void BenchmarkElement(SimHashes element)
         {
-            int benchmarkCell;
-            for (benchmarkCell = 0; benchmarkCell < Grid.CellCount; benchmarkCell++)
+            int benchmarkCell = -1;
+            for (int i = 0; i < Grid.CellCount; i++)
             {
-                if (Grid.Element[benchmarkCell].id == element) break;
+                if (Grid.Element[i].id == element)
+                {
+                    benchmarkCell = i;
+                    break;
+                }
+            }
+
+            if (benchmarkCell == -1)
+            {
+                Debug.Log("BenchmarkGasOverlay: Can't find gas cell on the map: " + Enum.GetName(typeof(SimHashes), element));
+                return;
             }
 
             var instance = SimDebugView.Instance;
@@ -60,7 +70,7 @@ namespace BenchmarkGasOverlay
                 element = Enum.GetName(typeof(SimHashes), Grid.Element[benchmarkCell].id)
             };
 
-            Debug.Log("Benchmark result: " + JsonConvert.SerializeObject(result));
+            Debug.Log("BenchmarkGasOverlay: result: " + JsonConvert.SerializeObject(result));
         }
     }
 }
