@@ -91,18 +91,23 @@ namespace GasOverlay
             {
                 Element element = Grid.Element[cell];
 
-                Color newGasColor = element.IsGas
-                    ? GetGasColor(cell, element)
-                    : NotGasColor;
+                if (element.IsGas)
+                {
+                    var newGasColor = GetGasColor(cell, element);
 
-                try
-                {
-                    __result = Color.Lerp(LastColors[cell], newGasColor, Config.InterpFactor);
-                    LastColors[cell] = __result;
+                    try
+                    {
+                        __result = Color.Lerp(LastColors[cell], newGasColor, Config.InterpFactor);
+                        LastColors[cell] = __result;
+                    }
+                    catch
+                    {
+                        ResetLastColors();
+                    }
                 }
-                catch
+                else
                 {
-                    ResetLastColors();
+                    __result = NotGasColor;
                 }
 
                 return false;
@@ -111,6 +116,11 @@ namespace GasOverlay
             private static void ResetLastColors()
             {
                 LastColors = new Color[Grid.CellCount];
+
+                for (int i = 0; i < LastColors.Length; i++)
+                {
+                    LastColors[i] = NotGasColor;
+                }
             }
 
             private static Color GetGasColor(int cell, Element element)
