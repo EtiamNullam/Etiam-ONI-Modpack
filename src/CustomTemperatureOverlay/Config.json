@@ -10,7 +10,7 @@
   },
   { // Near Absolute Zero
     "color": {
-      "r": 0.65,
+      "r": 0.35,
       "g": 0,
       "b": 1,
       "a": 0.9
