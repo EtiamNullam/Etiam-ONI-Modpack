@@ -17,7 +17,7 @@ namespace CustomTemperatureOverlay
             },
             new SimDebugView.ColorThreshold // Near Absolute Zero
             {
-                color = new Color(0.65f,0,1,0.9f),
+                color = new Color(0.35f,0,1,0.9f),
                 value = 5
             },
             new SimDebugView.ColorThreshold // Coldest Ice Biome
