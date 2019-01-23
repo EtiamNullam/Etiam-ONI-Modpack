@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using CustomTemperatureOverlay.HSV;
 using Harmony;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -12,8 +11,6 @@ namespace CustomTemperatureOverlay.Patches
 {
     public static class CustomTemperatureOverlayMod
     {
-        // TODO: set keybind to set ranges to currently visible (adaptive overlay)
-
         public const string ModName = "CustomTemperatureOverlay";
         public const string configFileName = "Config.json";
 
