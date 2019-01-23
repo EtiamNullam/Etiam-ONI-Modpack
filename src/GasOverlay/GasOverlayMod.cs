@@ -197,9 +197,20 @@ namespace GasOverlay
                     ScaleToPressure_Other(hsv, pressureFraction, mass);
                 }
 
-                hsv = hsv.Clamp();
+                hsv = CheapClamp(hsv);
 
                 return hsv.ToRgb();
+            }
+
+            private static ColorHSV CheapClamp(ColorHSV hsv)
+            {
+                return new ColorHSV
+                (
+                    hsv.H > 1 ? hsv.H - 1 : hsv.H,
+                    Mathf.Clamp01(hsv.S),
+                    Mathf.Clamp01(hsv.V),
+                    hsv.A
+                );
             }
 
             public static Color GetCellOverlayColor(Element element)
