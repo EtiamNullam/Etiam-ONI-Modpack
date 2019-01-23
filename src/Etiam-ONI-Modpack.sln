@@ -11,7 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreeCamera", "FreeCamera\Fr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoveDailyReports", "SaveNoDailyReports\RemoveDailyReports.csproj", "{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearRegolith", "ClearRegolith\ClearRegolith.csproj", "{886D1096-5D6B-4F42-A793-1CDF6F73E96B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{B007DEEC-C4D2-4420-821A-662C29666393}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearRegolith", "Tools\ClearRegolith\ClearRegolith.csproj", "{886D1096-5D6B-4F42-A793-1CDF6F73E96B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +44,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{886D1096-5D6B-4F42-A793-1CDF6F73E96B} = {B007DEEC-C4D2-4420-821A-662C29666393}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04275AE4-9475-4B12-9048-311A0F8E22A7}
