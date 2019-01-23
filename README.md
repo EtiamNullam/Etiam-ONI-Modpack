@@ -4,18 +4,21 @@ A bunch of mods made for [Klei](https://www.klei.com/)'s Oxygen Not Included.
 
 ![modpack_preview.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/Modpack.png)
 
-### Many thanks to:
+## [Thread on Klei's Forum](https://forums.kleientertainment.com/forums/topic/101902-mods-etiams-modpack/)
+
+## Special thanks to:
 - [@pardeike](https://github.com/pardeike) for his patching library - [Harmony](https://github.com/pardeike/Harmony)
 - [@javisar](https://github.com/javisar) for taking care of my mods in [his repo](https://github.com/javisar/ONI-Modloader-Mods) while I was absent and for the [ModLoader](https://github.com/javisar/ONI-Modloader)
-- [@Killface80](https://github.com/Killface1980) for porting my mods to ModLoader and for great contributions to the GasOverlay.
-- [@Moonkis](https://github.com/Moonkis) for OnionPatcher and its merge with my modpack.
-- Everyone else involved.
+- [@Cairath](https://github.com/Cairath) for being a great help during mod development and for [creating plenty of cool mods](https://github.com/Cairath/ONI-Mods)
+- [@Killface80](https://github.com/Killface1980) for porting my mods to ModLoader and for great contributions to the GasOverlay
+- [@Moonkis](https://github.com/Moonkis) for OnionPatcher and its merge with my modpack
+- Everyone else involved
 
 ## Installation
 
 ### Download
 
-Use this: [Download Link](https://github.com/EtiamNullam/Etiam-ONI-Modpack/archive/master.zip) or press `"Clone or download" -> "Download ZIP"`
+Use this [Download Link](https://github.com/EtiamNullam/Etiam-ONI-Modpack/archive/master.zip) or press `"Clone or download" -> "Download ZIP"`
 
 ### Modloader
 
@@ -62,3 +65,7 @@ Allows camera to move out of world boundaries without debug mode. Helps with wor
 ### RemoveDailyReports
 
 Removes old daily reports to decrease saving time and save file size. Might be useful on very high cycle count worlds.
+
+### ClearRegolith
+
+Removes 90% of stored regolith every time you load the save. More like an utility than actual mod, so its available from the [Tools](Tools) directory.
