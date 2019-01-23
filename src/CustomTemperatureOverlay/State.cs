@@ -27,12 +27,12 @@ namespace CustomTemperatureOverlay
             },
             new SimDebugView.ColorThreshold // Temperate
             {
-                color = new Color(0,1,0,0.75f),
+                color = new Color(0,1,0,0.6f),
                 value = 273+20
             },
             new SimDebugView.ColorThreshold // Warm
             {
-                color = new Color(0.9f,0.5f,0,0.75f),
+                color = new Color(0.9f,0.5f,0,0.6f),
                 value = 273+50
             },
             new SimDebugView.ColorThreshold // Hot Steam
