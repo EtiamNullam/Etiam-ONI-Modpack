@@ -173,17 +173,20 @@ namespace GasOverlay
 
             private static void MarkEarDrumPop(ref Color color, float mass)
             {
-                for (int i = 0; i < 3; i++)
-                {
-                    if (color[i] > Config.EarPopInversePoint)
-                    {
-                        color[i] -= Config.EarPopChange;
-                    }
-                    else
-                    {
-                        color[i] += Config.EarPopChange;
-                    }
-                }
+                color = new Color
+                (
+                    GetEarDrumPopValue(color.r),
+                    GetEarDrumPopValue(color.g),
+                    GetEarDrumPopValue(color.b),
+                    color.a
+                );
+            }
+
+            private static float GetEarDrumPopValue(float colorComponentValue)
+            {
+                return colorComponentValue > Config.EarPopInversePoint
+                    ? colorComponentValue - Config.EarPopChange
+                    : colorComponentValue + Config.EarPopChange;
             }
 
             private static void TransitColor(ref Color newColor, Color lastColor)
