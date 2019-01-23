@@ -26,7 +26,7 @@ namespace GasOverlay
             }
         }
 
-        private static ColorHSV ScaleToPressure_Other(ColorHSV hsv, float fraction, float mass)
+        private static void ScaleToPressure_Other(ref ColorHSV hsv, float fraction, float mass)
         {
             hsv = new ColorHSV
             (
@@ -40,11 +40,9 @@ namespace GasOverlay
             {
                 hsv = MarkEarDrumPopPressure_Other(hsv, mass);
             }
-
-            return hsv;
         }
 
-        private static ColorHSV ScaleToPressure_CO2(ColorHSV hsv, float fraction, float mass)
+        private static void ScaleToPressure_CO2(ref ColorHSV hsv, float fraction, float mass)
         {
             hsv.V = Mathf.LerpUnclamped(hsv.V, 0, fraction);
 
@@ -52,8 +50,6 @@ namespace GasOverlay
             {
                 hsv = MarkEarDrumPopPressure_CO2(hsv, mass);
             }
-
-            return hsv;
         }
 
         private static ColorHSV MarkEarDrumPopPressure_CO2(ColorHSV color, float mass)
@@ -76,9 +72,7 @@ namespace GasOverlay
             try
             {
                 // TODO: lerp over HSV?
-                var result = Color.Lerp(LastColors[cell], newColor, Config.InterpFactor);
-                LastColors[cell] = result;
-                return result;
+                return Color.Lerp(LastColors[cell], newColor, Config.InterpFactor);
             }
             catch
             {
@@ -170,47 +164,46 @@ namespace GasOverlay
 
                 if (element.IsGas)
                 {
-                    var newGasColor = GetGasColor(cell, element);
+                    float mass = Grid.Mass[cell];
+                    float maxMass = Config.MaxMass;
+
+                    float pressureFraction = GetPressureFraction(mass, maxMass);
+
+                    Color newGasColor = GetGasColor(element, pressureFraction, mass);
+
                     __result = ProcessColor(newGasColor, cell);
+                    LastColors[cell] = __result;
                 }
                 else
                 {
-                    // TODO: reset lastcolor at cell?
                     __result = NotGasColor;
                 }
+
 
                 return false;
             }
 
-            private static Color GetGasColor(int cell, Element element)
+            private static Color GetGasColor(Element element, float pressureFraction, float mass)
             {
-                float mass = Grid.Mass[cell];
-                float maxMass = Config.MaxMass;
+                ColorHSV hsv = GetCellOverlayColor(element).ToHSV();
 
-                float pressureFraction = GetPressureFraction(mass, maxMass);
-
-                Color primaryColor = GetCellOverlayColor(element);
-                ColorHSV hsv = primaryColor.ToHSV();
-
-                SimHashes elementID = element.id;
-
-                if (elementID == SimHashes.CarbonDioxide)
+                if (element.id == SimHashes.CarbonDioxide)
                 {
-                    hsv = ScaleToPressure_CO2(hsv, pressureFraction, mass);
+                    ScaleToPressure_CO2(ref hsv, pressureFraction, mass);
                 }
                 else
                 {
-                    hsv = ScaleToPressure_Other(hsv, pressureFraction, mass);
+                    ScaleToPressure_Other(ref hsv, pressureFraction, mass);
                 }
 
-                hsv = CheapClamp(hsv);
+                CheapClamp(ref hsv);
 
                 return hsv.ToRgb();
             }
 
-            private static ColorHSV CheapClamp(ColorHSV hsv)
+            private static void CheapClamp(ref ColorHSV hsv)
             {
-                return new ColorHSV
+                hsv = new ColorHSV
                 (
                     hsv.H > 1 ? hsv.H - 1 : hsv.H,
                     Mathf.Clamp01(hsv.S),
