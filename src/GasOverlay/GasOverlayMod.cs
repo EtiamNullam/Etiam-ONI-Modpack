@@ -28,7 +28,13 @@ namespace GasOverlay
 
         private static ColorHSV ScaleToPressure_Other(ColorHSV hsv, float fraction, float mass)
         {
-            hsv.V = Mathf.LerpUnclamped(0, hsv.V, fraction);
+            hsv = new ColorHSV
+            (
+                hsv.H,
+                hsv.S = Mathf.LerpUnclamped(0, hsv.S, fraction),
+                hsv.V = Mathf.LerpUnclamped(0, hsv.V, fraction),
+                hsv.A
+            );
 
             if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
             {
@@ -190,11 +196,11 @@ namespace GasOverlay
 
                 if (elementID == SimHashes.CarbonDioxide)
                 {
-                    ScaleToPressure_CO2(hsv, pressureFraction, mass);
+                    hsv = ScaleToPressure_CO2(hsv, pressureFraction, mass);
                 }
                 else
                 {
-                    ScaleToPressure_Other(hsv, pressureFraction, mass);
+                    hsv = ScaleToPressure_Other(hsv, pressureFraction, mass);
                 }
 
                 hsv = CheapClamp(hsv);
