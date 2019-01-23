@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using GasOverlay.HSV;
 using Harmony;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -11,75 +10,10 @@ namespace GasOverlay
 {
     public static class GasOverlayMod
     {
-        public static Color[] LastColors;
-        private static readonly Color NotGasColor = new Color(0.6f, 0.6f, 0.6f);
+        private static Color[] LastColors;
+        private static readonly Color NotGasColor = new Color(0.4f, 0.4f, 0.4f);
         private static Config Config = new Config();
         private const string ModName = "GasOverlay";
-
-        private static void ResetLastColors()
-        {
-            LastColors = new Color[Grid.CellCount];
-
-            for (int i = 0; i < LastColors.Length; i++)
-            {
-                LastColors[i] = NotGasColor;
-            }
-        }
-
-        private static void ScaleToPressure_Other(ref ColorHSV hsv, float fraction, float mass)
-        {
-            hsv = new ColorHSV
-            (
-                hsv.H,
-                hsv.S = Mathf.LerpUnclamped(0, hsv.S, fraction),
-                hsv.V = Mathf.LerpUnclamped(0, hsv.V, fraction),
-                hsv.A
-            );
-
-            if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
-            {
-                hsv = MarkEarDrumPopPressure_Other(hsv, mass);
-            }
-        }
-
-        private static void ScaleToPressure_CO2(ref ColorHSV hsv, float fraction, float mass)
-        {
-            hsv.V = Mathf.LerpUnclamped(hsv.V, 0, fraction);
-
-            if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
-            {
-                hsv = MarkEarDrumPopPressure_CO2(hsv, mass);
-            }
-        }
-
-        private static ColorHSV MarkEarDrumPopPressure_CO2(ColorHSV color, float mass)
-        {
-            color.V += 0.3f;
-            color.S += 0.4f;
-
-            return color;
-        }
-
-        private static ColorHSV MarkEarDrumPopPressure_Other(ColorHSV color, float mass)
-        {
-            color.H += 0.1f;
-
-            return color;
-        }
-
-        private static Color ProcessColor(Color newColor, int cell)
-        {
-            try
-            {
-                // TODO: lerp over HSV?
-                return Color.Lerp(LastColors[cell], newColor, Config.InterpFactor);
-            }
-            catch
-            {
-                ResetLastColors();
-                return NotGasColor;
-            }
-        }
 
         [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
         public static class SplashMessageScreen_OnSpawn
@@ -158,9 +92,15 @@ namespace GasOverlay
         [HarmonyPatch(typeof(SimDebugView), "GetOxygenMapColour")]
         public static class SimDebugView_GetOxygenMapColour
         {
+            // TODO: add error handling
             public static bool Prefix(int cell, ref Color __result)
             {
                 Element element = Grid.Element[cell];
+
+                if (LastColors == null || Grid.CellCount > LastColors.Count())
+                {
+                    ResetLastColors();
+                }
 
                 if (element.IsGas)
                 {
@@ -171,48 +111,33 @@ namespace GasOverlay
 
                     Color newGasColor = GetGasColor(element, pressureFraction, mass);
 
-                    __result = ProcessColor(newGasColor, cell);
-                    LastColors[cell] = __result;
+                    TransitColor(ref newGasColor, LastColors[cell]);
+
+                    __result = LastColors[cell] = newGasColor;
                 }
                 else
                 {
                     __result = NotGasColor;
                 }
 
-
                 return false;
             }
 
             private static Color GetGasColor(Element element, float pressureFraction, float mass)
             {
-                ColorHSV hsv = GetCellOverlayColor(element).ToHSV();
+                Color color = GetCellOverlayColor(element);
 
-                if (element.id == SimHashes.CarbonDioxide)
+                ScaleToPressure(ref color, pressureFraction);
+
+                if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
                 {
-                    ScaleToPressure_CO2(ref hsv, pressureFraction, mass);
-                }
-                else
-                {
-                    ScaleToPressure_Other(ref hsv, pressureFraction, mass);
+                    MarkEarDrumPop(ref color, mass);
                 }
 
-                CheapClamp(ref hsv);
-
-                return hsv.ToRgb();
+                return color;
             }
 
-            private static void CheapClamp(ref ColorHSV hsv)
-            {
-                hsv = new ColorHSV
-                (
-                    hsv.H > 1 ? hsv.H - 1 : hsv.H,
-                    Mathf.Clamp01(hsv.S),
-                    Mathf.Clamp01(hsv.V),
-                    hsv.A
-                );
-            }
-
-            public static Color GetCellOverlayColor(Element element)
+            private static Color GetCellOverlayColor(Element element)
             {
                 Color32 overlayColor = element.substance.colour;
 
@@ -221,7 +146,7 @@ namespace GasOverlay
                 return overlayColor;
             }
 
-            public static float GetPressureFraction(float mass, float maxMass)
+            private static float GetPressureFraction(float mass, float maxMass)
             {
                 float minFraction = Config.MinimumIntensity;
                 float fraction = mass / maxMass;
@@ -229,6 +154,41 @@ namespace GasOverlay
                 fraction = Mathf.Lerp(minFraction, 1, fraction);
 
                 return fraction;
+            }
+
+            private static void ResetLastColors()
+            {
+                LastColors = new Color[Grid.CellCount];
+
+                for (int i = 0; i < LastColors.Length; i++)
+                {
+                    LastColors[i] = NotGasColor;
+                }
+            }
+
+            private static void ScaleToPressure(ref Color color, float fraction)
+            {
+                color = Color.LerpUnclamped(Color.white, color, fraction);
+            }
+
+            private static void MarkEarDrumPop(ref Color color, float mass)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    if (color[i] > Config.EarPopInversePoint)
+                    {
+                        color[i] -= Config.EarPopChange;
+                    }
+                    else
+                    {
+                        color[i] += Config.EarPopChange;
+                    }
+                }
+            }
+
+            private static void TransitColor(ref Color newColor, Color lastColor)
+            {
+                newColor = Color.Lerp(lastColor, newColor, Config.InterpFactor);
             }
         }
     }
