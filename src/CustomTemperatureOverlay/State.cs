@@ -12,7 +12,7 @@ namespace CustomTemperatureOverlay
         {
             new SimDebugView.ColorThreshold // Exact Absolute Zero
             {
-                color = new Color(1,1,1,0.7f),
+                color = new Color(1,1,1,0.85f),
                 value = 0
             },
             new SimDebugView.ColorThreshold // Near Absolute Zero
@@ -22,7 +22,7 @@ namespace CustomTemperatureOverlay
             },
             new SimDebugView.ColorThreshold // Coldest Ice Biome
             {
-                color = new Color(0,0,1,0.75f),
+                color = new Color(0,0,1,0.8f),
                 value = 273-60
             },
             new SimDebugView.ColorThreshold // Temperate
@@ -32,12 +32,12 @@ namespace CustomTemperatureOverlay
             },
             new SimDebugView.ColorThreshold // Warm
             {
-                color = new Color(0.9f,0.5f,0,0.6f),
+                color = new Color(0.9f,0.6f,0,0.75f),
                 value = 273+50
             },
             new SimDebugView.ColorThreshold // Hot Steam
             {
-                color = new Color(0.9f,0,0,0.75f),
+                color = new Color(0.9f,0,0,0.85f),
                 value = 273+125
             },
             new SimDebugView.ColorThreshold // Hot Magma
