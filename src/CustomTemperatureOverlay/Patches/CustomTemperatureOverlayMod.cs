@@ -67,6 +67,8 @@ namespace CustomTemperatureOverlay.Patches
 
                 for (int i = 0; i < requiredThresholdsLength; i++)
                 {
+                    State.Thresholds = State.Thresholds.OrderBy(t => t.value).ToArray();
+
                     SimDebugView.Instance.temperatureThresholds[i] = i < stateThresholdsLength
                         ? State.Thresholds[i]
                         : State.Thresholds[stateThresholdsLength - 1];
