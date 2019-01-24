@@ -64,7 +64,7 @@ Allows camera to move out of world boundaries without debug mode. Helps with wor
 
 ### RemoveDailyReports
 
-Removes old daily reports to decrease saving time and save file size. Might be useful on very high cycle count worlds.
+Removes old daily reports every night to decrease saving time and save file size. Might be useful on very high cycle count worlds.
 
 ### ClearRegolith
 
