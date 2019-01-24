@@ -11,10 +11,30 @@ namespace Common
     {
         private static Action<T> _callback;
 
-        public static void Watch(string path, string pattern, Action<T> callback)
+        public static void Watch(string path, string pattern, Action<T> callback, bool relativePath = true)
         {
-            _callback = callback;
+            _callback += callback;
 
+            if (relativePath)
+            {
+                Pathfinder.ToRelativePath(ref path);
+            }
+
+            InitWatcher(path, pattern);
+        }
+
+        /// <summary>
+        /// Start FileWatcher with given pattern in ModRoot
+        /// </summary>
+        public static void Watch(string pattern, Action<T> callback)
+        {
+            _callback += callback;
+
+            InitWatcher(ModState.RootPath, pattern);
+        }
+        
+        private static void InitWatcher(string path, string pattern)
+        {
             var watcher = new FileSystemWatcher(path, pattern);
             watcher.Changed += OnChanged;
             watcher.EnableRaisingEvents = true;
@@ -25,11 +45,19 @@ namespace Common
             return JsonConvert.DeserializeObject<T>(File.ReadAllText(path));
         }
 
-        public static bool TryLoad(string path, out T result)
+        public static bool TryLoad(string path, out T result, bool relativePath = true)
         {
             try
             {
+                Logger.Log(ModState.RootPath);
+                if (relativePath)
+                {
+                    Pathfinder.ToRelativePath(ref path);
+                    Logger.Log(path);
+                }
+
                 result = Load(path);
+
                 return true;
             }
             catch (Exception ex)
@@ -42,7 +70,7 @@ namespace Common
 
         private static void OnChanged(object sender, FileSystemEventArgs ev)
         {
-            if (TryLoad(ev.FullPath, out var result))
+            if (TryLoad(ev.FullPath, out var result, false))
             {
                 _callback(result);
             }

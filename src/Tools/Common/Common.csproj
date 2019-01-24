@@ -53,6 +53,7 @@
     <Compile Include="ModState.cs" />
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="Pathfinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

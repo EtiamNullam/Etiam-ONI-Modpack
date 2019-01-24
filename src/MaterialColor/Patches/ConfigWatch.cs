@@ -18,33 +18,9 @@ namespace MaterialColor.Patches
             public static void Postfix()
             {
                 // TODO: remove magic string
-                Common.ModState.Name = "MaterialColor";
-                SetModRootPath();
+                Common.ModState.Initialize("MaterialColor");
                 TryStartConfigWatch();
                 TryLoadConfig();
-            }
-
-            // TODO: extract to some common library
-            private static void SetModRootPath()
-            {
-                try
-                {
-                    var directories = Directory.GetDirectories(Paths.ModsPath, Paths.ModName, SearchOption.AllDirectories);
-                    var modRootPath = directories.FirstOrDefault();
-
-                    if (modRootPath != null)
-                    {
-                        Paths.MaterialMainPath = modRootPath;
-                    }
-                    else
-                    {
-                        Common.Logger.Log("Couldn't find mod root path.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    Common.Logger.Log("Error while searching for mod root path.", e);
-                }
             }
 
             private static void TryLoadConfig()

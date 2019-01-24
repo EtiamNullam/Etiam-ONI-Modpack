@@ -20,40 +20,15 @@ namespace GasOverlay
         public static class SplashMessageScreen_OnSpawn
         {
             public const string configFileName = "Config.json";
-            public static string configDirectoryPath = "Mods" + Path.DirectorySeparatorChar + "GasOverlay";
-            public static string ConfigFilePath => configDirectoryPath + Path.DirectorySeparatorChar + configFileName;
 
             public static void Postfix()
             {
-                Common.ModState.Name = ModName;
-                SetModRootPath();
-                ConfigHelper<Config>.Watch(configDirectoryPath, configFileName, LoadConfig);
-                if (ConfigHelper<Config>.TryLoad(ConfigFilePath, out var newConfig))
+                Common.ModState.Initialize(ModName);
+
+                ConfigHelper<Config>.Watch(configFileName, LoadConfig);
+                if (ConfigHelper<Config>.TryLoad(configFileName, out var newConfig))
                 {
                     LoadConfig(newConfig);
-                }
-            }
-
-            // TODO: extract to some common library
-            private static void SetModRootPath()
-            {
-                try
-                {
-                    var directories = Directory.GetDirectories("Mods", ModName, SearchOption.AllDirectories);
-                    var modRootPath = directories.FirstOrDefault();
-
-                    if (modRootPath != null)
-                    {
-                        configDirectoryPath = modRootPath;
-                    }
-                    else
-                    {
-                        Common.Logger.Log("Couldn't find mod root path.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    Common.Logger.Log("Error while searching for mod root path." + Environment.NewLine + e);
                 }
             }
 
