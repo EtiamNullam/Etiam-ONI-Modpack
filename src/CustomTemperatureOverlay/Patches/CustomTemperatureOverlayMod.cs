@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Common;
-using CustomTemperatureOverlay.HSV;
 using Harmony;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -13,8 +12,6 @@ namespace CustomTemperatureOverlay.Patches
 {
     public static class CustomTemperatureOverlayMod
     {
-        // TODO: set keybind to set ranges to currently visible (adaptive overlay)
-
         public const string ModName = "CustomTemperatureOverlay";
         public const string configFileName = "Config.json";
 
@@ -23,7 +20,8 @@ namespace CustomTemperatureOverlay.Patches
         public static string ConfigFilePath
             => configDirectoryPath + Path.DirectorySeparatorChar + configFileName;
 
-        [HarmonyPatch(typeof(SimDebugView), "OnPrefabInit")]
+        [HarmonyPatch(typeof(SimDebugView))]
+        [HarmonyPatch("OnPrefabInit")]
         public static class SimDebugView_OnPrefabInit
         {
             public static void Postfix()
@@ -60,8 +58,45 @@ namespace CustomTemperatureOverlay.Patches
                 }
                 catch (Exception e)
                 {
-                    Common.Logger.Log("Error while searching for mod root path." + Environment.NewLine + e);
+                    Common.Logger.Log("Error while searching for mod root path.", e);
                 }
+            }
+
+            private static void ReloadConfig()
+            {
+                if (File.Exists(ConfigFilePath))
+                {
+                    State.Thresholds = JsonConvert.DeserializeObject<SimDebugView.ColorThreshold[]>(File.ReadAllText(ConfigFilePath));
+                }
+
+                int stateThresholdsLength = State.Thresholds.Length;
+                int requiredThresholdsLength = SimDebugView.Instance.temperatureThresholds.Length;
+                object[] logObject = new object[requiredThresholdsLength];
+
+                for (int i = 0; i < requiredThresholdsLength; i++)
+                {
+                    State.Thresholds = State.Thresholds.OrderBy(t => t.value).ToArray();
+
+                    SimDebugView.Instance.temperatureThresholds[i] = i < stateThresholdsLength
+                        ? State.Thresholds[i]
+                        : State.Thresholds[stateThresholdsLength - 1];
+
+                    var threshold = SimDebugView.Instance.temperatureThresholds[i];
+
+                    logObject[i] = new
+                    {
+                        color = new
+                        {
+                            threshold.color.r,
+                            threshold.color.g,
+                            threshold.color.b,
+                            threshold.color.a
+                        },
+                        threshold.value
+                    };
+                }
+
+                Debug.Log(ModName + ": Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(logObject));
             }
 
             private static void UpdateThresholds(SimDebugView.ColorThreshold[] newThresholds)
