@@ -8,7 +8,7 @@ namespace CustomTemperatureOverlay
 {
     public static class State
     {
-        public static SimDebugView.ColorThreshold[] Thresholds = new[]
+        public static readonly SimDebugView.ColorThreshold[] DefaultThresholds = new[]
         {
             new SimDebugView.ColorThreshold // Exact Absolute Zero
             {

@@ -35,11 +35,11 @@ namespace CustomTemperatureOverlay.Patches
                 }
                 else
                 {
-                    UpdateThresholds(State.Thresholds);
+                    UpdateThresholds(State.DefaultThresholds);
                 }
             }
 
-            // TODO: extract to some common library
+            // TODO: extract to common library
             private static void SetModRootPath()
             {
                 try
@@ -62,24 +62,19 @@ namespace CustomTemperatureOverlay.Patches
                 }
             }
 
-            private static void ReloadConfig()
+            private static void UpdateThresholds(SimDebugView.ColorThreshold[] newThresholds)
             {
-                if (File.Exists(ConfigFilePath))
-                {
-                    State.Thresholds = JsonConvert.DeserializeObject<SimDebugView.ColorThreshold[]>(File.ReadAllText(ConfigFilePath));
-                }
-
-                int stateThresholdsLength = State.Thresholds.Length;
+                int stateThresholdsLength = State.DefaultThresholds.Length;
                 int requiredThresholdsLength = SimDebugView.Instance.temperatureThresholds.Length;
                 object[] logObject = new object[requiredThresholdsLength];
 
                 for (int i = 0; i < requiredThresholdsLength; i++)
                 {
-                    State.Thresholds = State.Thresholds.OrderBy(t => t.value).ToArray();
+                    newThresholds = State.DefaultThresholds.OrderBy(t => t.value).ToArray();
 
                     SimDebugView.Instance.temperatureThresholds[i] = i < stateThresholdsLength
-                        ? State.Thresholds[i]
-                        : State.Thresholds[stateThresholdsLength - 1];
+                        ? State.DefaultThresholds[i]
+                        : State.DefaultThresholds[stateThresholdsLength - 1];
 
                     var threshold = SimDebugView.Instance.temperatureThresholds[i];
 
@@ -96,13 +91,7 @@ namespace CustomTemperatureOverlay.Patches
                     };
                 }
 
-                Debug.Log(ModName + ": Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(logObject));
-            }
-
-            private static void UpdateThresholds(SimDebugView.ColorThreshold[] newThresholds)
-            {
-                SimDebugView.Instance.temperatureThresholds = newThresholds;
-                Common.Logger.Log("Config loaded");//: " + Environment.NewLine + JsonConvert.SerializeObject(State.Thresholds));
+                Common.Logger.Log("Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(logObject));
             }
         }
     }
