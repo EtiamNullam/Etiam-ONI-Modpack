@@ -30,8 +30,15 @@ namespace CustomTemperatureOverlay.Patches
             {
                 Common.ModState.Name = ModName;
                 SetModRootPath();
-                ConfigWatcher.SetWatcher(configDirectoryPath, configFileName, (o, e) => ReloadConfig());
-                ReloadConfig();
+                ConfigHelper<SimDebugView.ColorThreshold[]>.Watch(configDirectoryPath, configFileName, UpdateThresholds);
+                if (ConfigHelper<SimDebugView.ColorThreshold[]>.TryLoad(ConfigFilePath, out var newThresholds))
+                {
+                    UpdateThresholds(newThresholds);
+                }
+                else
+                {
+                    UpdateThresholds(State.Thresholds);
+                }
             }
 
             // TODO: extract to some common library
@@ -57,14 +64,10 @@ namespace CustomTemperatureOverlay.Patches
                 }
             }
 
-            private static void ReloadConfig()
+            private static void UpdateThresholds(SimDebugView.ColorThreshold[] newThresholds)
             {
-                if (File.Exists(ConfigFilePath))
-                {
-                    State.Thresholds = JsonConvert.DeserializeObject<SimDebugView.ColorThreshold[]>(File.ReadAllText(ConfigFilePath));
-                    Common.Logger.Log("Config loaded");//: " + Environment.NewLine + JsonConvert.SerializeObject(State.Thresholds));
-                }
-                SimDebugView.Instance.temperatureThresholds = State.Thresholds;
+                SimDebugView.Instance.temperatureThresholds = newThresholds;
+                Common.Logger.Log("Config loaded");//: " + Environment.NewLine + JsonConvert.SerializeObject(State.Thresholds));
             }
         }
     }

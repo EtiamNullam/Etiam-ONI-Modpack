@@ -25,24 +25,12 @@ namespace GasOverlay
 
             public static void Postfix()
             {
-                try
+                Common.ModState.Name = ModName;
+                SetModRootPath();
+                ConfigHelper<Config>.Watch(configDirectoryPath, configFileName, LoadConfig);
+                if (ConfigHelper<Config>.TryLoad(ConfigFilePath, out var newConfig))
                 {
-                    Common.ModState.Name = ModName;
-                    SetModRootPath();
-                    ConfigWatcher.SetWatcher(configDirectoryPath, configFileName, (o, e) => ReloadConfig());
-                }
-                catch (Exception e)
-                {
-                    Common.Logger.Log("Error while starting file watcher: " + e);
-                }
-
-                try
-                {
-                    ReloadConfig();
-                }
-                catch (Exception e)
-                {
-                    Common.Logger.Log("Error while loading config: " + e);
+                    LoadConfig(newConfig);
                 }
             }
 
@@ -69,13 +57,10 @@ namespace GasOverlay
                 }
             }
 
-            private static void ReloadConfig()
+            private static void LoadConfig(Config config)
             {
-                if (File.Exists(ConfigFilePath))
-                {
-                    Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(ConfigFilePath));
-                    Common.Logger.Log("Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(Config));
-                }
+                Config = config;
+                Common.Logger.Log("Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(Config));
             }
         }
 
