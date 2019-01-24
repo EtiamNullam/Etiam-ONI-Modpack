@@ -45,11 +45,6 @@ namespace CustomTemperatureOverlay
                 color = new Color(1,0,0.35f,0.9f),
                 value = 273+2000
             },
-            new SimDebugView.ColorThreshold // Spare
-            {
-                color = new Color(1,0,0.35f,0.9f),
-                value = 273+2001
-            },
         };
     }
 }
