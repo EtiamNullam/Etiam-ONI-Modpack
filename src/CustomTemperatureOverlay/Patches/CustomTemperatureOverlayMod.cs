@@ -71,7 +71,7 @@ namespace CustomTemperatureOverlay.Patches
                         ? State.Thresholds[i]
                         : State.Thresholds[stateThresholdsLength - 1];
 
-                    var threshold = State.Thresholds[i];
+                    var threshold = SimDebugView.Instance.temperatureThresholds[i];
 
                     logObject[i] = new
                     {
