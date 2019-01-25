@@ -177,7 +177,7 @@ namespace GasOverlay
                 {
                     case SimHashes.CarbonDioxide:
                     case SimHashes.SourGas:
-                        color.r += Mathf.Clamp01(color.r + Config.EarPopChange);
+                        color.r = Mathf.Clamp01(color.r + Config.EarPopChange);
                         break;
                     case SimHashes.Methane:
                     case SimHashes.Helium:
