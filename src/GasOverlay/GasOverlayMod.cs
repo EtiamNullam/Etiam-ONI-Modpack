@@ -131,7 +131,7 @@ namespace GasOverlay
 
                 if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
                 {
-                    MarkEarDrumPop(ref color, element, mass);
+                    MarkEarDrumPop(ref color, element.id, mass);
                 }
 
                 return color;
@@ -171,16 +171,15 @@ namespace GasOverlay
                 color = Color.LerpUnclamped(Color.white, color, fraction);
             }
 
-            private static void MarkEarDrumPop(ref Color color, Element element, float mass)
+            private static void MarkEarDrumPop(ref Color color, SimHashes elementID, float mass)
             {
-                switch (element.id)
+                switch (elementID)
                 {
                     case SimHashes.CarbonDioxide:
                     case SimHashes.SourGas:
                         color.r = Mathf.Clamp01(color.r + Config.EarPopChange);
                         break;
                     case SimHashes.Methane:
-                    case SimHashes.Helium:
                     case SimHashes.ContaminatedOxygen:
                         color.g = Mathf.Clamp01(color.g + Config.EarPopChange);
                         break;
