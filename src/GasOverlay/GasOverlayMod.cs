@@ -131,7 +131,7 @@ namespace GasOverlay
 
                 if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
                 {
-                    MarkEarDrumPop(ref color, mass);
+                    MarkEarDrumPop(ref color, element, mass);
                 }
 
                 return color;
@@ -171,23 +171,23 @@ namespace GasOverlay
                 color = Color.LerpUnclamped(Color.white, color, fraction);
             }
 
-            private static void MarkEarDrumPop(ref Color color, float mass)
+            private static void MarkEarDrumPop(ref Color color, Element element, float mass)
             {
-                color = color.r + color.g + color.b > Config.EarPopBreakpoint
-                    ? new Color
-                    (
-                        color.r,
-                        color.g - Config.EarPopChange,
-                        color.b - Config.EarPopChange,
-                        color.a
-                    )
-                    : new Color
-                    (
-                        color.r + Config.EarPopChange,
-                        color.g,
-                        color.b,
-                        color.a
-                    );
+                switch (element.id)
+                {
+                    case SimHashes.CarbonDioxide:
+                    case SimHashes.SourGas:
+                        color.r += Config.EarPopChange;
+                        break;
+                    case SimHashes.Methane:
+                    case SimHashes.Helium:
+                    case SimHashes.ContaminatedOxygen:
+                        color.g += Config.EarPopChange;
+                        break;
+                    default:
+                        color.g -= Config.EarPopChange;
+                        break;
+                }
             }
 
             private static void TransitColor(ref Color newColor, Color lastColor)

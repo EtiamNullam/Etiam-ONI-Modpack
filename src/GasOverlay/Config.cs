@@ -6,8 +6,7 @@
         public float MinimumIntensity = 0.3f;
         public bool ShowEarDrumPopMarker = true;
         public float EarPopMass = 5;
-        public float EarPopChange = 0.165f;
-        public float EarPopBreakpoint = 1.4f;
+        public float EarPopChange = 0.2f;
 
         /// <summary>
         /// 0-1, where 1 means instant and 0 means no change.
