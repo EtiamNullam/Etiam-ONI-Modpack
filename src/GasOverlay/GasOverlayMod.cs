@@ -177,15 +177,15 @@ namespace GasOverlay
                 {
                     case SimHashes.CarbonDioxide:
                     case SimHashes.SourGas:
-                        color.r += Config.EarPopChange;
+                        color.r += Mathf.Clamp01(color.r + Config.EarPopChange);
                         break;
                     case SimHashes.Methane:
                     case SimHashes.Helium:
                     case SimHashes.ContaminatedOxygen:
-                        color.g += Config.EarPopChange;
+                        color.g = Mathf.Clamp01(color.g + Config.EarPopChange);
                         break;
                     default:
-                        color.g -= Config.EarPopChange;
+                        color.g = Mathf.Clamp01(color.g - Config.EarPopChange);
                         break;
                 }
             }
