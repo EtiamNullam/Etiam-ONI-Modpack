@@ -77,6 +77,10 @@ namespace GasOverlay
                 if (File.Exists(ConfigFilePath))
                 {
                     Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(ConfigFilePath));
+
+                    Config.InterpFactor = Mathf.Clamp(Config.InterpFactor, float.Epsilon, 1);
+                    Config.MinimumIntensity = Mathf.Clamp01(Config.MinimumIntensity);
+
                     Debug.Log(ModName + ": Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(Config));
                 }
             }
@@ -109,11 +113,18 @@ namespace GasOverlay
 
                     float pressureFraction = GetPressureFraction(mass, maxMass);
 
-                    Color newGasColor = GetGasColor(element, pressureFraction, mass);
+                    Color color = GetSubstanceColor(element);
 
-                    TransitColor(ref newGasColor, LastColors[cell]);
+                    ScaleToPressure(ref color, pressureFraction);
 
-                    __result = LastColors[cell] = newGasColor;
+                    if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
+                    {
+                        MarkEarDrumPop(ref color, element.id, mass);
+                    }
+
+                    TransitColor(ref color, LastColors[cell]);
+
+                    __result = LastColors[cell] = color;
                 }
                 else
                 {
@@ -123,21 +134,7 @@ namespace GasOverlay
                 return false;
             }
 
-            private static Color GetGasColor(Element element, float pressureFraction, float mass)
-            {
-                Color color = GetCellOverlayColor(element);
-
-                ScaleToPressure(ref color, pressureFraction);
-
-                if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
-                {
-                    MarkEarDrumPop(ref color, element.id, mass);
-                }
-
-                return color;
-            }
-
-            private static Color32 GetCellOverlayColor(Element element)
+            private static Color32 GetSubstanceColor(Element element)
             {
                 var color = element.substance.colour;
                 return new Color32(color.r, color.g, color.b, byte.MaxValue);
@@ -186,7 +183,7 @@ namespace GasOverlay
 
             private static void TransitColor(ref Color newColor, Color lastColor)
             {
-                newColor = Color.Lerp(lastColor, newColor, Config.InterpFactor);
+                newColor = Color.LerpUnclamped(lastColor, newColor, Config.InterpFactor);
             }
         }
     }
