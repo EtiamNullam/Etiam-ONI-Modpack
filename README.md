@@ -52,6 +52,8 @@ Replaces vanilla "breathable overlay" with an overlay which shows every gas in i
 
 ![natural-overview.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/GasOverlay/natural-overview.png)
 
+![gas-preview.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/GasOverlay/gas-preview.png)
+
 ![meteor-shower.gif](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/GasOverlay/meteor-shower.gif)
 
 ![electrolyzer-show.gif](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/GasOverlay/electrolyzers.gif)
