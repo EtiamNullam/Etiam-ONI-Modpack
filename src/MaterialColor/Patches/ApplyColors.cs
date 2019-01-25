@@ -117,6 +117,7 @@ namespace MaterialColor.Patches
             }
         }
 
+        // TODO: run only if deconstructable is a tile
         [HarmonyPatch(typeof(Deconstructable), "OnCompleteWork")]
         public static class Deconstructable_OnCompleteWork_MatCol
         {

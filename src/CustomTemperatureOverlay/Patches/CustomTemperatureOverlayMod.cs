@@ -21,7 +21,7 @@ namespace CustomTemperatureOverlay.Patches
         {
             public static void Postfix()
             {
-                Common.ModState.Initialize(ModName);
+                Common.ModState.Initialize(ModName, null);
                 ConfigHelper<SimDebugView.ColorThreshold[]>.Watch(configFileName, UpdateThresholds);
                 if (ConfigHelper<SimDebugView.ColorThreshold[]>.TryLoad(configFileName, out var newThresholds))
                 {

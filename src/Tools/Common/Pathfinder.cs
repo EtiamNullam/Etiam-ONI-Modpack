@@ -32,9 +32,9 @@ namespace Common
             return "Mods" + Path.DirectorySeparatorChar + name;
         }
 
-        public static void ToRelativePath(ref string path)
+        public static string ToRelativeToConfigPath(string path)
         {
-            path = ModState.RootPath + Path.DirectorySeparatorChar + path;
+            return ModState.ConfigPath + Path.DirectorySeparatorChar + path;
         }
     }
 }

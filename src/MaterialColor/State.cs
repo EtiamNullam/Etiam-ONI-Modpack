@@ -14,6 +14,8 @@
     {
         public static Color?[] TileColors;
 
+        public static bool ConfigChanged;
+
         // TODO: load from file instead
         [NotNull]
         public static readonly List<string> TileNames = new List<string>
@@ -39,7 +41,7 @@
             {
                 return _config;
             }
-            private set
+            set
             {
                 _config = value;
 
@@ -57,36 +59,6 @@
         public static TextFilter TypeFilter { get; private set; }
 
         [NotNull]
-        public static Dictionary<SimHashes, ElementColor> ElementColors { get; private set; } = new Dictionary<SimHashes, ElementColor>();
-
-        public static void LoadMainConfig()
-        {
-            string path = Paths.MainConfigPath;
-
-            if (File.Exists(path))
-            {
-                Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(path));
-                Common.Logger.Log("Main config loaded: ", JsonConvert.SerializeObject(Config));
-            }
-            else
-            {
-                Common.Logger.Log("Trying to load config from " + path + " but it doesn't exist.");
-            }
-        }
-
-        public static void LoadElementColors()
-        {
-            var newElementColors = new Dictionary<SimHashes, ElementColor>();
-            foreach (string filePath in Directory.GetFiles(Paths.ElementColorsDirectory, "*.json"))
-            {
-                string json = File.ReadAllText(filePath);
-                var fileElementColors = JsonConvert.DeserializeObject<Dictionary<SimHashes, ElementColor>>(json);
-                newElementColors = newElementColors.Concat(fileElementColors).ToDictionary(pair => pair.Key, pair => pair.Value);
-            }
-
-            ElementColors = newElementColors;
-
-            Common.Logger.Log("Element colors loaded.");
-        }
+        public static Dictionary<SimHashes, ElementColor> ElementColors { get; set; } = new Dictionary<SimHashes, ElementColor>();
     }
 }

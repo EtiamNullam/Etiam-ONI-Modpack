@@ -7,6 +7,7 @@ using System.Text;
 
 namespace Common
 {
+    // TODO: won't work if watching multiple paths for the same generic type, in one mod
     public static class ConfigHelper<T>
     {
         private static Action<T> _callback;
@@ -17,27 +18,48 @@ namespace Common
 
             if (relativePath)
             {
-                Pathfinder.ToRelativePath(ref path);
+                path = Pathfinder.ToRelativeToConfigPath(path);
             }
 
             InitWatcher(path, pattern);
         }
 
         /// <summary>
-        /// Start FileWatcher with given pattern in ModRoot
+        /// Start FileWatcher with given pattern in config root (ConfigPath).
         /// </summary>
         public static void Watch(string pattern, Action<T> callback)
         {
             _callback += callback;
 
-            InitWatcher(ModState.RootPath, pattern);
+            InitWatcher(ModState.ConfigPath, pattern);
         }
         
         private static void InitWatcher(string path, string pattern)
         {
-            var watcher = new FileSystemWatcher(path, pattern);
-            watcher.Changed += OnChanged;
-            watcher.EnableRaisingEvents = true;
+            try
+            {
+                if (Directory.Exists(path))
+                {
+                    var watcher = new FileSystemWatcher(path, pattern);
+
+                    watcher.Changed += OnChanged;
+                    watcher.Created += OnChanged;
+                    watcher.Renamed += OnChanged;
+                    watcher.Deleted += OnChanged;
+
+                    watcher.EnableRaisingEvents = true;
+
+                    Logger.LogDebug($"Set FileWatcher on {path}{Path.DirectorySeparatorChar}{pattern}");
+                }
+                else
+                {
+                    Logger.Log("Config parent directory doesn't exist:" + path);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Log("Failed to initialize watcher at " + path, e);
+            }
         }
 
         private static T Load(string path)
@@ -49,10 +71,9 @@ namespace Common
         {
             try
             {
-                Logger.Log(ModState.RootPath);
                 if (relativePath)
                 {
-                    Pathfinder.ToRelativePath(ref path);
+                    path = Pathfinder.ToRelativeToConfigPath(path);
                     Logger.Log(path);
                 }
 

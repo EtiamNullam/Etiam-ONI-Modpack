@@ -23,7 +23,7 @@ namespace GasOverlay
 
             public static void Postfix()
             {
-                Common.ModState.Initialize(ModName);
+                Common.ModState.Initialize(ModName, null);
 
                 ConfigHelper<Config>.Watch(configFileName, LoadConfig);
                 if (ConfigHelper<Config>.TryLoad(configFileName, out var newConfig))

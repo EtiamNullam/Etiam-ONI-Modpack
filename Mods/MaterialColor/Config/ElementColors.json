@@ -1,0 +1,106 @@
+{
+  // Refined Metal
+	"Copper": {
+		"Red": 0.3,
+		"Green": 0.1,
+		"Blue": 0
+	},
+	"Iron": {
+		"Red": 0.05,
+		"Green": 0.05,
+		"Blue": 0.15
+	},
+	"Steel": {
+		"Red": 0.2,
+		"Green": 0.2,
+		"Blue": 0.2
+	},
+	"Gold": {
+		"Red": 0.2,
+		"Green": 0.15,
+		"Blue": 0
+	},
+	"Niobium": {
+		"Red": 0,
+		"Green": 0.2,
+		"Blue": 0.1
+	},
+	"TempConductorSolid": {
+		"Red": 0.3,
+		"Green": 0,
+		"Blue": 0
+	},
+  // Raw Mineral
+  "Sandstone": {
+    "Red": 1,
+    "Green": 0.9,
+    "Blue": 0.5,
+    "DarkMode": true
+  },
+  "IgneousRock": {
+    "Red": 1,
+    "Green": 0.4,
+    "Blue": 0.4,
+    "DarkMode": true
+  },
+  "Granite": {
+    "Red": 0.15,
+    "Green": 0.15,
+    "Blue": 0.15
+  },
+  "SedimentaryRock": {
+    "Red": 0.6,
+    "Green": 1,
+    "Blue": 0.8,
+    "DarkMode": true
+  },
+  "Obsidian": {
+    "Red": 0.3,
+    "Green": 0.3,
+    "Blue": 0.4,
+    "DarkMode": true
+  },
+  // Metal Ore
+  "Cuprite": {
+    "Red": 0.2,
+    "Green": 0.05,
+    "Blue": 0
+  },
+  "IronOre": {
+    "Red": 0.025,
+    "Green": 0.025,
+    "Blue": 0.05
+  },
+  "Wolframite": {
+    "Red": 0,
+    "Green": 0,
+    "Blue": 0.125
+  },
+  "GoldAmalgam": {
+    "Red": 0.05,
+    "Green": 0.1,
+    "Blue": 0.0
+  },
+  // Other
+  "Unobtanium": {
+    "Red": 0.2,
+    "Green": 0,
+    "Blue": 0.2
+  },
+  "Dirt": {
+    "Red": 0.05,
+    "Green": 0,
+    "Blue": 0
+  },
+  "Clay": {
+    "Red": 0,
+    "Green": 0.1,
+    "Blue": 0.05
+  },
+  "SuperInsulator": {
+    "Red": 1.0,
+    "Green": 0.5,
+    "Blue": 1.0,
+    "DarkMode": true
+  }
+}
