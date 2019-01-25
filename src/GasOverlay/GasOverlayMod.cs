@@ -97,13 +97,13 @@ namespace GasOverlay
             {
                 Element element = Grid.Element[cell];
 
-                if (LastColors == null || Grid.CellCount > LastColors.Count())
-                {
-                    ResetLastColors();
-                }
-
                 if (element.IsGas)
                 {
+                    if (LastColors == null || cell > LastColors.Length)
+                    {
+                        ResetLastColors();
+                    }
+
                     float mass = Grid.Mass[cell];
                     float maxMass = Config.MaxMass;
 
@@ -137,13 +137,10 @@ namespace GasOverlay
                 return color;
             }
 
-            private static Color GetCellOverlayColor(Element element)
+            private static Color32 GetCellOverlayColor(Element element)
             {
-                Color32 overlayColor = element.substance.colour;
-
-                overlayColor.a = byte.MaxValue;
-
-                return overlayColor;
+                var color = element.substance.colour;
+                return new Color32(color.r, color.g, color.b, byte.MaxValue);
             }
 
             private static float GetPressureFraction(float mass, float maxMass)
@@ -151,9 +148,7 @@ namespace GasOverlay
                 float minFraction = Config.MinimumIntensity;
                 float fraction = mass / maxMass;
 
-                fraction = Mathf.Lerp(minFraction, 1, fraction);
-
-                return fraction;
+                return Mathf.Lerp(minFraction, 1, fraction);
             }
 
             private static void ResetLastColors()
