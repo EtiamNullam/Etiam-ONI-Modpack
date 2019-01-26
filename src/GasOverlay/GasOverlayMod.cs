@@ -12,9 +12,18 @@ namespace GasOverlay
     public static class GasOverlayMod
     {
         private static Color[] LastColors;
-        private static readonly Color NotGasColor = new Color(0.4f, 0.4f, 0.4f);
         private static Config Config = new Config();
         private const string ModName = "GasOverlay";
+
+        private static void ResetLastColors()
+        {
+            LastColors = new Color[Grid.CellCount];
+
+            for (int i = 0; i < LastColors.Length; i++)
+            {
+                LastColors[i] = Config.NotGasColor;
+            }
+        }
 
         [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
         public static class SplashMessageScreen_OnSpawn
@@ -39,7 +48,9 @@ namespace GasOverlay
                 Config.InterpFactor = Mathf.Clamp(Config.InterpFactor, float.Epsilon, 1);
                 Config.MinimumIntensity = Mathf.Clamp01(Config.MinimumIntensity);
 
-                Common.Logger.Log("Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(Config));
+                ResetLastColors();
+
+                Common.Logger.Log("Config loaded.");
             }
         }
 
@@ -78,7 +89,7 @@ namespace GasOverlay
                 }
                 else
                 {
-                    __result = NotGasColor;
+                    __result = Config.NotGasColor;
                 }
 
                 return false;
@@ -96,16 +107,6 @@ namespace GasOverlay
                 float fraction = mass / maxMass;
 
                 return Mathf.Lerp(minFraction, 1, fraction);
-            }
-
-            private static void ResetLastColors()
-            {
-                LastColors = new Color[Grid.CellCount];
-
-                for (int i = 0; i < LastColors.Length; i++)
-                {
-                    LastColors[i] = NotGasColor;
-                }
             }
 
             private static void ScaleToPressure(ref Color color, float fraction)

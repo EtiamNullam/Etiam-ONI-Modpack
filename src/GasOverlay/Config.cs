@@ -1,7 +1,11 @@
-﻿namespace GasOverlay
+﻿using Newtonsoft.Json;
+using UnityEngine;
+
+namespace GasOverlay
 {
     public class Config
     {
+        public Color NotGasColor = new Color(0.25f, 0.25f, 0.3f);
         public float MaxMass = 2.5f;
         public float MinimumIntensity = 0.3f;
         public bool ShowEarDrumPopMarker = true;
