@@ -1,6 +1,8 @@
 {
   "Enabled": true,
   "Debug": false,
+  "TileColorFactor": 2.5,
+  "TileColorShift": 0.275,
   "LogElementsData": false,
   "ShowMissingElementColors": false,
   "TypeFilterInfo": {

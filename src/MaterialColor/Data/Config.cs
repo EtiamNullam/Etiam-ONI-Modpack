@@ -13,5 +13,9 @@ namespace MaterialColor.Data
         public bool ShowMissingElements { get; set; }
 
         public FilterInfo TypeFilterInfo { get; set; } = new FilterInfo();
+
+        public float TileColorFactor { get; set; } = 2.5f;
+
+        public float TileColorShift { get; set; } = 0.275f;
     }
 }

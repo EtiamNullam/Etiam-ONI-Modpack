@@ -12,21 +12,25 @@ namespace MaterialColor.Extensions
         {
             if (color.a == 0)
             {
-                color = color.ForEachColorValue(colorValue => colorValue + 1);
+                color = new Color
+                (
+                    ProcessTileColorCompponent(color.r),
+                    ProcessTileColorCompponent(color.g),
+                    ProcessTileColorCompponent(color.b),
+                    1
+                );
             }
-
-            color.a = 1;
+            else
+            {
+                color.a = 1;
+            }
 
             return color;
         }
 
-        public static Color ForEachColorValue(this Color color, Func<float, float> action)
+        private static float ProcessTileColorCompponent(float colorComponent)
         {
-            for (int i = 0; i < 3; i++)
-            {
-                color[i] = action.Invoke(color[i]);
-            }
-            return color;
+            return (colorComponent + State.Config.TileColorShift) * State.Config.TileColorFactor;
         }
     }
 }
