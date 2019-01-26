@@ -8,7 +8,6 @@ namespace Common
 {
     public static class Logger
     {
-        // TODO: try printing all messages on crash/exit
         public static readonly HashSet<string> Messages = new HashSet<string>();
 
         public static void LogOnce(string message, object data)

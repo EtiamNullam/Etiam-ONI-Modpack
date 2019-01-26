@@ -101,13 +101,14 @@ namespace MaterialColor.Patches
             {
                 try
                 {
+                    var cellColor = State.TileColors[cell];
                     if
                     (
                         State.Config.Enabled &&
-                        State.TileColors[cell].HasValue
+                        cellColor.HasValue
                     )
                     {
-                        __result *= State.TileColors[cell].Value;
+                        __result *= cellColor.Value;
                     }
                 }
                 catch (Exception e)
@@ -125,7 +126,13 @@ namespace MaterialColor.Patches
             {
                 try
                 {
-                    State.TileColors[__instance.GetCell()] = null;
+                    var buildingComplete = __instance.GetComponent<BuildingComplete>();
+                    var buildingName = buildingComplete.name.Replace("Complete", string.Empty);
+
+                    if (State.TileNames.Contains(buildingName))
+                    {
+                        State.TileColors[__instance.GetCell()] = null;
+                    }
                 }
                 catch (Exception e)
                 {
