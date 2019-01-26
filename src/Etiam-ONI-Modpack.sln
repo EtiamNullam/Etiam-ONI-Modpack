@@ -21,6 +21,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTemperatureOverlay", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Tools\Common\Common.csproj", "{B0FE7A0A-C62D-41AE-94B3-DA3429806A29}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{CBB8B5C1-6C7D-461A-A013-8470A8417C46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearRegolith", "Tools\ClearRegolith\ClearRegolith.csproj", "{886D1096-5D6B-4F42-A793-1CDF6F73E96B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkGasOverlay", "Tools\BenchmarkGasOverlay\BenchmarkGasOverlay.csproj", "{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,9 +57,22 @@ Global
 		{B0FE7A0A-C62D-41AE-94B3-DA3429806A29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0FE7A0A-C62D-41AE-94B3-DA3429806A29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0FE7A0A-C62D-41AE-94B3-DA3429806A29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{886D1096-5D6B-4F42-A793-1CDF6F73E96B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{886D1096-5D6B-4F42-A793-1CDF6F73E96B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{886D1096-5D6B-4F42-A793-1CDF6F73E96B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{886D1096-5D6B-4F42-A793-1CDF6F73E96B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B0FE7A0A-C62D-41AE-94B3-DA3429806A29} = {CBB8B5C1-6C7D-461A-A013-8470A8417C46}
+		{886D1096-5D6B-4F42-A793-1CDF6F73E96B} = {CBB8B5C1-6C7D-461A-A013-8470A8417C46}
+		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E} = {CBB8B5C1-6C7D-461A-A013-8470A8417C46}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04275AE4-9475-4B12-9048-311A0F8E22A7}
