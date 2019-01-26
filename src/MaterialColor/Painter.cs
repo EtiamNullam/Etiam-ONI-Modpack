@@ -50,7 +50,7 @@ namespace MaterialColor
             }
             catch (Exception e)
             {
-                Logger.LogOnce("Error while filtering buildings", e);
+                Common.Logger.LogOnce("Error while filtering buildings", e);
             }
 
             ApplyColorToBuilding(building, color);
@@ -97,7 +97,7 @@ namespace MaterialColor
             }
             else
             {
-                Logger.LogOnce("Invalid building <{building}> and its not a registered tile.");
+                Common.Logger.LogOnce("Invalid building <{building}> and its not a registered tile.");
             }
         }
 
@@ -109,7 +109,7 @@ namespace MaterialColor
             }
             catch (Exception e)
             {
-                Logger.LogOnce("Error while getting cell color", e);
+                Common.Logger.LogOnce("Error while getting cell color", e);
             }
         }
 
@@ -120,7 +120,7 @@ namespace MaterialColor
                 World.Instance.blockTileRenderer.Rebuild(ObjectLayer.FoundationTile, i);
             }
 
-            Logger.LogDebug("All tiles rebuilt.");
+            Common.Logger.LogDebug("All tiles rebuilt.");
         }
 
         private static void UpdateBuildingsColors()
@@ -132,11 +132,11 @@ namespace MaterialColor
                     UpdateBuildingColor(building);
                 }
 
-                Logger.Log(Components.BuildingCompletes.Count + " buildings updated successfully.");
+                Common.Logger.Log(Components.BuildingCompletes.Count + " buildings updated successfully.");
             }
             catch (Exception e)
             {
-                Logger.Log("Buildings colors update failed.", e);
+                Common.Logger.Log("Buildings colors update failed.", e);
             }
         }
     }

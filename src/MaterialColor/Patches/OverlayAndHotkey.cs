@@ -30,7 +30,7 @@ namespace MaterialColor.Patches
                         {
                             elementsLog += Environment.NewLine + name;
                         }
-                        Logger.Log("Elements list: " + elementsLog);
+                        Common.Logger.Log("Elements list: " + elementsLog);
                     }
 
                     try
@@ -51,13 +51,13 @@ namespace MaterialColor.Patches
                     }
                     catch (Exception e)
                     {
-                        Logger.LogOnce("Keybindings failed:\n", e);
+                        Common.Logger.LogOnce("Keybindings failed:\n", e);
                         throw;
                     }
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("Global_GenerateDefaultBindings.Postfix", e);
+                    Common.Logger.LogOnce("Global_GenerateDefaultBindings.Postfix", e);
                 }
             }
         }
@@ -106,7 +106,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("OverlayMenu_InitializeToggles.Postfix: Icon set error", e);
+                    Common.Logger.LogOnce("OverlayMenu_InitializeToggles.Postfix: Icon set error", e);
                 }
 			}
 
@@ -130,7 +130,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("GetUISprite failed", e);
+                    Common.Logger.LogOnce("GetUISprite failed", e);
 
                     // TODO: set some placeholder sprite here
                     return null;
@@ -157,7 +157,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("OverlayChangedEntry.Prefix failed", e);
+                    Common.Logger.LogOnce("OverlayChangedEntry.Prefix failed", e);
                 }
             }
         }
@@ -175,7 +175,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("KeyDef_Constructor.Postfix failed", e);
+                    Common.Logger.LogOnce("KeyDef_Constructor.Postfix failed", e);
                 }
             }
         }
@@ -194,7 +194,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("KInputController_Constructor.KInputControllerMod failed", e);
+                    Common.Logger.LogOnce("KInputController_Constructor.KInputControllerMod failed", e);
                 }
 			}
 		}
@@ -224,7 +224,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("EnterToggle failed.", e);
+                    Common.Logger.LogOnce("EnterToggle failed.", e);
                     return true;
                 }
             }

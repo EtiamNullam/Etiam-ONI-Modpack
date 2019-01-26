@@ -43,6 +43,10 @@
       <HintPath>..\=lib\Assembly-CSharp-firstpass.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Common">
+      <HintPath>Common\Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\=lib\Newtonsoft.Json.dll</HintPath>
@@ -69,6 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\LoadCommon.cs" />
     <Compile Include="GasOverlayMod.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,10 +83,20 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Common\Common.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Common\=WARNING.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>robocopy /E "$(TargetDir)..\$(ConfigurationName)" "$(SolutionDir)..\Mods\$(ProjectName)"
 if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>robocopy /E "$(SolutionDir)Tools\Common\=MixedOutput" "$(ProjectDir)Common"
+if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25</PreBuildEvent>
   </PropertyGroup>
   <ProjectExtensions />
 </Project>

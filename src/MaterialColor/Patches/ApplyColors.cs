@@ -37,7 +37,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Logger.Log(e);
+                    Common.Logger.Log(e);
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("Ownable_UpdateTint.Postfix", e);
+                    Common.Logger.LogOnce("Ownable_UpdateTint.Postfix", e);
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("FilteredStorage_OnFilterChanged.Postfix", e);
+                    Common.Logger.LogOnce("FilteredStorage_OnFilterChanged.Postfix", e);
                 }
             }
         }
@@ -101,22 +101,24 @@ namespace MaterialColor.Patches
             {
                 try
                 {
+                    var cellColor = State.TileColors[cell];
                     if
                     (
                         State.Config.Enabled &&
-                        State.TileColors[cell].HasValue
+                        cellColor.HasValue
                     )
                     {
-                        __result *= State.TileColors[cell].Value;
+                        __result *= cellColor.Value;
                     }
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce("EnterCell failed.", e);
+                    Common.Logger.LogOnce("EnterCell failed.", e);
                 }
             }
         }
 
+        // TODO: run only if deconstructable is a tile
         [HarmonyPatch(typeof(Deconstructable), "OnCompleteWork")]
         public static class Deconstructable_OnCompleteWork_MatCol
         {
@@ -124,11 +126,17 @@ namespace MaterialColor.Patches
             {
                 try
                 {
-                    State.TileColors[__instance.GetCell()] = null;
+                    var buildingComplete = __instance.GetComponent<BuildingComplete>();
+                    var buildingName = buildingComplete.name.Replace("Complete", string.Empty);
+
+                    if (State.TileNames.Contains(buildingName))
+                    {
+                        State.TileColors[__instance.GetCell()] = null;
+                    }
                 }
                 catch (Exception e)
                 {
-                    Logger.LogOnce(e);
+                    Common.Logger.LogOnce(e);
                 }
             }
         }

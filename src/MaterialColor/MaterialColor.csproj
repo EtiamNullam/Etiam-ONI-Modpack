@@ -48,6 +48,11 @@
       <HintPath>..\=lib\Assembly-CSharp-firstpass.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Common\Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\=lib\Newtonsoft.Json.dll</HintPath>
@@ -76,15 +81,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\LoadCommon.cs" />
     <Compile Include="Data\ElementColor.cs" />
     <Compile Include="Data\Config.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
-    <Compile Include="Helpers\DebugHelper.cs" />
     <Compile Include="Data\FilterInfo.cs" />
-    <Compile Include="IO\ConfigWatcher.cs" />
-    <Compile Include="Logger.cs" />
+    <Compile Include="PeriodicRefresher.cs" />
     <Compile Include="Painter.cs" />
-    <Compile Include="Patches\ConfigWatch.cs" />
+    <Compile Include="Patches\WatchConfig.cs" />
     <Compile Include="Patches\OverlayAndHotkey.cs" />
     <Compile Include="TextFilter.cs" />
     <Compile Include="IO\Paths.cs" />
@@ -94,24 +98,17 @@
     <Compile Include="Helpers\MaterialHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IDs.cs" />
-    <None Include="Config\ElementColors\RefinedMetal.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\ElementColors\Other.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\ElementColors\RawMetal.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Config\ElementColors\RawMineral.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Config\Config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Config\ElementColors.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Common\=WARNING.txt" />
+    <EmbeddedResource Include="Common\Common.dll" />
     <Content Include="Sprites\overlay_materialColor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -120,5 +117,9 @@
   <PropertyGroup>
     <PostBuildEvent>robocopy /E "$(TargetDir)..\$(ConfigurationName)" "$(SolutionDir)..\Mods\$(ProjectName)"
 if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>robocopy /E "$(SolutionDir)Tools\Common\=MixedOutput" "$(ProjectDir)Common"
+if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25</PreBuildEvent>
   </PropertyGroup>
 </Project>

@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
-namespace MaterialColor
+namespace Common
 {
     public static class Logger
     {
-        private const string ModName = "MaterialColor";
-
-        // TODO: try printing all messages on crash/exit
         public static readonly HashSet<string> Messages = new HashSet<string>();
 
         public static void LogOnce(string message, object data)
@@ -41,7 +39,7 @@ namespace MaterialColor
 
         public static void LogDebug(string message, object data)
         {
-            if (State.Config.Debug)
+            if (ModState.Debug)
             {
                 Log(message + Environment.NewLine + data);
             }
@@ -49,7 +47,7 @@ namespace MaterialColor
 
         public static void LogDebug(object data)
         {
-            if (State.Config.Debug)
+            if (ModState.Debug)
             {
                 Log(data);
             }
@@ -57,12 +55,12 @@ namespace MaterialColor
 
         public static void Log(string message, object data)
         {
-            Debug.Log(ModName + ": " + message + Environment.NewLine + data);
+            Debug.Log(ModState.Name + ": " + message + Environment.NewLine + data);
         }
 
         public static void Log(object data)
         {
-            Debug.Log(ModName + ": " + data);
+            Debug.Log(ModState.Name + ": " + data);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Common;
 using Harmony;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -19,77 +20,26 @@ namespace GasOverlay
         public static class SplashMessageScreen_OnSpawn
         {
             public const string configFileName = "Config.json";
-            public static string configDirectoryPath = "Mods" + Path.DirectorySeparatorChar + "GasOverlay";
-            public static string ConfigFilePath => configDirectoryPath + Path.DirectorySeparatorChar + configFileName;
 
             public static void Postfix()
             {
-                try
-                {
-                    SetModRootPath();
-                    SetWatcher();
-                }
-                catch (Exception e)
-                {
-                    Debug.Log(ModName + ": Error while starting file watcher: " + e);
-                }
+                Common.ModState.Initialize(ModName, null);
 
-                try
+                ConfigHelper<Config>.Watch(configFileName, LoadConfig);
+                if (ConfigHelper<Config>.TryLoad(configFileName, out var newConfig))
                 {
-                    ReloadConfig();
-                }
-                catch (Exception e)
-                {
-                    Debug.Log(ModName + ": Error while loading config: " + e);
+                    LoadConfig(newConfig);
                 }
             }
 
-            // TODO: extract to some common library
-            private static void SetModRootPath()
+            private static void LoadConfig(Config config)
             {
-                try
-                {
-                    var directories = Directory.GetDirectories("Mods", ModName, SearchOption.AllDirectories);
-                    var modRootPath = directories.FirstOrDefault();
+                Config = config;
 
-                    if (modRootPath != null)
-                    {
-                        configDirectoryPath = modRootPath;
-                    }
-                    else
-                    {
-                        Debug.Log(ModName + ": Couldn't find mod root path.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    Debug.Log(ModName + ": Error while searching for mod root path." + Environment.NewLine + e);
-                }
-            }
+                Config.InterpFactor = Mathf.Clamp(Config.InterpFactor, float.Epsilon, 1);
+                Config.MinimumIntensity = Mathf.Clamp01(Config.MinimumIntensity);
 
-            private static void OnConfigChange(object sender, EventArgs e)
-            {
-                ReloadConfig();
-            }
-
-            private static void ReloadConfig()
-            {
-                if (File.Exists(ConfigFilePath))
-                {
-                    Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(ConfigFilePath));
-
-                    Config.InterpFactor = Mathf.Clamp(Config.InterpFactor, float.Epsilon, 1);
-                    Config.MinimumIntensity = Mathf.Clamp01(Config.MinimumIntensity);
-
-                    Debug.Log(ModName + ": Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(Config));
-                }
-            }
-
-            private static void SetWatcher()
-            {
-                var watcher = new FileSystemWatcher(configDirectoryPath, "*.json");
-                watcher.Changed += OnConfigChange;
-                watcher.EnableRaisingEvents = true;
+                Common.Logger.Log("Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(Config));
             }
         }
 
