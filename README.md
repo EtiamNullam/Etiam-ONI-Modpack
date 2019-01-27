@@ -85,7 +85,7 @@ Some examples:
 
 #### External input
 
-![External Input Example](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/SmartLockerDropPort/2.gif)
+![External Input Example](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/SmartLockerDropPort/1.gif)
 
 #### Self (with a filter)
 
