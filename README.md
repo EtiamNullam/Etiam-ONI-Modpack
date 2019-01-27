@@ -71,3 +71,22 @@ Removes old daily reports every night to decrease saving time and save file size
 ### ClearRegolith
 
 Removes 90% of stored regolith every time you load the save. More like an utility than actual mod, so its available from the [Tools](Tools) directory.
+
+### CustomTemperatureOverlay
+
+Extends vanilla temperature ranges and colors to make extreme temperatures easier to read.
+It's also configurable, so you can tweak it to your needs.
+
+### SmartLockerDropPort
+
+Adds additional input port to the Smart Locker, when supplied with a signal makes the locker drop its contents.
+Often used in a combination with a door, sometimes a buffer will be needed too.
+Some examples:
+
+#### External input
+
+![External Input Example](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/SmartLockerDropPort/2.gif)
+
+#### Self (with a filter)
+
+![Self Example](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/SmartLockerDropPort/2.gif)
