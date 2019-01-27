@@ -7,9 +7,12 @@ using UnityEngine;
 
 namespace SmartLockerDropPort.Patches
 {
-    public static class SmartContainerConfig
+    public static class ConfigureSmartLocker
     {
         private static HashedString DropPortID = "LockerDropStorage";
+
+        private static readonly AccessTools.FieldRef<StorageLocker, FilteredStorage> FilteredStorageGetter = AccessTools.FieldRefAccess<StorageLocker, FilteredStorage>("filteredStorage");
+        private static readonly AccessTools.FieldRef<FilteredStorage, Storage> StorageGetter = AccessTools.FieldRefAccess<FilteredStorage, Storage>("storage");
 
         [HarmonyPatch(typeof(StorageLockerSmartConfig))]
         [HarmonyPatch(nameof(StorageLockerSmartConfig.DoPostConfigurePreview))]
@@ -17,7 +20,7 @@ namespace SmartLockerDropPort.Patches
         {
             public static void Postfix(GameObject go, LogicPorts.Port ___OUTPUT_PORT)
             {
-                AddResetPort(go, ___OUTPUT_PORT);
+                AddDropPort(go, ___OUTPUT_PORT);
             }
         }
 
@@ -27,7 +30,7 @@ namespace SmartLockerDropPort.Patches
         {
             public static void Postfix(GameObject go, LogicPorts.Port ___OUTPUT_PORT)
             {
-                AddResetPort(go, ___OUTPUT_PORT);
+                AddDropPort(go, ___OUTPUT_PORT);
             }
         }
 
@@ -37,7 +40,7 @@ namespace SmartLockerDropPort.Patches
         {
             public static void Postfix(GameObject go, LogicPorts.Port ___OUTPUT_PORT)
             {
-                AddResetPort(go, ___OUTPUT_PORT);
+                AddDropPort(go, ___OUTPUT_PORT);
             }
         }
 
@@ -73,13 +76,14 @@ namespace SmartLockerDropPort.Patches
         {
             if (ports.GetInputValue(DropPortID) == 1)
             {
-                var filteredStorage = Traverse.Create(storageLocker).Field<FilteredStorage>("filteredStorage").Value;
-                var storage = Traverse.Create(filteredStorage).Field<Storage>("storage").Value;
+                var filteredStorage = FilteredStorageGetter.Invoke(storageLocker);
+                var storage = StorageGetter.Invoke(filteredStorage);
+
                 storage.DropAll();
             }
         }
 
-        private static void AddResetPort(GameObject gameObject, LogicPorts.Port defaultOutputPort)
+        private static void AddDropPort(GameObject gameObject, LogicPorts.Port defaultOutputPort)
         {
             var inputPorts = new[]
             {
