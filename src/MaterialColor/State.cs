@@ -9,6 +9,7 @@
     using System.IO;
     using UnityEngine;
     using System.Linq;
+    using Common;
 
     public static class State
     {
@@ -31,6 +32,8 @@
             "MetalTile",
             "CarpetTile",
         };
+
+        public static Core Common = new Core("MaterialColor", "Config", false);
 
         private static Config _config = new Config();
 

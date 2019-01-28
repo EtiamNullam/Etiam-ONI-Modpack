@@ -52,8 +52,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModState.cs" />
     <Compile Include="ConfigHelper.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="ConfigWatcher.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Pathfinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -18,22 +18,29 @@ namespace MaterialColor.Patches
         {
             public static void Postfix()
             {
-                Common.ModState.Initialize("MaterialColor", "Config");
-                
                 string mainConfigFilename = "Config.json";
                 string elementColorsFilename = "ElementColors.json";
 
-                Common.ConfigHelper<Config>.Watch(mainConfigFilename, LoadMainConfig);
-                Common.ConfigHelper<Dictionary<SimHashes, ElementColor>>.Watch(elementColorsFilename, LoadElementColors);
+                State.Common.WatchConfig<Config>(mainConfigFilename, LoadMainConfig);
+                State.Common.WatchConfig<Dictionary<SimHashes, ElementColor>>(elementColorsFilename, LoadElementColors);
 
-                if (Common.ConfigHelper<Config>.TryLoad(mainConfigFilename, out var newConfig))
+                try
                 {
-                    LoadMainConfig(newConfig);
+
+                    LoadMainConfig(State.Common.LoadConfig<Config>(mainConfigFilename));
+                }
+                catch (Exception e)
+                {
+                    State.Common.Logger.Log("Error while loading config." + e);
                 }
 
-                if (Common.ConfigHelper<Dictionary<SimHashes, ElementColor>>.TryLoad(elementColorsFilename, out var newElementColors))
+                try
                 {
-                    LoadElementColors(newElementColors);
+                    LoadElementColors(State.Common.LoadConfig<Dictionary<SimHashes, ElementColor>>(elementColorsFilename));
+                }
+                catch (Exception e)
+                {
+                    State.Common.Logger.Log("Error while loading config." + e);
                 }
             }
 
@@ -72,7 +79,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Common.Logger.LogOnce("Game_DestroyInstances.Postfix failed", e);
+                    State.Common.Logger.LogOnce("Game_DestroyInstances.Postfix failed", e);
                 }
             }
         }

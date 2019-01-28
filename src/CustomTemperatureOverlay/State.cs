@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace CustomTemperatureOverlay
 {
     public static class State
     {
+        public static Core Common = new Core("CustomTemperatureOverlay", null, true);
+
         public static readonly SimDebugView.ColorThreshold[] DefaultThresholds = new[]
         {
             new SimDebugView.ColorThreshold // Exact Absolute Zero
