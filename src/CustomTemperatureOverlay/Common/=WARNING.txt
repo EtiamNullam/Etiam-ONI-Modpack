@@ -1,1 +1,0 @@
-This directory is copied over from src\Tools\Common\=MixedOutput, if you modify it elsewhere it will be overwritten on pre-build!
