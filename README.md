@@ -90,3 +90,10 @@ Some examples:
 #### Self (with a buffer)
 
 ![Self Example](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/SmartLockerDropPort/2.gif)
+
+### ChainedDeconstruction
+
+Allows to deconstruct many ladders, tubes or firepoles at once.
+Deconstructing one of them will deconstruct all others connectged and marked for deconstruction.
+
+![ChainedDeconstruction Preview](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/ChainedDeconstruction/chained-deconstruction.gif))
