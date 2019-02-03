@@ -1,4 +1,5 @@
 ﻿using Harmony;
+using System;
 
 namespace FreeCamera.Patches
 {
@@ -18,12 +19,19 @@ namespace FreeCamera.Patches
     {
         public static void Postfix()
         {
-            UIScheduler.Instance.Schedule
-            (
-                "setZoomAfter_fadeInUI",
-                3,
-                data => CameraController.Instance.SetMaxOrthographicSize(Config.MaxZoom)
-            );
+            try
+            {
+                UIScheduler.Instance.Schedule
+                (
+                    "setZoomAfter_fadeInUI",
+                    3,
+                    data => CameraController.Instance.SetMaxOrthographicSize(Config.MaxZoom)
+                );
+            }
+            catch (Exception e)
+            {
+                Debug.Log("FreeCamera: Failed to schedule a change of max camera zoom after world start." + e);
+            }
         }
     }
 }
