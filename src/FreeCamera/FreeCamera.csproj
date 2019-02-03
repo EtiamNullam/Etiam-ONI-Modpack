@@ -72,7 +72,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FreeCameraMod.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="Patches\IncreaseMaxZoom.cs" />
+    <Compile Include="Patches\RemoveConstraint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
