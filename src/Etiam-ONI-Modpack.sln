@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLockerDropPort", "Smar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainedDeconstruction", "ChainedDeconstruction\ChainedDeconstruction.csproj", "{20DEA568-F78F-4891-9C9E-EA79D1403758}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayAllTemps", "DisplayAllTemps\DisplayAllTemps.csproj", "{F90017D3-DAC2-4971-B0B2-E96B2ADB6A9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{20DEA568-F78F-4891-9C9E-EA79D1403758}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20DEA568-F78F-4891-9C9E-EA79D1403758}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20DEA568-F78F-4891-9C9E-EA79D1403758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F90017D3-DAC2-4971-B0B2-E96B2ADB6A9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F90017D3-DAC2-4971-B0B2-E96B2ADB6A9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F90017D3-DAC2-4971-B0B2-E96B2ADB6A9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F90017D3-DAC2-4971-B0B2-E96B2ADB6A9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
