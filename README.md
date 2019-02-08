@@ -96,6 +96,20 @@ Some examples:
 ### ChainedDeconstruction
 
 Allows to deconstruct many ladders, tubes or firepoles at once.
-Deconstructing one of them will deconstruct all others connectged and marked for deconstruction.
+Deconstructing one of them will deconstruct all others connected and marked for deconstruction.
 
-![ChainedDeconstruction Preview](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/ChainedDeconstruction/chained-deconstruction.gif))
+![ChainedDeconstruction Preview](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/ChainedDeconstruction/chained-deconstruction.gif)
+
+### LiquefiableSculptures
+
+Allows to build Ice Sculptures from any liquefiable materials, for example Carbon Dioxide or Chlorine.
+
+Works well with MaterialColor mod.
+
+![Chlorine Sculpture Example](https://i.imgur.com/huwisRA.png)
+
+### DisplayAllTemps
+
+Always shows temperature in all units: celsius, fahrenheit and kelvin.
+
+![All temps](https://i.imgur.com/o61vNsE.png)
