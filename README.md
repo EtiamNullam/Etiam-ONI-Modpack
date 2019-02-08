@@ -46,6 +46,8 @@ Highly customizable mod that shows what buildings are made from by tinting them 
 
 ![pipes.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/MaterialColor/pipes.png)
 
+[AvailableMaterials.txt](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/MaterialColor/AvailableMaterials.txt) - This will come in handy if you want to override custom materials.
+
 ### GasOverlay
 
 Replaces vanilla "breathable overlay" with an overlay which shows every gas in its own, easily distinguishable color.
