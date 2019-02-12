@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace CustomSpriteOverlay
+namespace DoorIcons.Patches
 {
-    public static class HarmonyEntry
+    public static class DrawIconsOnDoors
     {
         [HarmonyPatch(typeof(Door))]
         [HarmonyPatch("OnSpawn")]
@@ -18,7 +18,7 @@ namespace CustomSpriteOverlay
         {
             public static void Postfix(Door __instance)
             {
-                var go = new GameObject("sprite_test");
+                var go = new GameObject("DoorIcon");
                 var renderer = go.AddComponent<SpriteRenderer>();
 
                 renderer.sprite = GetSprite();
