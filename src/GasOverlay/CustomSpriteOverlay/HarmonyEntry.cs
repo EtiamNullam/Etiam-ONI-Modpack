@@ -7,55 +7,60 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using static Grid;
 
 namespace CustomSpriteOverlay
 {
     public static class HarmonyEntry
     {
-        //[HarmonyPatch(typeof(CameraController), "Update")]
-        public static class CameraController_Update
-        {
-            public static void Postfix(CameraController __instance)
-            {
-                //__instance.
-            }
-        }
-
-        //[HarmonyPatch(typeof(Door))]
-        //[HarmonyPatch("OnSpawn")]
-        [HarmonyPatch(typeof(AttackTool))]
-        [HarmonyPatch("OnActivateTool")]
+        [HarmonyPatch(typeof(Door))]
+        [HarmonyPatch("OnSpawn")]
         public static class DrawSpriteOnWorldCanvas
         {
-            public static void Postfix()
+            public static void Postfix(Door __instance)
             {
-                // TODO: get components
-                // TODO: draw sprite somewhere around there
-
                 var go = new GameObject("sprite_test");
                 var renderer = go.AddComponent<SpriteRenderer>();
+
                 renderer.sprite = GetSprite();
-                //go.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+                renderer.material.renderQueue = 5000;
 
                 Util.KInstantiate(renderer, GameScreenManager.Instance.worldSpaceCanvas);
 
+                var pos = Grid.PosToXY(__instance.transform.position);
+
+                Debug.Log($"x: {pos.X}, y: {pos.Y}");
+
+                //for (int i = 0; i < Enum.GetValues(typeof(GameScreenManager.UIRenderTarget)).Length; i++)
+                //{
+                //    try
+                //    {
+                //        Debug.Log("camera z: "
+                //            + GameScreenManager.Instance
+                //            .GetCamera((GameScreenManager.UIRenderTarget)i)
+                //            .transform
+                //            .position
+                //            .z);
+                //    }
+                //    catch { }
+                //}
+
+                // TODO: horizontal door needs different offset
+                // AND rotated icon
                 go.transform.position = new Vector3
                 (
-                    go.transform.position.x,
-                    go.transform.position.y,
-                    Grid.GetLayerZ(SceneLayer.SceneMAX)
+                    pos.X + 0.5f,
+                    pos.Y + 0.4f,
+                    Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
                 );
 
-                //var canvas = GameScreenManager.Instance.worldSpaceCanvas.GetComponent<canvas>();
-                //var canvasScaler = GameScreenManager.Instance.worldSpaceCanvas.GetComponent<UnityEngine.UI.CanvasScaler>();
+                go.transform.localScale = new Vector3
+                (
+                    0.005f,
+                    0.005f,
+                    1
+                );
 
-                //rectTransform.Translate(1, 0, 0);
-
-                LogRectTransformOfWorldSpaceCanvasComponents();
-
-                //var comps = GameScreenManager.Instance.worldSpaceCanvas.GetComponents<Component>();
-
+                //LogRectTransformOfWorldSpaceCanvasComponents();
             }
 
             private static void LogRectTransformOfWorldSpaceCanvasComponents()
@@ -77,41 +82,15 @@ namespace CustomSpriteOverlay
 
                 byte[] bytes = File.ReadAllBytes("restricted.png");
 
-                //Debug.Log("jpg bytes: " + JsonConvert.SerializeObject(bytes));
-
                 Texture2D texture = new Texture2D(width, height, TextureFormat.RGB24, false)
                 {
                     filterMode = FilterMode.Trilinear
                 };
 
-
-                //Debug.Log("texture: " + JsonConvert.SerializeObject(texture));
-
-                //Debug.Log("loadimage result: " +
-                ImageConversion.LoadImage(texture, bytes);
-                    //);
+                texture.LoadImage(bytes);
 
                 return Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.0f), 1.0f);
             }
         }
-
-        //private static 
-
-        //[HarmonyPatch(typeof(PopFXManager), "SpawnFX")]
-        //public static class PopFXManager_SpawnFX
-        //{
-        //    public static void Postfix(PopFXManager __instance)
-        //    {
-        //        GameObject gameObject = Util.KInstantiate(__instance.Prefab_PopFX, __instance.gameObject, "Pooled_PopFX");
-        //        //gameObject.transform.localScale = Vector3.one;
-
-        //        foreach (var comp in gameObject.GetComponents<Component>())
-        //        {
-        //            Debug.Log(comp.name);
-        //        }
-
-        //        Debug.Log("===============\n");
-        //    }
-        //}
     }
 }
