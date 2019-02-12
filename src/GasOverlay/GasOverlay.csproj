@@ -45,7 +45,7 @@
     </Reference>
     <Reference Include="Common">
       <HintPath>Common\Common.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -67,6 +67,10 @@
       <HintPath>..\=lib\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\=lib\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\=lib\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
@@ -74,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\LoadCommon.cs" />
+    <Compile Include="CustomSpriteOverlay\HarmonyEntry.cs" />
     <Compile Include="GasOverlayMod.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
