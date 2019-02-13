@@ -29,6 +29,17 @@ namespace DoorIcons.Patches
 
         private static Dictionary<Door, GameObject> DoorIcons = new Dictionary<Door, GameObject>();
 
+        private static Dictionary<ExtendedDoorState, Sprite> DoorSprites = new Dictionary<ExtendedDoorState, Sprite>
+        {
+            {ExtendedDoorState.Open, CreateSprite("open.png")},
+            {ExtendedDoorState.Locked, CreateSprite("locked.png")},
+            {ExtendedDoorState.Automation, CreateSprite("automation.png")},
+            {ExtendedDoorState.AccessLeft, CreateSprite("access_left.png")},
+            {ExtendedDoorState.AccessRight, CreateSprite("access_right.png")},
+            {ExtendedDoorState.AccessRestricted, CreateSprite("access_restricted.png")},
+            {ExtendedDoorState.AccessCustom, CreateSprite("access_custom.png")},
+        };
+
         private static readonly AccessTools.FieldRef
         <
             Door,
@@ -183,17 +194,6 @@ namespace DoorIcons.Patches
             return GetSavedPermissions(access).Any(p => p.Value != access.DefaultPermission);
         }
 
-        private static Dictionary<ExtendedDoorState, Sprite> DoorSprites = new Dictionary<ExtendedDoorState, Sprite>
-        {
-            {ExtendedDoorState.Open, CreateSprite("open.png")},
-            {ExtendedDoorState.Locked, CreateSprite("locked.png")},
-            {ExtendedDoorState.Automation, CreateSprite("automation.png")},
-            {ExtendedDoorState.AccessLeft, CreateSprite("access_left.png")},
-            {ExtendedDoorState.AccessRight, CreateSprite("access_right.png")},
-            {ExtendedDoorState.AccessRestricted, CreateSprite("access_restricted.png")},
-            {ExtendedDoorState.AccessCustom, CreateSprite("access_custom.png")},
-        };
-
         private static void SetDoorIcon(Door door, ExtendedDoorState targetState)
         {
             if (DoorIcons.TryGetValue(door, out var go))
@@ -231,7 +231,6 @@ namespace DoorIcons.Patches
 
                 texture.LoadImage(bytes);
 
-                //return Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.0f), 1.0f);
                 return Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 1.0f);
             }
             else
@@ -278,14 +277,26 @@ namespace DoorIcons.Patches
                 Util.KInstantiate(renderer, GameScreenManager.Instance.worldSpaceCanvas);
 
                 var pos = Grid.PosToXY(door.transform.position);
+                var rotatable = door.GetComponent<Rotatable>();
 
-                //Debug.Log($"x: {pos.X}, y: {pos.Y}");
-                go.transform.position = new Vector3
-                (
-                    pos.X + 0.5f,
-                    pos.Y + 1f,
-                    Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
-                );
+                if (rotatable != null && rotatable.GetOrientation() == Orientation.R90)
+                {
+                    go.transform.position = new Vector3
+                    (
+                        pos.X + 1f,
+                        pos.Y + 0.5f,
+                        Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
+                    );
+                }
+                else
+                {
+                    go.transform.position = new Vector3
+                    (
+                        pos.X + 0.5f,
+                        pos.Y + 1f,
+                        Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
+                    );
+                }
 
                 go.transform.localScale = new Vector3
                 (
@@ -294,21 +305,7 @@ namespace DoorIcons.Patches
                     1
                 );
 
-                //LogRectTransformOfWorldSpaceCanvasComponents();
-
                 return go;
-            }
-
-            private static void LogRectTransformOfWorldSpaceCanvasComponents()
-            {
-                var rectTransform = GameScreenManager.Instance.worldSpaceCanvas.GetComponent<RectTransform>();
-                var comps = rectTransform.GetComponentsInChildren<Component>();
-
-                for (int i = 0; i < comps.Length; i++)
-                {
-                    Component comp = comps[i];
-                    Debug.Log($"component:{i}-{comp}-{comp.name}-{comp.gameObject.name}");
-                }
             }
         }
     }
