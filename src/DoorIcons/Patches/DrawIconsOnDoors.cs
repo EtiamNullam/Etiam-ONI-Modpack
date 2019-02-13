@@ -12,43 +12,22 @@ namespace DoorIcons.Patches
 {
     // TODO: allow disabling of all icons with some button and/or hotkey
     // TODO: move sprites into project (and into proper directory)
-    // TODO: not refreshing on any access change
     public static class DrawIconsOnDoors
     {
-        [HarmonyPatch(typeof(Door))]
-        [HarmonyPatch("RefreshControlState")]
-        public static class Door_RefreshControlState
+        private enum ExtendedDoorState
         {
-            public static void Postfix(Door __instance)
-            {
-                UpdateIcon(__instance);
-            }
+            Invalid,
+            Auto,
+            Open,
+            Locked,
+            Automation,
+            AccessLeft,
+            AccessRight,
+            AccessRestricted,
+            AccessCustom,
         }
 
-        [HarmonyPatch(typeof(AccessControl))]
-        [HarmonyPatch("OnControlStateChanged")]
-        public static class AccessControl_OnControlStateChanged
-        {
-            public static void Postfix(AccessControl __instance)
-            {
-                var door = __instance.GetComponent<Door>();
-
-                if (door != null)
-                {
-                    UpdateIcon(door);
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(Door))]
-        [HarmonyPatch(nameof(Door.OnLogicValueChanged))]
-        public static class Door_OnLogicValueChanged
-        {
-            public static void Postfix(Door __instance)
-            {
-                UpdateIcon(__instance);
-            }
-        }
+        private static Dictionary<Door, GameObject> DoorIcons = new Dictionary<Door, GameObject>();
 
         private static readonly AccessTools.FieldRef
         <
@@ -84,8 +63,41 @@ namespace DoorIcons.Patches
             >
         >("savedPermissions");
 
-        // open, closed, locked, restricted both, restricted left, restricted right, automation open, automation closed
-        // automation > restrict > other
+        [HarmonyPatch(typeof(Door))]
+        [HarmonyPatch("RefreshControlState")]
+        public static class Door_RefreshControlState
+        {
+            public static void Postfix(Door __instance)
+            {
+                UpdateIcon(__instance);
+            }
+        }
+
+        [HarmonyPatch(typeof(AccessControl))]
+        [HarmonyPatch("SetStatusItem")]
+        public static class AccessControl_OnControlStateChanged
+        {
+            public static void Postfix(AccessControl __instance)
+            {
+                var door = __instance.GetComponent<Door>();
+
+                if (door != null)
+                {
+                    UpdateIcon(door);
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(Door))]
+        [HarmonyPatch(nameof(Door.OnLogicValueChanged))]
+        public static class Door_OnLogicValueChanged
+        {
+            public static void Postfix(Door __instance)
+            {
+                UpdateIcon(__instance);
+            }
+        }
+
         private static void UpdateIcon(Door door)
         {
             ExtendedDoorState state = GetExtendedDoorState(door);
@@ -171,21 +183,6 @@ namespace DoorIcons.Patches
             return GetSavedPermissions(access).Any(p => p.Value != access.DefaultPermission);
         }
 
-        private enum ExtendedDoorState
-        {
-            Invalid,
-            Auto,
-            Open,
-            Locked,
-            Automation,
-            AccessLeft,
-            AccessRight,
-            AccessRestricted,
-            AccessCustom,
-        }
-
-        private static Dictionary<Door, GameObject> DoorIcons = new Dictionary<Door, GameObject>();
-
         private static Dictionary<ExtendedDoorState, Sprite> DoorSprites = new Dictionary<ExtendedDoorState, Sprite>
         {
             {ExtendedDoorState.Open, CreateSprite("open.png")},
@@ -234,7 +231,8 @@ namespace DoorIcons.Patches
 
                 texture.LoadImage(bytes);
 
-                return Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.0f), 1.0f);
+                //return Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.0f), 1.0f);
+                return Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 1.0f);
             }
             else
             {
@@ -251,6 +249,11 @@ namespace DoorIcons.Patches
         {
             public static void Postfix(Door __instance)
             {
+                if (Game.Instance == null)
+                {
+                    return;
+                }
+
                 DoorIcons.Add
                 (
                     __instance,
@@ -280,7 +283,7 @@ namespace DoorIcons.Patches
                 go.transform.position = new Vector3
                 (
                     pos.X + 0.5f,
-                    pos.Y + 0.4f,
+                    pos.Y + 1f,
                     Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
                 );
 
