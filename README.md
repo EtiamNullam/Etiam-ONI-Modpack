@@ -46,6 +46,8 @@ Highly customizable mod that shows what buildings are made from by tinting them 
 
 ![pipes.png](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/MaterialColor/pipes.png)
 
+[AvailableMaterials.txt](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/MaterialColor/AvailableMaterials.txt) - This will come in handy if you want to override custom materials.
+
 ### GasOverlay
 
 Replaces vanilla "breathable overlay" with an overlay which shows every gas in its own, easily distinguishable color.
@@ -96,6 +98,20 @@ Some examples:
 ### ChainedDeconstruction
 
 Allows to deconstruct many ladders, tubes or firepoles at once.
-Deconstructing one of them will deconstruct all others connectged and marked for deconstruction.
+Deconstructing one of them will deconstruct all others connected and marked for deconstruction.
 
-![ChainedDeconstruction Preview](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/ChainedDeconstruction/chained-deconstruction.gif))
+![ChainedDeconstruction Preview](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/ChainedDeconstruction/chained-deconstruction.gif)
+
+### LiquefiableSculptures
+
+Allows to build Ice Sculptures from any liquefiable materials, for example Carbon Dioxide or Chlorine.
+
+Works well with MaterialColor mod.
+
+![Chlorine Sculpture Example](https://i.imgur.com/huwisRA.png)
+
+### DisplayAllTemps
+
+Always shows temperature in all units: celsius, fahrenheit and kelvin.
+
+![All temps](https://i.imgur.com/o61vNsE.png)
