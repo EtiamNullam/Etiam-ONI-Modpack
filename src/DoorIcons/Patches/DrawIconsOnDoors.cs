@@ -12,8 +12,7 @@ using Common;
 namespace DoorIcons.Patches
 {
     // TODO: allow disabling of all icons with some button and/or hotkey
-    // TODO: add black border around sprites
-    // TODO: split this file
+    // TODO: split and rearrange this file
     public static class DrawIconsOnDoors
     {
         private enum ExtendedDoorState
@@ -238,7 +237,7 @@ namespace DoorIcons.Patches
             {
                 byte[] bytes = File.ReadAllBytes(path);
 
-                Texture2D texture = new Texture2D(width, height, TextureFormat.RGB24, false)
+                Texture2D texture = new Texture2D(width, height, TextureFormat.RGB24, true)
                 {
                     filterMode = FilterMode.Trilinear
                 };
