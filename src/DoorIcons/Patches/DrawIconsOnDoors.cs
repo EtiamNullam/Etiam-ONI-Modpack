@@ -112,8 +112,15 @@ namespace DoorIcons.Patches
 
         private static void UpdateIcon(Door door)
         {
-            ExtendedDoorState state = GetExtendedDoorState(door);
-            SetDoorIcon(door, state);
+            try
+            {
+                ExtendedDoorState state = GetExtendedDoorState(door);
+                SetDoorIcon(door, state);
+            }
+            catch (Exception e)
+            {
+                State.Common.Logger.LogOnce("Update icon failed", e);
+            }
         }
 
         private static ExtendedDoorState GetExtendedDoorState(Door door)
@@ -264,11 +271,18 @@ namespace DoorIcons.Patches
                     return;
                 }
 
-                DoorIcons.Add
-                (
-                    __instance,
-                    CreateDoorIcon(__instance)
-                );
+                try
+                {
+                    DoorIcons.Add
+                    (
+                        __instance,
+                        CreateDoorIcon(__instance)
+                    );
+                }
+                catch (Exception e)
+                {
+                    State.Common.Logger.LogOnce("Error while trying to create door icon");
+                }
             }
 
             private static GameObject CreateDoorIcon(Door door)

@@ -8,6 +8,7 @@ namespace Common
 {
     public class Logger
     {
+        // TODO: move logDebugMessages to config
         public Logger(string modName, bool logDebugMessages)
         {
             this._modName = modName;
