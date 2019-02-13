@@ -13,7 +13,6 @@ namespace DoorIcons.Patches
     // TODO: allow disabling of all icons with some button and/or hotkey
     // TODO: move sprites into project (and into proper directory)
     // TODO: not refreshing on any access change
-    // TODO: updates on automation change (when it actually changes state), but not on wire disconnect
     public static class DrawIconsOnDoors
     {
         [HarmonyPatch(typeof(Door))]
@@ -40,25 +39,16 @@ namespace DoorIcons.Patches
                 }
             }
         }
-        //[HarmonyPatch(typeof(Door))]
-        //[HarmonyPatch(nameof(Door.OnLogicValueChanged))]
-        //public static class x
-        //{
-        //    public static void Postfix(Door __instance)
-        //    {
-        //        UpdateIcon(__instance);
-        //    }
-        //}
 
-        //[HarmonyPatch(typeof(Door))]
-        //[HarmonyPatch(nameof(Door.QueueStateChange))]
-        //public static class y
-        //{
-        //    public static void Postfix(Door __instance)
-        //    {
-        //        UpdateIcon(__instance);
-        //    }
-        //}
+        [HarmonyPatch(typeof(Door))]
+        [HarmonyPatch(nameof(Door.OnLogicValueChanged))]
+        public static class Door_OnLogicValueChanged
+        {
+            public static void Postfix(Door __instance)
+            {
+                UpdateIcon(__instance);
+            }
+        }
 
         private static readonly AccessTools.FieldRef
         <
