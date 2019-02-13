@@ -12,6 +12,7 @@ namespace DoorIcons.Patches
 {
     // TODO: allow disabling of all icons with some button and/or hotkey
     // TODO: move sprites into project (and into proper directory)
+    // TODO: add black border around sprites
     public static class DrawIconsOnDoors
     {
         private enum ExtendedDoorState
@@ -215,6 +216,16 @@ namespace DoorIcons.Patches
             }
         }
 
+        private static void RemoveDoorIcon(Door door)
+        {
+            if (DoorIcons.TryGetValue(door, out var go))
+            {
+                GameObject.Destroy(go);
+
+                DoorIcons.Remove(door);
+            }
+        }
+
         private static Sprite CreateSprite(string path)
         {
             var width = 256;
@@ -240,8 +251,6 @@ namespace DoorIcons.Patches
             }
         }
 
-        // TODO: remove icon on door deconstruct
-        // TODO: check for other ways to remove door, and remove icon there as well
         [HarmonyPatch(typeof(Door))]
         [HarmonyPatch("OnSpawn")]
         public static class DrawSpriteOnWorldCanvas
@@ -306,6 +315,36 @@ namespace DoorIcons.Patches
                 );
 
                 return go;
+            }
+        }
+
+        [HarmonyPatch(typeof(Deconstructable))]
+        [HarmonyPatch("OnCompleteWork")]
+        public static class Deconstructable_OnCompleteWork
+        {
+            public static void Postfix(Deconstructable __instance)
+            {
+                var door = __instance.GetComponent<Door>();
+
+                if (door != null)
+                {
+                    RemoveDoorIcon(door);
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(StructureTemperatureComponents))]
+        [HarmonyPatch(nameof(StructureTemperatureComponents.DoMelt))]
+        public static class StructureTemperatureComponents_DoMelt
+        {
+            public static void Postfix(PrimaryElement primary_element)
+            {
+                var door = primary_element.gameObject.GetComponent<Door>();
+
+                if (door != null)
+                {
+                    RemoveDoorIcon(door);
+                }
             }
         }
     }
