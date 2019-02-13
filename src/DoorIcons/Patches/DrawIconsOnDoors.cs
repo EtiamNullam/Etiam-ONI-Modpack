@@ -7,12 +7,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Common;
 
 namespace DoorIcons.Patches
 {
     // TODO: allow disabling of all icons with some button and/or hotkey
     // TODO: move sprites into project (and into proper directory)
     // TODO: add black border around sprites
+    // TODO: split this file
+    // TODO: use common
     public static class DrawIconsOnDoors
     {
         private enum ExtendedDoorState
@@ -226,10 +229,12 @@ namespace DoorIcons.Patches
             }
         }
 
-        private static Sprite CreateSprite(string path)
+        private static Sprite CreateSprite(string spriteFilename)
         {
             var width = 256;
             var height = 256;
+
+            var path = Pathfinder.MergePath(State.Common.RootPath, "Sprites", spriteFilename);
 
             if (File.Exists(path))
             {
@@ -246,7 +251,7 @@ namespace DoorIcons.Patches
             }
             else
             {
-                Debug.Log("File doesn't exist: " + path);
+                State.Common.Logger.Log("File doesn't exist at path: " + path);
                 return null;
             }
         }
