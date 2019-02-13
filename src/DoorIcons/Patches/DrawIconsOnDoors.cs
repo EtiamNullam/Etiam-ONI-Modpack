@@ -10,14 +10,15 @@ using UnityEngine;
 
 namespace DoorIcons.Patches
 {
+    // TODO: allow disabling of all icons with some button and/or hotkey
     // TODO: move sprites into project (and into proper directory)
+    // TODO: not refreshing on any access change
+    // TODO: updates on automation change (when it actually changes state), but not on wire disconnect
     public static class DrawIconsOnDoors
     {
-        // TODO: not refreshing on any access change
-        // TODO: test automation
         [HarmonyPatch(typeof(Door))]
         [HarmonyPatch("RefreshControlState")]
-        public static class x
+        public static class Door_RefreshControlState
         {
             public static void Postfix(Door __instance)
             {
@@ -27,7 +28,7 @@ namespace DoorIcons.Patches
 
         [HarmonyPatch(typeof(AccessControl))]
         [HarmonyPatch("OnControlStateChanged")]
-        public static class y
+        public static class AccessControl_OnControlStateChanged
         {
             public static void Postfix(AccessControl __instance)
             {
@@ -117,35 +118,67 @@ namespace DoorIcons.Patches
             }
             else
             {
-                if (GetSavedPermissions(accessControl)
-                    .Any(p => p.Value != accessControl.DefaultPermission))
+                switch (GetDoorStatus(door))
                 {
-                    return ExtendedDoorState.AccessCustom;
-                }
-                // invalid order here?
-                switch (accessControl.DefaultPermission)
-                {
-                    case AccessControl.Permission.GoLeft:
-                        return ExtendedDoorState.AccessLeft;
-                    case AccessControl.Permission.GoRight:
-                        return ExtendedDoorState.AccessRight;
-                    case AccessControl.Permission.Neither:
-                        return ExtendedDoorState.AccessRestricted;
-                    case AccessControl.Permission.Both:
-                        switch (GetDoorStatus(door))
+                    case Door.ControlState.Auto:
+                        if (HasCustomDupePermissions(accessControl))
                         {
-                            case Door.ControlState.Auto:
-                                return ExtendedDoorState.Auto;
-                            case Door.ControlState.Closed:
-                                return ExtendedDoorState.Locked;
-                            case Door.ControlState.Opened:
-                                return ExtendedDoorState.Open;
+                            return ExtendedDoorState.AccessCustom;
                         }
-                        break;
+
+                        if (HasCustomGlobalPermissions(accessControl, out var permission))
+                        {
+                            return permission;
+                        }
+
+                        return ExtendedDoorState.Auto;
+
+                    case Door.ControlState.Opened:
+                        if (HasCustomDupePermissions(accessControl))
+                        {
+                            return ExtendedDoorState.AccessCustom;
+                        }
+
+                        if (HasCustomGlobalPermissions(accessControl, out var permission2))
+                        {
+                            return permission2;
+                        }
+
+                        return ExtendedDoorState.Open;
+
+                    case Door.ControlState.Closed:
+                        return ExtendedDoorState.Locked;
                 }
             }
 
             return ExtendedDoorState.Invalid;
+        }
+
+        private static bool HasCustomGlobalPermissions(AccessControl access, out ExtendedDoorState doorState)
+        {
+            switch (access.DefaultPermission)
+            {
+                case AccessControl.Permission.GoLeft:
+                    doorState = ExtendedDoorState.AccessLeft;
+                    return true;
+
+                case AccessControl.Permission.GoRight:
+                    doorState = ExtendedDoorState.AccessRight;
+                    return true;
+
+                case AccessControl.Permission.Neither:
+                    doorState = ExtendedDoorState.AccessRestricted;
+                    return true;
+
+                default:
+                    doorState = ExtendedDoorState.Invalid;
+                    return false;
+            }
+        }
+
+        private static bool HasCustomDupePermissions(AccessControl access)
+        {
+            return GetSavedPermissions(access).Any(p => p.Value != access.DefaultPermission);
         }
 
         private enum ExtendedDoorState
@@ -176,13 +209,21 @@ namespace DoorIcons.Patches
 
         private static void SetDoorIcon(Door door, ExtendedDoorState targetState)
         {
-            if (DoorIcons.TryGetValue(door, out var go) && DoorSprites.TryGetValue(targetState, out var sprite))
+            if (DoorIcons.TryGetValue(door, out var go))
             {
                 var renderer = go.GetComponent<SpriteRenderer>();
 
                 if (renderer != null)
                 {
-                    renderer.sprite = sprite;
+                    if (DoorSprites.TryGetValue(targetState, out var newSprite))
+                    {
+                        renderer.sprite = newSprite;
+                        renderer.enabled = newSprite != null;
+                    }
+                    else
+                    {
+                        renderer.enabled = false;
+                    }
                 }
             }
         }
@@ -246,23 +287,6 @@ namespace DoorIcons.Patches
                 var pos = Grid.PosToXY(door.transform.position);
 
                 //Debug.Log($"x: {pos.X}, y: {pos.Y}");
-
-                //for (int i = 0; i < Enum.GetValues(typeof(GameScreenManager.UIRenderTarget)).Length; i++)
-                //{
-                //    try
-                //    {
-                //        Debug.Log("camera z: "
-                //            + GameScreenManager.Instance
-                //            .GetCamera((GameScreenManager.UIRenderTarget)i)
-                //            .transform
-                //            .position
-                //            .z);
-                //    }
-                //    catch { }
-                //}
-
-                // TODO: horizontal door needs different offset
-                // AND rotated icon
                 go.transform.position = new Vector3
                 (
                     pos.X + 0.5f,
