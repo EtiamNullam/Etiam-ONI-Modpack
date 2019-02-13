@@ -34,7 +34,7 @@
 
         private static Color ExtractGameColor(PrimaryElement primaryElement)
         {
-            Color resultColor = primaryElement.Element.substance.conduitColour;
+            Color resultColor = primaryElement.Element.substance.colour;
             resultColor.a = 1;
 
             return resultColor;

@@ -12,7 +12,6 @@ namespace GasOverlay
     public static class GasOverlayMod
     {
         private static Color[] LastColors;
-        private static Config Config = new Config();
         private const string ModName = "GasOverlay";
 
         private static void ResetLastColors()
@@ -21,7 +20,7 @@ namespace GasOverlay
 
             for (int i = 0; i < LastColors.Length; i++)
             {
-                LastColors[i] = Config.NotGasColor;
+                LastColors[i] = State.Config.NotGasColor;
             }
         }
 
@@ -32,25 +31,28 @@ namespace GasOverlay
 
             public static void Postfix()
             {
-                Common.ModState.Initialize(ModName, null);
+                State.Common.WatchConfig<Config>(configFileName, LoadConfig);
 
-                ConfigHelper<Config>.Watch(configFileName, LoadConfig);
-                if (ConfigHelper<Config>.TryLoad(configFileName, out var newConfig))
+                try
                 {
-                    LoadConfig(newConfig);
+                    LoadConfig(State.Common.LoadConfig<Config>(configFileName));
+                }
+                catch (Exception e)
+                {
+                    State.Common.Logger.Log("Error while loading config." + e);
                 }
             }
 
             private static void LoadConfig(Config config)
             {
-                Config = config;
+                State.Config = config;
 
-                Config.InterpFactor = Mathf.Clamp(Config.InterpFactor, float.Epsilon, 1);
-                Config.MinimumIntensity = Mathf.Clamp01(Config.MinimumIntensity);
+                State.Config.InterpFactor = Mathf.Clamp(State.Config.InterpFactor, float.Epsilon, 1);
+                State.Config.MinimumIntensity = Mathf.Clamp01(State.Config.MinimumIntensity);
 
                 ResetLastColors();
 
-                Common.Logger.Log("Config loaded.");
+                State.Common.Logger.Log("Config loaded.");
             }
         }
 
@@ -70,7 +72,7 @@ namespace GasOverlay
                     }
 
                     float mass = Grid.Mass[cell];
-                    float maxMass = Config.MaxMass;
+                    float maxMass = State.Config.MaxMass;
 
                     float pressureFraction = GetPressureFraction(mass, maxMass);
 
@@ -78,7 +80,7 @@ namespace GasOverlay
 
                     ScaleToPressure(ref color, pressureFraction);
 
-                    if (Config.ShowEarDrumPopMarker && mass > Config.EarPopMass)
+                    if (State.Config.ShowEarDrumPopMarker && mass > State.Config.EarPopMass)
                     {
                         MarkEarDrumPop(ref color, element.id, mass);
                     }
@@ -89,7 +91,7 @@ namespace GasOverlay
                 }
                 else
                 {
-                    __result = Config.NotGasColor;
+                    __result = State.Config.NotGasColor;
                 }
 
                 return false;
@@ -103,7 +105,7 @@ namespace GasOverlay
 
             private static float GetPressureFraction(float mass, float maxMass)
             {
-                float minFraction = Config.MinimumIntensity;
+                float minFraction = State.Config.MinimumIntensity;
                 float fraction = mass / maxMass;
 
                 return Mathf.Lerp(minFraction, 1, fraction);
@@ -120,21 +122,21 @@ namespace GasOverlay
                 {
                     case SimHashes.CarbonDioxide:
                     case SimHashes.SourGas:
-                        color.r = Mathf.Clamp01(color.r + Config.EarPopChange);
+                        color.r = Mathf.Clamp01(color.r + State.Config.EarPopChange);
                         break;
                     case SimHashes.Methane:
                     case SimHashes.ContaminatedOxygen:
-                        color.g = Mathf.Clamp01(color.g + Config.EarPopChange);
+                        color.g = Mathf.Clamp01(color.g + State.Config.EarPopChange);
                         break;
                     default:
-                        color.g = Mathf.Clamp01(color.g - Config.EarPopChange);
+                        color.g = Mathf.Clamp01(color.g - State.Config.EarPopChange);
                         break;
                 }
             }
 
             private static void TransitColor(ref Color newColor, Color lastColor)
             {
-                newColor = Color.LerpUnclamped(lastColor, newColor, Config.InterpFactor);
+                newColor = Color.LerpUnclamped(lastColor, newColor, State.Config.InterpFactor);
             }
         }
     }

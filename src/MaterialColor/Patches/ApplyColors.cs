@@ -37,7 +37,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Common.Logger.Log(e);
+                    State.Common.Logger.Log(e);
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Common.Logger.LogOnce("Ownable_UpdateTint.Postfix", e);
+                    State.Common.Logger.LogOnce("Ownable_UpdateTint.Postfix", e);
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Common.Logger.LogOnce("FilteredStorage_OnFilterChanged.Postfix", e);
+                    State.Common.Logger.LogOnce("FilteredStorage_OnFilterChanged.Postfix", e);
                 }
             }
         }
@@ -113,7 +113,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Common.Logger.LogOnce("EnterCell failed.", e);
+                    State.Common.Logger.LogOnce("EnterCell failed.", e);
                 }
             }
         }
@@ -135,7 +135,7 @@ namespace MaterialColor.Patches
                 }
                 catch (Exception e)
                 {
-                    Common.Logger.LogOnce(e);
+                    State.Common.Logger.LogOnce(e);
                 }
             }
         }

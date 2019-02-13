@@ -12,7 +12,8 @@ namespace Common
         {
             try
             {
-                var directories = Directory.GetDirectories("Mods", ModState.Name, SearchOption.AllDirectories);
+                // TODO: search by .dll location instead, then get its containing directory
+                var directories = Directory.GetDirectories("Mods", name, SearchOption.AllDirectories);
                 var modRootPath = directories.FirstOrDefault();
 
                 if (modRootPath != null)
@@ -21,20 +22,28 @@ namespace Common
                 }
                 else
                 {
-                    Logger.Log("Couldn't find mod root path.");
+                    Logger.Default.Log("Couldn't find mod root path.");
                 }
             }
             catch (Exception e)
             {
-                Logger.Log("Error while searching for mod root path.", e);
+                Logger.Default.Log("Error while searching for mod root path.", e);
             }
 
             return "Mods" + Path.DirectorySeparatorChar + name;
         }
 
-        public static string ToRelativeToConfigPath(string path)
+        // TODO: test with interactive
+        public static string MergePath(params string[] pathSegments)
         {
-            return ModState.ConfigPath + Path.DirectorySeparatorChar + path;
+            var builder = new StringBuilder(pathSegments[0]);
+
+            for (int i = 1; i < pathSegments.Length; i++)
+            {
+                builder.Append(Path.DirectorySeparatorChar + pathSegments[i]);
+            }
+
+            return builder.ToString();
         }
     }
 }

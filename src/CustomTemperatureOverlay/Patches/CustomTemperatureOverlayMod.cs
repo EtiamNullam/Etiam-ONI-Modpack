@@ -21,14 +21,18 @@ namespace CustomTemperatureOverlay.Patches
         {
             public static void Postfix()
             {
-                Common.ModState.Initialize(ModName, null);
-                ConfigHelper<SimDebugView.ColorThreshold[]>.Watch(configFileName, UpdateThresholds);
-                if (ConfigHelper<SimDebugView.ColorThreshold[]>.TryLoad(configFileName, out var newThresholds))
+                State.Common.WatchConfig<SimDebugView.ColorThreshold[]>(configFileName, UpdateThresholds);
+
+                try
                 {
-                    UpdateThresholds(newThresholds);
+                    UpdateThresholds
+                    (
+                        State.Common.LoadConfig<SimDebugView.ColorThreshold[]>(configFileName)
+                    );
                 }
-                else
+                catch (Exception e)
                 {
+                    State.Common.Logger.Log("Error while loading config." + e);
                     UpdateThresholds(State.DefaultThresholds);
                 }
             }
@@ -61,7 +65,7 @@ namespace CustomTemperatureOverlay.Patches
                     };
                 }
 
-                Common.Logger.Log("Config loaded: " + Environment.NewLine + JsonConvert.SerializeObject(logObject));
+                State.Common.Logger.Log("Config loaded: " + JsonConvert.SerializeObject(logObject));
             }
         }
     }

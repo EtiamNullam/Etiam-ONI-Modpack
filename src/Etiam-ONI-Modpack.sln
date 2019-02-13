@@ -18,6 +18,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoveDailyReports", "SaveNoDailyReports\RemoveDailyReports.csproj", "{D45B80B8-8950-4ED4-8ED8-3A044FF4D9C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTemperatureOverlay", "CustomTemperatureOverlay\CustomTemperatureOverlay.csproj", "{92E021FE-3CCC-43B1-984D-9C48CA427610}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B0FE7A0A-C62D-41AE-94B3-DA3429806A29} = {B0FE7A0A-C62D-41AE-94B3-DA3429806A29}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Tools\Common\Common.csproj", "{B0FE7A0A-C62D-41AE-94B3-DA3429806A29}"
 EndProject
@@ -27,7 +30,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearRegolith", "Tools\Clea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkGasOverlay", "Tools\BenchmarkGasOverlay\BenchmarkGasOverlay.csproj", "{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoorIcons", "DoorIcons\DoorIcons.csproj", "{1EFDA498-D0B3-417C-957D-066D46A4EC02}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLockerDropPort", "SmartLockerDropPort\SmartLockerDropPort.csproj", "{6B6E34C1-57F7-46FE-AC44-ED49DDCF7E83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainedDeconstruction", "ChainedDeconstruction\ChainedDeconstruction.csproj", "{20DEA568-F78F-4891-9C9E-EA79D1403758}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiquefiableSculptures", "LiquefiableSculptures\LiquefiableSculptures.csproj", "{BCB946C1-3237-4163-967D-4DC0F491683C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,10 +74,18 @@ Global
 		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1EFDA498-D0B3-417C-957D-066D46A4EC02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1EFDA498-D0B3-417C-957D-066D46A4EC02}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1EFDA498-D0B3-417C-957D-066D46A4EC02}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1EFDA498-D0B3-417C-957D-066D46A4EC02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B6E34C1-57F7-46FE-AC44-ED49DDCF7E83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B6E34C1-57F7-46FE-AC44-ED49DDCF7E83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B6E34C1-57F7-46FE-AC44-ED49DDCF7E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B6E34C1-57F7-46FE-AC44-ED49DDCF7E83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20DEA568-F78F-4891-9C9E-EA79D1403758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20DEA568-F78F-4891-9C9E-EA79D1403758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20DEA568-F78F-4891-9C9E-EA79D1403758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20DEA568-F78F-4891-9C9E-EA79D1403758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCB946C1-3237-4163-967D-4DC0F491683C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCB946C1-3237-4163-967D-4DC0F491683C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCB946C1-3237-4163-967D-4DC0F491683C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCB946C1-3237-4163-967D-4DC0F491683C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
