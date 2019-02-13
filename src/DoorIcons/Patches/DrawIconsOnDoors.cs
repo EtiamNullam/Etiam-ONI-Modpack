@@ -12,10 +12,8 @@ using Common;
 namespace DoorIcons.Patches
 {
     // TODO: allow disabling of all icons with some button and/or hotkey
-    // TODO: move sprites into project (and into proper directory)
     // TODO: add black border around sprites
     // TODO: split this file
-    // TODO: use common
     public static class DrawIconsOnDoors
     {
         private enum ExtendedDoorState
