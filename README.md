@@ -115,3 +115,9 @@ Works well with MaterialColor mod.
 Always shows temperature in all units: celsius, fahrenheit and kelvin.
 
 ![All temps](https://i.imgur.com/o61vNsE.png)
+
+### DoorIcons
+
+Displays the icon on top of each door which indicates current state or access restrictions.
+
+![DoorIcons Preview](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/DoorIcons/door_access.gif)
