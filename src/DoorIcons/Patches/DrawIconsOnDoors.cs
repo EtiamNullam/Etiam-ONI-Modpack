@@ -75,23 +75,71 @@ namespace DoorIcons.Patches
             >
         >("savedPermissions");
 
-        [HarmonyPatch(typeof(Door))]
-        [HarmonyPatch("RefreshControlState")]
-        public static class Door_RefreshControlState
+        private static readonly AccessTools.FieldRef
+        <
+            DoorToggleSideScreen,
+            Door
+        > GetDoorSideScreenTarget = AccessTools.FieldRefAccess
+        <
+            DoorToggleSideScreen,
+            Door
+        >("target");
+
+        private static readonly AccessTools.FieldRef
+        <
+            AccessControlSideScreen,
+            Door
+        > GetAccessSideScreenDoorTarget = AccessTools.FieldRefAccess
+        <
+            AccessControlSideScreen,
+            Door
+        >("doorTarget");
+
+        [HarmonyPatch(typeof(Workable))]
+        [HarmonyPatch("OnSpawn")]
+        public static class Door_OnSpawn
         {
-            public static void Postfix(Door __instance)
+            public static void Postfix(Workable __instance)
             {
-                UpdateIcon(__instance);
+                try
+                {
+                    if (Game.Instance == null)
+                    {
+                        return;
+                    }
+
+                    var door = __instance.GetComponent<Door>();
+
+                    if (door != null && !DoorIcons.ContainsKey(door))
+                    {
+                        var icon = CreateDoorIcon(door);
+
+                        DoorIcons.Add
+                        (
+                            door,
+                            icon
+                        );
+
+                        __instance.gameObject.Subscribe((int)GameHashes.LogicEvent, data => UpdateIcon(door));
+                        __instance.gameObject.Subscribe((int)GameHashes.DoorStateChanged, data => UpdateIcon(door));
+                        __instance.gameObject.Subscribe((int)GameHashes.CopySettings, data => UpdateIcon(door));
+                        __instance.gameObject.Subscribe((int)GameHashes.DoorControlStateChanged, data => UpdateIcon(door));
+                    }
+                }
+                catch (Exception e)
+                {
+                    State.Common.Logger.LogOnce("Error while trying to create door icon", e);
+                }
             }
         }
 
-        [HarmonyPatch(typeof(AccessControl))]
-        [HarmonyPatch("SetStatusItem")]
-        public static class AccessControl_OnControlStateChanged
+        [HarmonyPatch(typeof(AccessControlSideScreen))]
+        [HarmonyPatch("OnPermissionChanged")]
+        public static class Door_Update_OnMinionPermissionChange
         {
-            public static void Postfix(AccessControl __instance)
+            public static void Postfix(AccessControlSideScreen __instance)
             {
-                var door = __instance.GetComponent<Door>();
+                var door = GetAccessSideScreenDoorTarget(__instance);
 
                 if (door != null)
                 {
@@ -100,13 +148,117 @@ namespace DoorIcons.Patches
             }
         }
 
-        [HarmonyPatch(typeof(Door))]
-        [HarmonyPatch(nameof(Door.OnLogicValueChanged))]
-        public static class Door_OnLogicValueChanged
+        [HarmonyPatch(typeof(AccessControlSideScreen))]
+        [HarmonyPatch("RefreshOnline")]
+        public static class Door_Update_OnDefaultPermissionChange
         {
-            public static void Postfix(Door __instance)
+            public static void Postfix(AccessControlSideScreen __instance)
             {
-                UpdateIcon(__instance);
+                var door = GetAccessSideScreenDoorTarget(__instance);
+
+                if (door != null)
+                {
+                    UpdateIcon(door);
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(Deconstructable))]
+        [HarmonyPatch("OnCompleteWork")]
+        public static class Door_Remove_OnDeconstruct
+        {
+            public static void Postfix(Deconstructable __instance)
+            {
+                var door = __instance.GetComponent<Door>();
+
+                if (door != null)
+                {
+                    RemoveDoorIcon(door);
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(StructureTemperatureComponents))]
+        [HarmonyPatch(nameof(StructureTemperatureComponents.DoMelt))]
+        public static class Door_Remove_OnMelt
+        {
+            public static void Postfix(PrimaryElement primary_element)
+            {
+                var door = primary_element.gameObject.GetComponent<Door>();
+
+                if (door != null)
+                {
+                    RemoveDoorIcon(door);
+                }
+            }
+        }
+
+        private static GameObject CreateDoorIcon(Door door)
+        {
+            var go = new GameObject("DoorIcon");
+            var renderer = go.FindOrAddComponent<SpriteRenderer>();
+
+            ExtendedDoorState state = GetExtendedDoorState(door);
+
+            if (DoorSprites.TryGetValue(state, out var newSprite))
+            {
+                renderer.sprite = newSprite;
+            }
+;
+            renderer.material.renderQueue = 5000;
+
+            Util.KInstantiate(renderer, GameScreenManager.Instance.worldSpaceCanvas);
+
+            var pos = Grid.PosToXY(door.transform.position);
+            var rotatable = door.GetComponent<Rotatable>();
+
+            if (rotatable != null && rotatable.GetOrientation() == Orientation.R90)
+            {
+                go.transform.position = new Vector3
+                (
+                    pos.X + 1f,
+                    pos.Y + 0.5f,
+                    Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
+                );
+            }
+            else
+            {
+                go.transform.position = new Vector3
+                (
+                    pos.X + 0.5f,
+                    pos.Y + 1f,
+                    Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
+                );
+            }
+
+            go.transform.localScale = new Vector3
+            (
+                0.005f,
+                0.005f,
+                1
+            );
+
+            return go;
+        }
+
+        private static void SetDoorIcon(Door door, ExtendedDoorState targetState)
+        {
+            if (DoorIcons.TryGetValue(door, out var go))
+            {
+                var renderer = go.GetComponent<SpriteRenderer>();
+
+                if (renderer != null)
+                {
+                    if (DoorSprites.TryGetValue(targetState, out var newSprite))
+                    {
+                        renderer.sprite = newSprite;
+                        renderer.enabled = newSprite != null;
+                    }
+                    else
+                    {
+                        renderer.enabled = false;
+                    }
+                }
             }
         }
 
@@ -202,27 +354,6 @@ namespace DoorIcons.Patches
             return GetSavedPermissions(access).Any(p => p.Value != access.DefaultPermission);
         }
 
-        private static void SetDoorIcon(Door door, ExtendedDoorState targetState)
-        {
-            if (DoorIcons.TryGetValue(door, out var go))
-            {
-                var renderer = go.GetComponent<SpriteRenderer>();
-
-                if (renderer != null)
-                {
-                    if (DoorSprites.TryGetValue(targetState, out var newSprite))
-                    {
-                        renderer.sprite = newSprite;
-                        renderer.enabled = newSprite != null;
-                    }
-                    else
-                    {
-                        renderer.enabled = false;
-                    }
-                }
-            }
-        }
-
         private static void RemoveDoorIcon(Door door)
         {
             if (DoorIcons.TryGetValue(door, out var go))
@@ -257,110 +388,6 @@ namespace DoorIcons.Patches
             {
                 State.Common.Logger.Log("File doesn't exist at path: " + path);
                 return null;
-            }
-        }
-
-        [HarmonyPatch(typeof(Door))]
-        [HarmonyPatch("OnSpawn")]
-        public static class DrawSpriteOnWorldCanvas
-        {
-            public static void Postfix(Door __instance)
-            {
-                if (Game.Instance == null)
-                {
-                    return;
-                }
-
-                try
-                {
-                    DoorIcons.Add
-                    (
-                        __instance,
-                        CreateDoorIcon(__instance)
-                    );
-                }
-                catch (Exception e)
-                {
-                    State.Common.Logger.LogOnce("Error while trying to create door icon");
-                }
-            }
-
-            private static GameObject CreateDoorIcon(Door door)
-            {
-                var go = new GameObject("DoorIcon");
-                var renderer = go.AddComponent<SpriteRenderer>();
-
-                ExtendedDoorState state = GetExtendedDoorState(door);
-
-                if (DoorSprites.TryGetValue(state, out var newSprite))
-                {
-                    renderer.sprite = newSprite;
-                }
-;
-                renderer.material.renderQueue = 5000;
-
-                Util.KInstantiate(renderer, GameScreenManager.Instance.worldSpaceCanvas);
-
-                var pos = Grid.PosToXY(door.transform.position);
-                var rotatable = door.GetComponent<Rotatable>();
-
-                if (rotatable != null && rotatable.GetOrientation() == Orientation.R90)
-                {
-                    go.transform.position = new Vector3
-                    (
-                        pos.X + 1f,
-                        pos.Y + 0.5f,
-                        Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
-                    );
-                }
-                else
-                {
-                    go.transform.position = new Vector3
-                    (
-                        pos.X + 0.5f,
-                        pos.Y + 1f,
-                        Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
-                    );
-                }
-
-                go.transform.localScale = new Vector3
-                (
-                    0.005f,
-                    0.005f,
-                    1
-                );
-
-                return go;
-            }
-        }
-
-        [HarmonyPatch(typeof(Deconstructable))]
-        [HarmonyPatch("OnCompleteWork")]
-        public static class Deconstructable_OnCompleteWork
-        {
-            public static void Postfix(Deconstructable __instance)
-            {
-                var door = __instance.GetComponent<Door>();
-
-                if (door != null)
-                {
-                    RemoveDoorIcon(door);
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(StructureTemperatureComponents))]
-        [HarmonyPatch(nameof(StructureTemperatureComponents.DoMelt))]
-        public static class StructureTemperatureComponents_DoMelt
-        {
-            public static void Postfix(PrimaryElement primary_element)
-            {
-                var door = primary_element.gameObject.GetComponent<Door>();
-
-                if (door != null)
-                {
-                    RemoveDoorIcon(door);
-                }
             }
         }
     }
