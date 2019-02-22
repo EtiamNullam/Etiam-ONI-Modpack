@@ -18,6 +18,8 @@ Requires [@javisar](https://github.com/javisar)'s mod loader - [GitHub](https://
 
 After installation of modloader copy over contents of `Mods` directory to `Mods` directory in Oxygen Not Included installation directory.
 
+NOTE: You don't have to use the whole pack - delete the mods you don't like and it will still run just fine.
+
 ## Donate
 
 [![Support me on Patreon](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/become-a-patron.png)](https://www.patreon.com/bePatron?u=16564340)
@@ -31,6 +33,8 @@ After installation of modloader copy over contents of `Mods` directory to `Mods`
 - Everyone else involved
 
 ## Mods preview
+
+NOTE: Many of my mods are configurable through `.json` files inside their directories. Changes are reflected immediately as soon as you save the file (where applicable).
 
 ### MaterialColor
 
