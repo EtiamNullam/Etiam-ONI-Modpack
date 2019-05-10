@@ -7,9 +7,19 @@ namespace FreeCamera.Patches
     [HarmonyPatch("OnPrefabInit")]
     public static class CameraController_OnPrefabInit_SetMaxZoom
     {
-        public static void Postfix(ref float ___maxOrthographicSize)
+        public static void Postfix()
         {
-            ___maxOrthographicSize = Config.MaxZoom;
+            CameraController.Instance.SetMaxOrthographicSize(Config.MaxZoom);
+        }
+    }
+
+    [HarmonyPatch(typeof(NewBaseScreen))]
+    [HarmonyPatch(nameof(NewBaseScreen.SetInitialCamera))]
+    public static class NewBaseScreen_SetInitialCamera_SetMaxZoom
+    {
+        public static void Postfix()
+        {
+            CameraController.Instance.SetMaxOrthographicSize(Config.MaxZoom);
         }
     }
 
