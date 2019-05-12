@@ -87,7 +87,7 @@ namespace SmartLockerDropPort.Patches
         {
             var inputPorts = new[]
             {
-                new LogicPorts.Port(DropPortID, new CellOffset(0, 0), "Drops contents", true, LogicPortSpriteType.Input)
+                new LogicPorts.Port(DropPortID, new CellOffset(0, 0), "Drops contents when active", "Drops contents", null, true, LogicPortSpriteType.Input)
             };
 
             var outputPorts = new[]
