@@ -9,19 +9,23 @@ namespace Common
     // TODO: this class does a lot of routing maybe rename it accordingly
     public class Core
     {
-        public Core(string modName, string configDirectoryPath, bool logDebugMessages)
+        public Core(string modName, string workshopID, string configDirectoryPath, bool logDebugMessages)
         {
             this.Logger = new Logger(modName, logDebugMessages);
 
             this.ModName = modName;
-            this.RootPath = this.ConfigPath = Pathfinder.FindModRootPath(modName);
+
+            if (Pathfinder.FindModRootPath(workshopID, out var path))
+            {
+                this.RootPath = this.ConfigPath = path;
+            }
 
             if (configDirectoryPath != null)
             {
                 this.ConfigPath = Pathfinder.MergePath(this.ConfigPath, configDirectoryPath);
             }
 
-            this.Logger.LogDebug($"Initialized {modName} mod at path {this.RootPath}, with config root at {this.ConfigPath}");
+            this.Logger.LogDebug($"Initialized {this.ModName} mod at path {this.RootPath}, with config root at {this.ConfigPath}");
         }
 
         public string ModName { get; private set; }
@@ -32,11 +36,21 @@ namespace Common
 
         public ConfigWatcher<T> WatchConfig<T>(string path, Action<T> callback)
         {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
             return new ConfigWatcher<T>(this.ConfigPath, path, callback);
         }
 
         public T LoadConfig<T>(string path)
         {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
             return ConfigHelper.Load<T>(Pathfinder.MergePath(this.ConfigPath, path));
         }
     }

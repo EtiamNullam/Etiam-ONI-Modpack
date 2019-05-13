@@ -1,4 +1,5 @@
-﻿using Harmony;
+﻿using Common;
+using Harmony;
 using MaterialColor.IO;
 using System;
 using System.Collections.Generic;
@@ -115,10 +116,21 @@ namespace MaterialColor.Patches
             {
                 try
                 {
+                    if (State.Common.ConfigPath == null)
+                    {
+                        return null;
+                    }
+
                     var width = 256;
                     var height = 256;
 
-                    byte[] bytes = File.ReadAllBytes(Paths.IconPath);
+                    byte[] bytes = File.ReadAllBytes(
+                        Pathfinder.MergePath(
+                            State.Common.RootPath,
+                            "Sprites",
+                            "overlay_materialColor.png"
+                        )
+                    );
 
                     Texture2D texture = new Texture2D(width, height, TextureFormat.RGB24, false)
                     {

@@ -31,6 +31,11 @@ namespace GasOverlay
 
             public static void Postfix()
             {
+                if (State.Common.ConfigPath == null)
+                {
+                    return;
+                }
+
                 State.Common.WatchConfig<Config>(configFileName, LoadConfig);
 
                 try

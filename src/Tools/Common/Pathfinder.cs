@@ -8,32 +8,43 @@ namespace Common
 {
     public static class Pathfinder
     {
-        public static string FindModRootPath(string name)
+        public static bool FindModRootPath(string workshopID, out string rootPath)
         {
             try
             {
-                // TODO: search by .dll location instead, then get its containing directory
-                var directories = Directory.GetDirectories("Mods", name, SearchOption.AllDirectories);
-                var modRootPath = directories.FirstOrDefault();
+                var steamModsPath = MergePath(
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    "Klei",
+                    "OxygenNotIncluded",
+                    "mods",
+                    "Steam"
+                );
 
-                if (modRootPath != null)
-                {
-                    return modRootPath;
-                }
-                else
+                var directories = Directory.GetDirectories(
+                    steamModsPath,
+                    workshopID,
+                    SearchOption.AllDirectories
+                );
+
+                rootPath = directories.FirstOrDefault();
+
+                if (rootPath == null)
                 {
                     Logger.Default.Log("Couldn't find mod root path.");
+                    return false;
                 }
+
+                return true;
             }
             catch (Exception e)
             {
                 Logger.Default.Log("Error while searching for mod root path.", e);
             }
 
-            return "Mods" + Path.DirectorySeparatorChar + name;
+            rootPath = string.Empty;
+            return false;
         }
 
-        // TODO: test with interactive
         public static string MergePath(params string[] pathSegments)
         {
             var builder = new StringBuilder(pathSegments[0]);

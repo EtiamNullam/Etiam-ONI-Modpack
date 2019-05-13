@@ -1,4 +1,5 @@
-﻿using Harmony;
+﻿using Common;
+using Harmony;
 using MaterialColor.Data;
 using MaterialColor.IO;
 using System;
@@ -16,18 +17,22 @@ namespace MaterialColor.Patches
         [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
         public static class GameLaunch
         {
+            private static readonly string MainConfigFilename = "Config.json";
+            private static readonly string ElementColorsFilename = "ElementColors.json";
+
             public static void Postfix()
             {
-                string mainConfigFilename = "Config.json";
-                string elementColorsFilename = "ElementColors.json";
+                if (State.Common.ConfigPath == null)
+                {
+                    return;
+                }
 
-                State.Common.WatchConfig<Config>(mainConfigFilename, LoadMainConfig);
-                State.Common.WatchConfig<Dictionary<SimHashes, ElementColor>>(elementColorsFilename, LoadElementColors);
+                State.Common.WatchConfig<Config>(MainConfigFilename, LoadMainConfig);
+                State.Common.WatchConfig<Dictionary<SimHashes, ElementColor>>(ElementColorsFilename, LoadElementColors);
 
                 try
                 {
-
-                    LoadMainConfig(State.Common.LoadConfig<Config>(mainConfigFilename));
+                    LoadMainConfig(State.Common.LoadConfig<Config>(MainConfigFilename));
                 }
                 catch (Exception e)
                 {
@@ -36,7 +41,7 @@ namespace MaterialColor.Patches
 
                 try
                 {
-                    LoadElementColors(State.Common.LoadConfig<Dictionary<SimHashes, ElementColor>>(elementColorsFilename));
+                    LoadElementColors(State.Common.LoadConfig<Dictionary<SimHashes, ElementColor>>(ElementColorsFilename));
                 }
                 catch (Exception e)
                 {

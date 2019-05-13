@@ -33,7 +33,7 @@
             "CarpetTile",
         };
 
-        public static Core Common = new Core("MaterialColor", "Config", false);
+        public static Core Common = new Core("MaterialColor", "1739635014", "Config", false);
 
         private static Config _config = new Config();
 
@@ -56,8 +56,8 @@
                 {
                     Common.Logger.LogOnce("Error while creating new TextFilter object", e);
                 }
-			}
-		}
+            }
+        }
 
         public static TextFilter TypeFilter { get; private set; }
 
