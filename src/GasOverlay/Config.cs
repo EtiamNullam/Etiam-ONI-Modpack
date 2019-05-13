@@ -7,7 +7,7 @@ namespace GasOverlay
     {
         public Color NotGasColor = new Color(0.25f, 0.25f, 0.3f);
         public float MaxMass = 2.5f;
-        public float MinimumIntensity = 0.3f;
+        public float MinimumIntensity = 0.35f;
         public bool ShowEarDrumPopMarker = true;
         public float EarPopMass = 5;
         public float EarPopChange = 0.2f;
