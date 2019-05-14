@@ -15,7 +15,7 @@ namespace Common
 
             this.ModName = modName;
 
-            if (Pathfinder.FindModRootPath(workshopID, out var path))
+            if (Pathfinder.FindModRootPath(modName, workshopID, out var path))
             {
                 this.RootPath = this.ConfigPath = path;
             }

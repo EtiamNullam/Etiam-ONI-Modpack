@@ -8,33 +8,53 @@ namespace Common
 {
     public static class Pathfinder
     {
-        public static bool FindModRootPath(string workshopID, out string rootPath)
+        public static bool FindModRootPath(string modName, string workshopID, out string rootPath)
         {
             try
             {
-                var steamModsPath = MergePath(
+                string steamModsPath = MergePath(
                     Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                     "Klei",
                     "OxygenNotIncluded",
-                    "mods",
-                    "Steam"
+                    "mods"
                 );
 
-                var directories = Directory.GetDirectories(
-                    steamModsPath,
-                    workshopID,
-                    SearchOption.AllDirectories
-                );
-
-                rootPath = directories.FirstOrDefault();
-
-                if (rootPath == null)
+                var possibleLocations = new string[]
                 {
-                    Logger.Default.Log("Couldn't find mod root path.");
-                    return false;
+                    MergePath(steamModsPath, "Steam"),
+                    MergePath(steamModsPath, "Local"),
+                    MergePath(steamModsPath, "Dev"),
+                    "Mods"
+                };
+
+                var possibleNames = new string[]
+                {
+                    workshopID,
+                    modName
+                };
+
+                foreach (var location in possibleLocations)
+                {
+                    foreach (var name in possibleNames)
+                    {
+                        string[] directories = Directory.GetDirectories(
+                            location,
+                            name,
+                            SearchOption.TopDirectoryOnly
+                        );
+
+                        rootPath = directories.FirstOrDefault();
+
+                        if (rootPath != null)
+                        {
+                            return true;
+                        }
+                    }
                 }
 
-                return true;
+                Logger.Default.Log("Couldn't find mod root path.");
+                rootPath = null;
+                return false;
             }
             catch (Exception e)
             {
