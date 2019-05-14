@@ -8,17 +8,22 @@ A bunch of mods made for [Klei](https://www.klei.com/)'s Oxygen Not Included.
 
 ## Installation
 
-### Download
+### Steam Workshop
 
-Use this [Download Link](https://github.com/EtiamNullam/Etiam-ONI-Modpack/archive/master.zip) or press `"Clone or download" -> "Download ZIP"`
+Most of my mods are now available on [My Steam Workshop](https://steamcommunity.com/profiles/76561197993782918/myworkshopfiles/?appid=4571), so simply subscribe to the mods you want, then enable them in-game (`Main Menu -> Mods`).
+
+### Alternative
+
+If you prefer to not use the steam workshop:
+- Use this [Download Link](https://github.com/EtiamNullam/Etiam-ONI-Modpack/archive/master.zip) or press `"Clone or download" -> "Download ZIP"`.
+- Extract to `Documents/Klei/OxygenNotIncluded/mods/Local` (on Windows, not sure about other platforms)
+
+NOTE: As Steam Workshop approach is clearly superior I'm not going focus too much on the old way of installation.
+NOTE: You should avoid having two different instances of one mod installed, it will most likely crash.
 
 ### Modloader
 
-Requires [@javisar](https://github.com/javisar)'s mod loader - [GitHub](https://github.com/javisar/ONI-Modloader) / [Forum Thread](https://forums.kleientertainment.com/forums/topic/88186-mods05-oni-modloader/)
-
-After installation of modloader copy over contents of `Mods` directory to `Mods` directory in Oxygen Not Included installation directory.
-
-NOTE: You don't have to use the whole pack - delete the mods you don't like and it will still run just fine.
+Does NOT require the [Modloader](https://github.com/javisar/ONI-Modloader) anymore, but should still work with it.
 
 ## Donate
 
