@@ -19,6 +19,7 @@ If you prefer to not use the steam workshop:
 - Extract to `Documents/Klei/OxygenNotIncluded/mods/Local` (on Windows, not sure about other platforms)
 
 NOTE: As Steam Workshop approach is clearly superior I'm not going focus too much on the old way of installation.
+
 NOTE: You should avoid having two different instances of one mod installed, it will most likely crash.
 
 ### Modloader
