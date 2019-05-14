@@ -10,7 +10,7 @@ A bunch of mods made for [Klei](https://www.klei.com/)'s Oxygen Not Included.
 
 ### Steam Workshop
 
-Most of my mods are now available on [My Steam Workshop](https://steamcommunity.com/profiles/76561197993782918/myworkshopfiles/?appid=4571), so simply subscribe to the mods you want, then enable them in-game (`Main Menu -> Mods`).
+Most of my mods are now available on [My Steam Workshop](https://steamcommunity.com/profiles/76561197993782918/myworkshopfiles/?appid=457140), so simply subscribe to the mods you want, then enable them in-game (`Main Menu -> Mods`).
 
 ### Alternative
 
