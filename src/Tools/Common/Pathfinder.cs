@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KMod;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,18 +13,13 @@ namespace Common
         {
             try
             {
-                string steamModsPath = MergePath(
-                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    "Klei",
-                    "OxygenNotIncluded",
-                    "mods"
-                );
+                string modsPath = Manager.GetDirectory();
 
                 var possibleLocations = new string[]
                 {
-                    MergePath(steamModsPath, "Steam"),
-                    MergePath(steamModsPath, "Local"),
-                    MergePath(steamModsPath, "Dev"),
+                    MergePath(modsPath, "Steam"),
+                    MergePath(modsPath, "Local"),
+                    MergePath(modsPath, "Dev"),
                     "Mods"
                 };
 
