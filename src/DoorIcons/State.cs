@@ -10,7 +10,7 @@ namespace DoorIcons
 {
     public static class State
     {
-        public static Core Common = new Core("DoorIcons", null, true);
+        public static Core Common = new Core("DoorIcons", "1741162790", null, true);
 
         public static Dictionary<Door, GameObject> DoorIcons = new Dictionary<Door, GameObject>();
 
@@ -27,6 +27,11 @@ namespace DoorIcons
 
         private static Sprite CreateSprite(string spriteFilename)
         {
+            if (State.Common.RootPath == null)
+            {
+                return null;
+            }
+
             var width = 256;
             var height = 256;
 

@@ -143,7 +143,7 @@ namespace DoorIcons
 
                         return ExtendedDoorState.Open;
 
-                    case Door.ControlState.Closed:
+                    case Door.ControlState.Locked:
                         return ExtendedDoorState.Locked;
                 }
             }
