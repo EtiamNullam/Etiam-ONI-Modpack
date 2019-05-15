@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -52,6 +53,26 @@ namespace Common
             }
 
             return ConfigHelper.Load<T>(Pathfinder.MergePath(this.ConfigPath, path));
+        }
+
+        public void SaveConfig(string path, object data)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            File.WriteAllText(Pathfinder.MergePath(this.ConfigPath, path), JsonConvert.SerializeObject(data, Formatting.Indented));
+        }
+
+        public bool ConfigExists(string path)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            return File.Exists(Pathfinder.MergePath(this.ConfigPath, path));
         }
     }
 }
