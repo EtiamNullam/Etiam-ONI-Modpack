@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Harmony;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace DisplayAllTemps.Patches
@@ -21,39 +22,50 @@ namespace DisplayAllTemps.Patches
                 }
 
                 string formatString = "##0.#";
+
                 float kelvin = GameUtil.GetTemperatureConvertedToKelvin(temp);
 
-                string kelvinString = kelvin.ToString(formatString);
-                string celsiusString = GameUtil.GetTemperatureConvertedFromKelvin(kelvin, GameUtil.TemperatureUnit.Celsius).ToString(formatString);
-                string fahrenheitString = GameUtil.GetTemperatureConvertedFromKelvin(kelvin, GameUtil.TemperatureUnit.Fahrenheit).ToString(formatString);
+                var temperatures = new List<string>();
 
-                string first;
-                string second;
-
-                switch (GameUtil.temperatureUnit)
+                if (GameUtil.temperatureUnit != GameUtil.TemperatureUnit.Celsius && (TemperatureUnitMultiple.Celsius & State.Unit) != 0)
                 {
-                    case GameUtil.TemperatureUnit.Celsius:
-                        first = kelvinString + STRINGS.UI.UNITSUFFIXES.TEMPERATURE.KELVIN;
-                        second = fahrenheitString + STRINGS.UI.UNITSUFFIXES.TEMPERATURE.FAHRENHEIT;
-                        break;
-                    case GameUtil.TemperatureUnit.Fahrenheit:
-                        first = kelvinString + STRINGS.UI.UNITSUFFIXES.TEMPERATURE.KELVIN;
-                        second = celsiusString + STRINGS.UI.UNITSUFFIXES.TEMPERATURE.CELSIUS;
-                        break;
-                    case GameUtil.TemperatureUnit.Kelvin:
-                        first = celsiusString + STRINGS.UI.UNITSUFFIXES.TEMPERATURE.CELSIUS;
-                        second = fahrenheitString + STRINGS.UI.UNITSUFFIXES.TEMPERATURE.FAHRENHEIT;
-                        break;
-                    default:
-                        return;
+                    string celsiusString = GameUtil.GetTemperatureConvertedFromKelvin(kelvin, GameUtil.TemperatureUnit.Celsius).ToString(formatString) + STRINGS.UI.UNITSUFFIXES.TEMPERATURE.CELSIUS;
+
+                    temperatures.Add(celsiusString);
+                }
+                
+                if (GameUtil.temperatureUnit != GameUtil.TemperatureUnit.Fahrenheit && (TemperatureUnitMultiple.Fahrenheit & State.Unit) != 0)
+                {
+                    string fahrenheitString = GameUtil.GetTemperatureConvertedFromKelvin(kelvin, GameUtil.TemperatureUnit.Fahrenheit).ToString(formatString) + STRINGS.UI.UNITSUFFIXES.TEMPERATURE.FAHRENHEIT;
+
+                    temperatures.Add(fahrenheitString);
                 }
 
-                __result += $", ({first}, {second})";
+                if (GameUtil.temperatureUnit != GameUtil.TemperatureUnit.Kelvin && (TemperatureUnitMultiple.Kelvin & State.Unit) != 0)
+                {
+                    string kelvinString = kelvin.ToString(formatString) + STRINGS.UI.UNITSUFFIXES.TEMPERATURE.KELVIN;
+
+                    temperatures.Add(kelvinString);
+                }
+
+                if (temperatures.Count <= 0)
+                {
+                    return;
+                }
+
+                var builder = new StringBuilder(__result);
+
+                foreach (var temperature in temperatures)
+                {
+                    builder.Append(", ");
+                    builder.Append(temperature);
+                }
+
+                __result = builder.ToString();
             }
             catch (Exception e)
             {
-                // TODO: log once instead
-                Debug.Log("DisplayAllTemps: " + e);
+                State.Common.Logger.LogOnce("DisplayAllTemps failed.", e);
             }
         }
     }
