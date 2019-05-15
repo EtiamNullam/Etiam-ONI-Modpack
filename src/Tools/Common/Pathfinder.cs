@@ -13,7 +13,7 @@ namespace Common
         {
             try
             {
-                string modsPath = Manager.GetDirectory();
+                string modsPath = Manager.GetDirectory().TrimEnd('/', '\\');
 
                 var possibleLocations = new string[]
                 {
@@ -31,6 +31,11 @@ namespace Common
 
                 foreach (var location in possibleLocations)
                 {
+                    if (!Directory.Exists(location))
+                    {
+                        continue;
+                    }
+
                     foreach (var name in possibleNames)
                     {
                         string[] directories = Directory.GetDirectories(
