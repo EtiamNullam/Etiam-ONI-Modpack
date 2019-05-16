@@ -28,34 +28,46 @@ namespace ChainedDeconstruction
 
         public static void Postfix(Deconstructable __instance, Building building)
         {
-            var name = __instance.name;
-
-            if (!DestroyedGetter(__instance) || !chainableBuildings.Contains(name))
+            try
             {
-                return;
-            }
-
-            var cell = building.GetCell();
-
-            var adjacentBuildings = new[]
-            {
-                Grid.Objects[Grid.CellAbove(cell), (int)ObjectLayer.Building],
-                Grid.Objects[Grid.CellBelow(cell), (int)ObjectLayer.Building],
-                Grid.Objects[Grid.CellLeft(cell), (int)ObjectLayer.Building],
-                Grid.Objects[Grid.CellRight(cell), (int)ObjectLayer.Building],
-            };
-
-            foreach (var buildingGameObject in adjacentBuildings)
-            {
-                if (buildingGameObject != null && buildingGameObject.name == name)
+                if (__instance == null || building == null)
                 {
-                    var deconstructable = buildingGameObject.GetComponent<Deconstructable>();
+                    return;
+                }
 
-                    if (deconstructable != null && deconstructable.IsMarkedForDeconstruction() && !DestroyedGetter(deconstructable))
+                var name = __instance.name;
+
+                if (!DestroyedGetter(__instance) || !chainableBuildings.Contains(name))
+                {
+                    return;
+                }
+
+                var cell = building.GetCell();
+
+                var adjacentBuildings = new[]
+                {
+                    Grid.Objects[Grid.CellAbove(cell), (int)ObjectLayer.Building],
+                    Grid.Objects[Grid.CellBelow(cell), (int)ObjectLayer.Building],
+                    Grid.Objects[Grid.CellLeft(cell), (int)ObjectLayer.Building],
+                    Grid.Objects[Grid.CellRight(cell), (int)ObjectLayer.Building],
+                };
+
+                foreach (var buildingGameObject in adjacentBuildings)
+                {
+                    if (buildingGameObject != null && buildingGameObject.name == name)
                     {
-                        ForceDeconstruct.Invoke(deconstructable, NullWorkerParameter);
+                        var deconstructable = buildingGameObject.GetComponent<Deconstructable>();
+
+                        if (deconstructable != null && deconstructable.IsMarkedForDeconstruction() && !DestroyedGetter(deconstructable))
+                        {
+                            ForceDeconstruct.Invoke(deconstructable, NullWorkerParameter);
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Debug.Log("ChainedDeconstruction failed: " + e);
             }
         }
     }
