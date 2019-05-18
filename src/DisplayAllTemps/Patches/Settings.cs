@@ -31,12 +31,12 @@ namespace DisplayAllTemps.Patches
         {
             public static void Prefix()
             {
-                OnClicked_Prefix(TemperatureUnitMultiple.Celsius);
+                OnClicked_Prefix(GameUtil.TemperatureUnit.Celsius);
             }
 
             public static void Postfix()
             {
-                OnClicked_Postfix(TemperatureUnitMultiple.Celsius);
+                OnClicked_Postfix(GameUtil.TemperatureUnit.Celsius);
             }
         }
 
@@ -46,12 +46,12 @@ namespace DisplayAllTemps.Patches
         {
             public static void Prefix()
             {
-                OnClicked_Prefix(TemperatureUnitMultiple.Fahrenheit);
+                OnClicked_Prefix(GameUtil.TemperatureUnit.Fahrenheit);
             }
 
             public static void Postfix()
             {
-                OnClicked_Postfix(TemperatureUnitMultiple.Fahrenheit);
+                OnClicked_Postfix(GameUtil.TemperatureUnit.Fahrenheit);
             }
         }
 
@@ -61,30 +61,38 @@ namespace DisplayAllTemps.Patches
         {
             public static void Prefix()
             {
-                OnClicked_Prefix(TemperatureUnitMultiple.Kelvin);
+                OnClicked_Prefix(GameUtil.TemperatureUnit.Kelvin);
             }
 
             public static void Postfix()
             {
-                OnClicked_Postfix(TemperatureUnitMultiple.Kelvin);
+                OnClicked_Postfix(GameUtil.TemperatureUnit.Kelvin);
             }
         }
 
-        private static void OnClicked_Prefix(TemperatureUnitMultiple unit)
+        private static void OnClicked_Prefix(GameUtil.TemperatureUnit unit)
         {
-            FlipUnit(unit);
+            var multipleUnit = VanillaToMultiple(unit);
+
+            if ((State.Unit ^ multipleUnit) != 0)
+            {
+                FlipUnit(multipleUnit);
+            }
+
             Save();
         }
 
-        private static void OnClicked_Postfix(TemperatureUnitMultiple unit)
+        private static void OnClicked_Postfix(GameUtil.TemperatureUnit unit)
         {
-            if ((State.Unit & unit) == 0)
+            var multipleUnit = VanillaToMultiple(unit);
+
+            if ((State.Unit & multipleUnit) == 0)
             {
                 GameUtil.temperatureUnit = State.LastMainUnit;
             }
             else
             {
-                State.LastMainUnit = MultipleToVanilla(unit);
+                State.LastMainUnit = unit;
             }
         }
 
