@@ -12,11 +12,11 @@ namespace DisplayAllTemps.Patches
     [HarmonyPatch(nameof(GameUtil.GetFormattedTemperature))]
     public static class DisplayAllTemps
     {
-        public static void Postfix(float temp, ref string __result, GameUtil.TemperatureInterpretation interpretation, GameUtil.TimeSlice timeSlice)
+        public static void Postfix(float temp, bool displayUnits, ref string __result, GameUtil.TemperatureInterpretation interpretation, GameUtil.TimeSlice timeSlice)
         {
             try
             {
-                if (interpretation != GameUtil.TemperatureInterpretation.Absolute || timeSlice != GameUtil.TimeSlice.None)
+                if (interpretation != GameUtil.TemperatureInterpretation.Absolute || timeSlice != GameUtil.TimeSlice.None || !displayUnits)
                 {
                     return;
                 }
