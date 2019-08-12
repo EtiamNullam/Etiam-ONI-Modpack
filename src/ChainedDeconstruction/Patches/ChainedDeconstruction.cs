@@ -18,6 +18,7 @@ namespace ChainedDeconstruction
         {
             "LadderComplete",
             "LadderFastComplete",
+            "SteelLadderComplete",
             "TravelTubeComplete",
             "FirePoleComplete"
         };
