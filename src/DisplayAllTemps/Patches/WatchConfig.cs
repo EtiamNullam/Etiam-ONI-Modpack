@@ -8,10 +8,9 @@ using System.Text;
 
 namespace DisplayAllTemps.Patches
 {
-    [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
     public static class GameLaunch
     {
-        public static void Postfix()
+        public static void OnLoad()
         {
             try
             {

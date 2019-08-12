@@ -12,7 +12,7 @@ namespace GasOverlay
     public static class GasOverlayMod
     {
         private static Color[] LastColors;
-        private const string ModName = "GasOverlay";
+        private const string ConfigFileName = "Config.json";
 
         private static void ResetLastColors()
         {
@@ -24,41 +24,35 @@ namespace GasOverlay
             }
         }
 
-        [HarmonyPatch(typeof(SplashMessageScreen), "OnSpawn")]
-        public static class SplashMessageScreen_OnSpawn
+        public static void OnLoad()
         {
-            public const string configFileName = "Config.json";
-
-            public static void Postfix()
+            if (State.Common.ConfigPath == null)
             {
-                if (State.Common.ConfigPath == null)
-                {
-                    return;
-                }
-
-                State.Common.WatchConfig<Config>(configFileName, LoadConfig);
-
-                try
-                {
-                    LoadConfig(State.Common.LoadConfig<Config>(configFileName));
-                }
-                catch (Exception e)
-                {
-                    State.Common.Logger.Log("Error while loading config." + e);
-                }
+                return;
             }
 
-            private static void LoadConfig(Config config)
+            State.Common.WatchConfig<Config>(ConfigFileName, LoadConfig);
+
+            try
             {
-                State.Config = config;
-
-                State.Config.InterpFactor = Mathf.Clamp(State.Config.InterpFactor, float.Epsilon, 1);
-                State.Config.MinimumIntensity = Mathf.Clamp01(State.Config.MinimumIntensity);
-
-                ResetLastColors();
-
-                State.Common.Logger.Log("Config loaded.");
+                LoadConfig(State.Common.LoadConfig<Config>(ConfigFileName));
             }
+            catch (Exception e)
+            {
+                State.Common.Logger.Log("Error while loading config." + e);
+            }
+        }
+
+        private static void LoadConfig(Config config)
+        {
+            State.Config = config;
+
+            State.Config.InterpFactor = Mathf.Clamp(State.Config.InterpFactor, float.Epsilon, 1);
+            State.Config.MinimumIntensity = Mathf.Clamp01(State.Config.MinimumIntensity);
+
+            ResetLastColors();
+
+            State.Common.Logger.Log("Config loaded.");
         }
 
         [HarmonyPatch(typeof(SimDebugView), "GetOxygenMapColour")]

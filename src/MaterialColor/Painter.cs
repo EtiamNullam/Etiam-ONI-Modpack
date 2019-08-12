@@ -33,6 +33,12 @@ namespace MaterialColor
         public static void UpdateBuildingColor(BuildingComplete building)
         {
             string buildingName = building.name.Replace("Complete", string.Empty);
+
+            if (buildingName == "Wallpaper")
+            {
+                return;
+            }
+            
             Color color = ColorHelper.GetComponentMaterialColor(building);
 
             if (State.TileNames.Contains(buildingName))
@@ -43,14 +49,21 @@ namespace MaterialColor
 
             try
             {
-                if (!State.TypeFilter.Check(buildingName))
+                if (State.TypeFilter != null)
                 {
-                    color = ColorHelper.DefaultColor;
+                    if (!State.TypeFilter.Check(buildingName))
+                    {
+                        color = ColorHelper.DefaultColor;
+                    }
+                }
+                else
+                {
+                    State.Common.Logger.LogOnce("State.TypeFilter is null");
                 }
             }
             catch (Exception e)
             {
-                State.Common.Logger.LogOnce("Error while filtering buildings", e);
+                State.Common.Logger.LogOnce("Error while filtering for: " + buildingName, e);
             }
 
             ApplyColorToBuilding(building, color);
