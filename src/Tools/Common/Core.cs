@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Common
@@ -26,7 +27,7 @@ namespace Common
                 this.ConfigPath = Pathfinder.MergePath(this.ConfigPath, configDirectoryPath);
             }
 
-            this.Logger.LogDebug($"Initialized {this.ModName} mod at path {this.RootPath}, with config root at {this.ConfigPath}");
+            this.Logger.Log($"Initialized successfully. Version: {Assembly.GetCallingAssembly().GetName().Version}, Path: {this.RootPath}, Config root: {this.ConfigPath}");
         }
 
         public string ModName { get; private set; }
