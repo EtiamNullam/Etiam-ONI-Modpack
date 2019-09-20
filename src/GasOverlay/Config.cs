@@ -11,6 +11,7 @@ namespace GasOverlay
         public bool ShowEarDrumPopMarker = true;
         public float EarPopMass = 5;
         public float EarPopChange = 0.2f;
+        public double ExponentRootOf = 0.3f;
 
         /// <summary>
         /// 0-1, where 1 means instant and 0 means no change.

@@ -107,7 +107,11 @@ namespace GasOverlay
                 float minFraction = State.Config.MinimumIntensity;
                 float fraction = mass / maxMass;
 
-                return Mathf.Lerp(minFraction, 1, fraction);
+                float lerped = Mathf.Lerp(minFraction, 1, fraction);
+
+                float exponentRootOf = (float)Math.Pow(lerped, State.Config.ExponentRootOf);
+
+                return exponentRootOf;
             }
 
             private static void ScaleToPressure(ref Color color, float fraction)
