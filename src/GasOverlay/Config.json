@@ -8,7 +8,7 @@
   "MaxMass": 2.5,               // Mass (in kg) at which gas will reach max intensity
   "InterpFactor": 0.05,         // 0 - 1, where 1 means instant change, and 0 - no change
   "MinimumIntensity": 0.2,     // 0 - 1, intensity for low pressure gases
-	"ExponentRootOf": 0.65, 			  // Defines value for mathematical function across intensity range. Values below 1 will make gases easier to distinguish at lower pressure, values above 1 make it easier for high intensity (0 to infinity). (https://en.wikipedia.org/wiki/File:Mplwp_roots_01.svg)
+	"ExponentRootOf": 0.8, 			  // Defines value for mathematical function across intensity range. Values below 1 will make gases easier to distinguish at lower pressure, values above 1 make it easier for high intensity (0 to infinity). (https://en.wikipedia.org/wiki/File:Mplwp_roots_01.svg)
   "ShowEarDrumPopMarker": true, // Whether to highlight very high pressure gas
   "EarPopMass": 5.0,            // Mass (in kg) at which cell gas tile should highlight
   "EarPopChange": 0.2           // How much color will change while highlighting

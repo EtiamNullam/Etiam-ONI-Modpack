@@ -11,17 +11,12 @@ namespace GasOverlay
 {
     public static class GasOverlayMod
     {
-        private static Color[] LastColors;
+        private static Color?[] LastColors;
         private const string ConfigFileName = "Config.json";
 
         private static void ResetLastColors()
         {
-            LastColors = new Color[Grid.CellCount];
-
-            for (int i = 0; i < LastColors.Length; i++)
-            {
-                LastColors[i] = State.Config.NotGasColor;
-            }
+            LastColors = new Color?[Grid.CellCount];
         }
 
         public static void OnLoad()
@@ -84,9 +79,15 @@ namespace GasOverlay
                         MarkEarDrumPop(ref color, element.id, mass);
                     }
 
-                    TransitColor(ref color, LastColors[cell]);
+                    Color? lastColor = LastColors[cell];
 
-                    __result = LastColors[cell] = color;
+                    if (lastColor.HasValue)
+                    {
+                        TransitColor(ref color, lastColor.Value);
+                    }
+
+                    LastColors[cell] = color;
+                    __result = color;
                 }
                 else
                 {
