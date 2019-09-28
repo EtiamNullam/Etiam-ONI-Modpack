@@ -10,25 +10,24 @@ namespace RemoveDailyReports.Patches
     [HarmonyPatch("OnNightTime")]
     public static class ClearOldReports_AtNight
     {
+        private static readonly int ToSpare = 10;
+
         public static void Postfix(ref List<ReportManager.DailyReport> ___dailyReports)
         {
             try
             {
-                int recentReportsToSpare = 5;
-                int dailyReportsCount = ___dailyReports.Count();
+                int reportsCount = ___dailyReports.Count;
 
-                if (dailyReportsCount > recentReportsToSpare)
+                if (reportsCount > ToSpare)
                 {
-                    var reportsToClear = ___dailyReports.Take(dailyReportsCount - recentReportsToSpare);
-                    foreach (var report in reportsToClear)
-                    {
-                        report.reportEntries.Clear();
-                    }
+                    ___dailyReports
+                        .Take(reportsCount - ToSpare)
+                        .Do(report => report.reportEntries.Clear());
                 }
             }
             catch (Exception e)
             {
-                Debug.Log("Error while clearing old reports at night: " + e);
+                Debug.Log("RDR: Error while clearing old reports at night: " + e);
             }
         }
     }
