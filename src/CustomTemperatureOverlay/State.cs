@@ -9,7 +9,7 @@ namespace CustomTemperatureOverlay
 {
     public static class State
     {
-        public static Core Common = new Core("CustomTemperatureOverlay", null, true);
+        public static Core Common = new Core("CustomTemperatureOverlay", "1878592057", null, true);
 
         public static readonly SimDebugView.ColorThreshold[] DefaultThresholds = new[]
         {
