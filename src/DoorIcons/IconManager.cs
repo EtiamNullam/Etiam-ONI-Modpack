@@ -59,6 +59,8 @@ namespace DoorIcons
 
             if (rotatable != null && rotatable.GetOrientation() == Orientation.R90)
             {
+                renderer.transform.Rotate(0, 0, -90);
+
                 go.transform.position = new Vector3
                 (
                     pos.X + 1f,
