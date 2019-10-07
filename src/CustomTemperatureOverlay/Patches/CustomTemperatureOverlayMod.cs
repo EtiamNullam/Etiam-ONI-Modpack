@@ -42,7 +42,11 @@ namespace CustomTemperatureOverlay.Patches
                 int newThresholdsLength = newThresholds.Length;
                 int requiredThresholdsLength = SimDebugView.Instance.temperatureThresholds.Length;
                 object[] logObject = new object[requiredThresholdsLength];
-                newThresholds = newThresholds.OrderBy(t => t.value).ToArray();
+
+                newThresholds = newThresholds
+                    .Select(MaskConversionError)
+                    .OrderBy(t => t.value)
+                    .ToArray();
 
                 for (int i = 0; i < requiredThresholdsLength; i++)
                 {
@@ -65,7 +69,17 @@ namespace CustomTemperatureOverlay.Patches
                     };
                 }
 
-                State.Common.Logger.Log("Config loaded: " + JsonConvert.SerializeObject(logObject));
+                State.Common.Logger.Log("Config loaded: ", JsonConvert.SerializeObject(logObject));
+            }
+
+            private static SimDebugView.ColorThreshold MaskConversionError(SimDebugView.ColorThreshold threshold)
+            {
+                if (threshold.value != 0)
+                {
+                    threshold.value += 0.1f;
+                }
+
+                return threshold;
             }
         }
     }
