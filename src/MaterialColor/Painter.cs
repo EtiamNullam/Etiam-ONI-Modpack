@@ -30,43 +30,34 @@ namespace MaterialColor
             RebuildAllTiles();
         }
 
+        public static void UpdateBuildingColor(Component component)
+        {
+            var buildingComplete = component.GetComponent<BuildingComplete>();
+
+            if (buildingComplete != null)
+            {
+                UpdateBuildingColor(buildingComplete);
+            }
+            else
+            {
+                State.Common.Logger.LogOnce("Couldn't find BuildingComplete on component", component.name);
+            }
+        }
+
         public static void UpdateBuildingColor(BuildingComplete building)
         {
-            string buildingName = building.name.Replace("Complete", string.Empty);
-
-            if (buildingName == "Wallpaper")
-            {
-                return;
-            }
-            
             Color color = ColorHelper.GetComponentMaterialColor(building);
 
-            if (State.TileNames.Contains(buildingName))
+            Filter(building.name, ref color);
+
+            if (State.TileNames.Contains(building.name))
             {
                 ApplyColorToTile(building, color);
-                return;
             }
-
-            try
+            else
             {
-                if (State.TypeFilter != null)
-                {
-                    if (!State.TypeFilter.Check(buildingName))
-                    {
-                        color = ColorHelper.DefaultColor;
-                    }
-                }
-                else
-                {
-                    State.Common.Logger.LogOnce("State.TypeFilter is null");
-                }
+                ApplyColorToBuilding(building, color);
             }
-            catch (Exception e)
-            {
-                State.Common.Logger.LogOnce("Error while filtering for: " + buildingName, e);
-            }
-
-            ApplyColorToBuilding(building, color);
         }
 
         private static FilteredStorage ExtractFilteredStorage(Component building)
@@ -110,7 +101,7 @@ namespace MaterialColor
             }
             else
             {
-                State.Common.Logger.LogOnce("Invalid building <{building}> and its not a registered tile.");
+                State.Common.Logger.LogOnce($"Invalid building <{building}> and its not a registered tile.");
             }
         }
 
@@ -123,6 +114,24 @@ namespace MaterialColor
             catch (Exception e)
             {
                 State.Common.Logger.LogOnce("Error while getting cell color", e);
+            }
+        }
+
+        public static void ApplyColorToKAnimControllerBase(Component component)
+        {
+            KAnimControllerBase animBase = component.GetComponent<KAnimControllerBase>();
+
+            if (animBase != null)
+            {
+                Color color = ColorHelper.GetComponentMaterialColor(component);
+
+                Painter.Filter(animBase.name, ref color);
+
+                animBase.TintColour = color;
+            }
+            else
+            {
+                State.Common.Logger.LogOnce("Failed to find KAnimControllerBase", component.name);
             }
         }
 
@@ -150,6 +159,35 @@ namespace MaterialColor
             catch (Exception e)
             {
                 State.Common.Logger.Log("Buildings colors update failed.", e);
+            }
+        }
+
+        public static void Filter(string buildingName, ref Color color)
+        {
+            try
+            {
+                buildingName = buildingName.Replace("Complete", string.Empty);
+
+                if (buildingName == "Wallpaper")
+                {
+                    return;
+                }
+
+                if (State.TypeFilter != null)
+                {
+                    if (!State.TypeFilter.Check(buildingName))
+                    {
+                        color = ColorHelper.DefaultColor;
+                    }
+                }
+                else
+                {
+                    State.Common.Logger.LogOnce("State.TypeFilter is null");
+                }
+            }
+            catch (Exception e)
+            {
+                State.Common.Logger.LogOnce("Error while filtering for: " + buildingName, e);
             }
         }
     }

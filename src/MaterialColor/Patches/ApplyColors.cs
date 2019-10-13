@@ -7,12 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using UnityEngine;
-using static KInputController;
-using System.Reflection;
-using MaterialColor.Data;
 using MaterialColor.IO;
 
 namespace MaterialColor.Patches
@@ -49,16 +44,9 @@ namespace MaterialColor.Patches
             {
                 try
                 {
-                    Color color = ColorHelper.GetComponentMaterialColor(__instance);
-                    bool owned = __instance.assignee != null;
-
-                    if (owned)
+                    if (IsOwned(__instance))
                     {
-                        KAnimControllerBase animBase = __instance.GetComponent<KAnimControllerBase>();
-                        if (animBase != null)
-                        {
-                            animBase.TintColour = color;
-                        }
+                        Painter.ApplyColorToKAnimControllerBase(__instance);
                     }
                 }
                 catch (Exception e)
@@ -66,6 +54,8 @@ namespace MaterialColor.Patches
                     State.Common.Logger.LogOnce("Ownable_UpdateTint.Postfix", e);
                 }
             }
+
+            private static bool IsOwned(Ownable ownable) => ownable.assignee != null;
         }
 
         [HarmonyPatch(typeof(FilteredStorage), "OnFilterChanged")]
@@ -75,16 +65,9 @@ namespace MaterialColor.Patches
             {
                 try
                 {
-                    Color color = ColorHelper.GetComponentMaterialColor(___root);
-                    bool active = tags != null && tags.Length != 0;
-
-                    if (active)
+                    if (IsActive(tags))
                     {
-                        KAnimControllerBase animBase = ___root.GetComponent<KAnimControllerBase>();
-                        if (animBase != null)
-                        {
-                            animBase.TintColour = color;
-                        }
+                        Painter.ApplyColorToKAnimControllerBase(___root);
                     }
                 }
                 catch (Exception e)
@@ -92,6 +75,9 @@ namespace MaterialColor.Patches
                     State.Common.Logger.LogOnce("FilteredStorage_OnFilterChanged.Postfix", e);
                 }
             }
+
+            private static bool IsActive(Tag[] tags)
+                => tags != null && tags.Length != 0;
         }
 
         [HarmonyPatch(typeof(BlockTileRenderer), nameof(BlockTileRenderer.GetCellColour))]
@@ -125,10 +111,7 @@ namespace MaterialColor.Patches
             {
                 try
                 {
-                    var buildingComplete = __instance.GetComponent<BuildingComplete>();
-                    var buildingName = buildingComplete.name.Replace("Complete", string.Empty);
-
-                    if (State.TileNames.Contains(buildingName))
+                    if (State.TileNames.Contains(__instance.name))
                     {
                         State.TileColors[__instance.GetCell()] = null;
                     }

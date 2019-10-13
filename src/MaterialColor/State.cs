@@ -31,7 +31,7 @@
             "PlasticTile",
             "MetalTile",
             "CarpetTile",
-        };
+        }.Select(name => name + "Complete").ToList();
 
         public static Core Common = new Core("MaterialColor", "1739635014", "Config", false);
 

@@ -47,16 +47,16 @@ namespace MaterialColor.Patches
         }
 
         private static void LoadMainConfig(Config newConfig)
-            {
-                State.Config = newConfig;
-                State.ConfigChanged = true;
-            }
+        {
+            State.Config = newConfig;
+            State.ConfigChanged = true;
+        }
 
-            private static void LoadElementColors(Dictionary<SimHashes, ElementColor> newElementColors)
-            {
-                State.ElementColors = newElementColors;
-                State.ConfigChanged = true;
-            }
+        private static void LoadElementColors(Dictionary<SimHashes, ElementColor> newElementColors)
+        {
+            State.ElementColors = newElementColors;
+            State.ConfigChanged = true;
+        }
         
         [HarmonyPatch(typeof(Game), "OnSpawn")]
         public static class Game_OnSpawn
