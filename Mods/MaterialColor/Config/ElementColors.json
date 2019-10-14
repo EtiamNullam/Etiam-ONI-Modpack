@@ -65,6 +65,12 @@
     "Blue": 0.4,
     "DarkMode": true
   },
+  "MaficRock": {
+    "Red": 0.6,
+    "Green": 0.6,
+    "Blue": 0.6,
+    "DarkMode": true
+  },
   // Metal Ore
   "Cuprite": {
     "Red": 0.2,
@@ -87,6 +93,12 @@
     "Green": 0.1,
     "Blue": 0.0
   },
+	"AluminumOre": {
+    "Red": 1,
+    "Green": 0.75,
+    "Blue": 0.7,
+    "DarkMode": true
+	},
 	// Soil
   "Dirt": {
     "Red": 0.05,
