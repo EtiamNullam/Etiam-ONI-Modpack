@@ -26,6 +26,11 @@ namespace DraggablePanelMod
 
         public static void Attach(KScreen screen)
         {
+            if (screen.name == "SimpleInfoScreen")
+            {
+                return;
+            }
+
             DraggablePanel panel = screen.FindOrAddUnityComponent<DraggablePanel>();
 
             if (panel == null)
@@ -55,7 +60,7 @@ namespace DraggablePanelMod
             {
                 panel.SetPosition(newPosition);
 
-                State.Common.Logger.Log("Loaded position: ", newPosition);
+                State.Common.Logger.Log($"Loaded position: {newPosition} for {screen.name}");
             }
         }
 
