@@ -15,7 +15,7 @@ namespace MaterialColor
     /// </summary>
     public static class Painter
     {
-        private static readonly List<Type> _storageTypes = new List<Type>
+        private static readonly List<Type> StorageTypes = new List<Type>
         {
             typeof(RationBox),
             typeof(Refrigerator),
@@ -23,6 +23,8 @@ namespace MaterialColor
             typeof(StorageLocker),
             typeof(TinkerStation)
         };
+
+        private static readonly string ExcludeKeyword = "NoPaint";
 
         public static void Refresh()
         {
@@ -46,6 +48,11 @@ namespace MaterialColor
 
         public static void UpdateBuildingColor(BuildingComplete building)
         {
+            if (building.name == "WallpaperComplete" || building.name.Contains(ExcludeKeyword))
+            {
+                return;
+            }
+
             Color color = ColorHelper.GetComponentMaterialColor(building);
 
             Filter(building.name, ref color);
@@ -62,7 +69,7 @@ namespace MaterialColor
 
         private static FilteredStorage ExtractFilteredStorage(Component building)
         {
-            foreach (Type storageType in _storageTypes)
+            foreach (Type storageType in StorageTypes)
             {
                 Component comp = building.GetComponent(storageType);
 
@@ -167,11 +174,6 @@ namespace MaterialColor
             try
             {
                 buildingName = buildingName.Replace("Complete", string.Empty);
-
-                if (buildingName == "Wallpaper")
-                {
-                    return;
-                }
 
                 if (State.TypeFilter != null)
                 {
