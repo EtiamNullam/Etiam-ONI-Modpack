@@ -48,7 +48,7 @@ namespace MaterialColor
 
         public static void UpdateBuildingColor(BuildingComplete building)
         {
-            if (building.name == "WallpaperComplete" || building.name.Contains(ExcludeKeyword))
+            if (building.name == "PixelPackComplete" || building.name == "WallpaperComplete" || building.name.Contains(ExcludeKeyword))
             {
                 return;
             }
