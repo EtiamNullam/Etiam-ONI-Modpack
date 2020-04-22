@@ -19,6 +19,8 @@ namespace ChainedDeconstruction
 
         private static readonly string ConfigFileName = "Chainables.json";
 
+        private static bool Busy = false;
+
         public static void OnLoad()
         {
             if (State.Common.ConfigPath == null)
@@ -43,64 +45,114 @@ namespace ChainedDeconstruction
             if (chainables.Any(c => c == "*"))
             {
                 State.ChainAll = true;
+
+                State.Common.Logger.Log("Set chainables:", "all");
             }
             else
             {
-                State.Chainables = chainables.Select(c => c + "Complete").ToArray();
-                State.ChainAll = false;
-            }
+                State.Chainables = chainables
+                    .Select(c => c + "Complete")
+                    .ToArray();
 
-            State.Common.Logger.Log("Set chainables");
+                State.ChainAll = false;
+
+                State.Common.Logger.Log("Set chainables:", State.Chainables);
+            }
         }
 
-        public static void Postfix(Deconstructable __instance, Building building)
+        public static void Postfix(Deconstructable __instance)
         {
+            if (Busy)
+            {
+                return;
+            }
+
+            Busy = true;
+
             try
             {
-                if (__instance == null || building == null)
+                if (__instance == null)
                 {
+                    State.Common.Logger.LogOnce("__instance is null at Deconstructable.TriggerDestroy.Postfix");
+
                     return;
                 }
 
                 var name = __instance.name;
 
-                if (
-                    DestroyedGetter(__instance) == false
-                    || (
-                        State.Chainables.Contains(name) == false
-                        && State.ChainAll == false)
-                    )
+                if (DestroyedGetter(__instance) == false)
                 {
+                    State.Common.Logger.LogOnce("DestroyedGetter is null:", name);
+
                     return;
                 }
 
-                var cell = building.GetCell();
-
-                var adjacentBuildings = new[]
+                if (State.ChainAll == false)
                 {
-                    Grid.Objects[Grid.CellAbove(cell), (int)ObjectLayer.Building],
-                    Grid.Objects[Grid.CellBelow(cell), (int)ObjectLayer.Building],
-                    Grid.Objects[Grid.CellLeft(cell), (int)ObjectLayer.Building],
-                    Grid.Objects[Grid.CellRight(cell), (int)ObjectLayer.Building],
-                };
-
-                foreach (var buildingGameObject in adjacentBuildings)
-                {
-                    if (buildingGameObject != null && buildingGameObject.name == name)
+                    if (State.Chainables.Contains(name) == false)
                     {
-                        var deconstructable = buildingGameObject.GetComponent<Deconstructable>();
-
-                        if (deconstructable != null && deconstructable.IsMarkedForDeconstruction() && !DestroyedGetter(deconstructable))
-                        {
-                            ForceDeconstruct.Invoke(deconstructable, NullWorkerParameter);
-                        }
+                        return;
                     }
                 }
+
+                var layer = GetLayerForDeconstructable(__instance);
+                DeconstructAdjacent(__instance, name, layer);
             }
             catch (Exception e)
             {
-                Debug.Log("ChainedDeconstruction failed: " + e);
+                State.Common.Logger.Log("Deconstructable.TriggerDestroy.Postfix", e);
+            }
+            finally
+            {
+                Busy = false;
             }
         }
+
+        private static void DeconstructAdjacent(Deconstructable rootDeconstructable, string name, int layer)
+        {
+            GetAdjacentCells(rootDeconstructable.GetCell())
+                .Select(cell => Grid.Objects[cell, layer])
+                .Where(gameObject => gameObject != null)
+                .Select(gameObject => gameObject.GetComponent<Deconstructable>())
+                .Where(deconstructable =>
+                    deconstructable != null
+                    && deconstructable.name == name
+                    && deconstructable.IsMarkedForDeconstruction()
+                    && !DestroyedGetter(deconstructable)
+                )
+                .ToList()
+                .ForEach(
+                    deconstructable =>
+                    {
+                        ForceDeconstruct.Invoke(deconstructable, NullWorkerParameter);
+                        DeconstructAdjacent(deconstructable, name, layer);
+                    }
+                );
+        }
+
+        private static int GetLayerForDeconstructable(Deconstructable deconstructable)
+        {
+            var cell = deconstructable.GetCell();
+
+            for (int layer = 1; layer <= 27; layer++)
+            {
+                var obj = Grid.Objects[cell, layer];
+
+                if (obj != null && obj.GetComponent<Deconstructable>() == deconstructable)
+                {
+                    return layer;
+                }
+            }
+
+            return (int)ObjectLayer.Building;
+        }
+
+        private static List<int> GetAdjacentCells(int cell) => new List<int>
+        {
+            Grid.CellAbove(cell),
+            Grid.CellBelow(cell),
+            Grid.CellLeft(cell),
+            Grid.CellRight(cell)
+        };
     }
 }
