@@ -1,7 +1,8 @@
-﻿namespace DraggablePanelMod
-{
-    using Harmony;
+﻿using Harmony;
+using System;
 
+namespace DraggablePanelMod
+{
     [HarmonyPatch(typeof(KScreen), "OnPrefabInit")]
     public static class DraggablePanelModInit
     {

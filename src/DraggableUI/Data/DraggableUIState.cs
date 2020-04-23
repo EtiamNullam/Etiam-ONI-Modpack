@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-
+using System.IO;
 using UnityEngine;
 
 namespace DraggablePanelMod.Data
@@ -11,14 +11,14 @@ namespace DraggablePanelMod.Data
     {
         private Dictionary<string, SerializeableVector2> _windowPositions;
 
-        private Dictionary<string, SerializeableVector2> WindowPositions =>
-        this._windowPositions ?? (this._windowPositions = this.LoadFile());
+        private Dictionary<string, SerializeableVector2> WindowPositions
+            => this._windowPositions ?? (this._windowPositions = this.LoadFile());
 
         public bool LoadWindowPosition(GameObject window, out Vector2 position)
         {
             if (window == null)
             {
-                position= Vector2.zero;
+                position = Vector2.zero;
                 return false;
             }
 
@@ -46,14 +46,19 @@ namespace DraggablePanelMod.Data
         {
             try
             {
-                return State.Common.LoadConfig<Dictionary<string, SerializeableVector2>>(State.StateFileName);
+                return State.Common.LoadConfig<Dictionary<string, SerializeableVector2>>(State.StateFileName)
+                    ?? new Dictionary<string, SerializeableVector2>();
+            }
+            catch (FileNotFoundException e)
+            {
+                State.Common.Logger.LogOnce("State file not found (This error is most likely harmless, unless this file really exists).", e);
             }
             catch (Exception e)
             {
-                State.Common.Logger.LogOnce("Draggable UI state load failed.", e);
-
-                return new Dictionary<string, SerializeableVector2>();
+                State.Common.Logger.LogOnce("State load failed.", e);
             }
+
+            return new Dictionary<string, SerializeableVector2>();
         }
 
         private void UpdateFile()
@@ -64,7 +69,7 @@ namespace DraggablePanelMod.Data
             }
             catch (Exception e)
             {
-                State.Common.Logger.LogOnce("Draggable UI state save failed.", e);
+                State.Common.Logger.LogOnce("State save failed.", e);
             }
         }
 
