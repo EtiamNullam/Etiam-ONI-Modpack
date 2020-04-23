@@ -26,7 +26,7 @@ namespace DraggablePanelMod
 
         public static void Attach(KScreen screen)
         {
-            if (screen.name == "SimpleInfoScreen")
+            if (screen == null || screen.name == "SimpleInfoScreen")
             {
                 return;
             }
@@ -39,7 +39,15 @@ namespace DraggablePanelMod
             }
 
             panel.Screen = screen;
-            panel.DefaultPosition = panel.GetComponentInParent<RectTransform>().anchoredPosition;
+
+            var rect = panel.GetComponentInParent<RectTransform>();
+
+            if (rect == null)
+            {
+                return;
+            }
+
+            panel.DefaultPosition = rect.anchoredPosition;
 
             State.Common.Logger.LogDebug("Attached to KScreen", screen.displayName);
         }
