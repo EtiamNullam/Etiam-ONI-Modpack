@@ -21,6 +21,8 @@ namespace ChainedDeconstruction
 
         private static bool Busy = false;
 
+        private static readonly List<int> CellsDeconstructed = new List<int>();
+
         public static void OnLoad()
         {
             if (State.Common.ConfigPath == null)
@@ -96,6 +98,9 @@ namespace ChainedDeconstruction
                 }
 
                 var layer = GetLayerForDeconstructable(__instance);
+
+                CellsDeconstructed.Clear();
+
                 DeconstructAdjacent(__instance, name, layer);
             }
             catch (Exception e)
@@ -116,18 +121,21 @@ namespace ChainedDeconstruction
                 .Select(gameObject => gameObject.GetComponent<Deconstructable>())
                 .Where(deconstructable =>
                     deconstructable != null
-                    && deconstructable.name == name
                     && deconstructable.IsMarkedForDeconstruction()
-                    && !DestroyedGetter(deconstructable)
+                    && deconstructable.name == name
+                    && false == DestroyedGetter(deconstructable)
                 )
-                .ToList()
-                .ForEach(
-                    deconstructable =>
+                .Do(deconstructable =>
+                {
+                    var cell = deconstructable.GetCell();
+
+                    if (false == CellsDeconstructed.Contains(cell))
                     {
                         ForceDeconstruct.Invoke(deconstructable, NullWorkerParameter);
+                        CellsDeconstructed.Add(cell);
                         DeconstructAdjacent(deconstructable, name, layer);
                     }
-                );
+                });
         }
 
         private static int GetLayerForDeconstructable(Deconstructable deconstructable)
@@ -147,12 +155,12 @@ namespace ChainedDeconstruction
             return (int)ObjectLayer.Building;
         }
 
-        private static List<int> GetAdjacentCells(int cell) => new List<int>
+        private static IEnumerable<int> GetAdjacentCells(int cell)
         {
-            Grid.CellAbove(cell),
-            Grid.CellBelow(cell),
-            Grid.CellLeft(cell),
-            Grid.CellRight(cell)
-        };
+            yield return Grid.CellAbove(cell);
+            yield return Grid.CellBelow(cell);
+            yield return Grid.CellLeft(cell);
+            yield return Grid.CellRight(cell);
+        }
     }
 }
