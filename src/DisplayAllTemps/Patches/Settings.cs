@@ -1,4 +1,5 @@
 ﻿using Common;
+using DisplayAllTemps.Helpers;
 using Harmony;
 using Newtonsoft.Json;
 using System;
@@ -72,11 +73,11 @@ namespace DisplayAllTemps.Patches
 
         private static void OnClicked_Prefix(GameUtil.TemperatureUnit unit)
         {
-            var multipleUnit = VanillaToMultiple(unit);
+            var multipleUnit = unit.ToMultiple();
 
             if ((State.Unit ^ multipleUnit) != 0)
             {
-                FlipUnit(multipleUnit);
+                multipleUnit.Flip();
             }
 
             Save();
@@ -84,7 +85,7 @@ namespace DisplayAllTemps.Patches
 
         private static void OnClicked_Postfix(GameUtil.TemperatureUnit unit)
         {
-            var multipleUnit = VanillaToMultiple(unit);
+            var multipleUnit = unit.ToMultiple();
 
             if ((State.Unit & multipleUnit) == 0)
             {
@@ -93,50 +94,6 @@ namespace DisplayAllTemps.Patches
             else
             {
                 State.LastMainUnit = unit;
-            }
-        }
-
-        private static void FlipUnit(TemperatureUnitMultiple unit)
-        {
-            try
-            {
-                if (State.Unit == unit)
-                {
-                    return;
-                }
-
-                State.Unit ^= unit;
-            }
-            catch (Exception e)
-            {
-                State.Common.Logger.Log("Flip unit failed.", e);
-            }
-
-            return;
-        }
-
-        private static GameUtil.TemperatureUnit MultipleToVanilla(TemperatureUnitMultiple multiple)
-        {
-            return (State.Unit & TemperatureUnitMultiple.Celsius) != 0
-               ? GameUtil.TemperatureUnit.Celsius
-               : (State.Unit & TemperatureUnitMultiple.Fahrenheit) != 0
-                   ? GameUtil.TemperatureUnit.Fahrenheit
-                   : GameUtil.TemperatureUnit.Kelvin;
-        }
-
-        private static TemperatureUnitMultiple VanillaToMultiple(GameUtil.TemperatureUnit vanilla)
-        {
-            switch(vanilla)
-            {
-                case GameUtil.TemperatureUnit.Celsius:
-                    return TemperatureUnitMultiple.Celsius;
-                case GameUtil.TemperatureUnit.Kelvin:
-                    return TemperatureUnitMultiple.Kelvin;
-                case GameUtil.TemperatureUnit.Fahrenheit:
-                    return TemperatureUnitMultiple.Fahrenheit;
-                default:
-                    State.Common.Logger.LogOnce("VanillaToMultiple: invalid unit");
-                    return TemperatureUnitMultiple.All;
             }
         }
 
