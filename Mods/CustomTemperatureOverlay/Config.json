@@ -1,4 +1,14 @@
 ﻿[
+  // You can configure the mod here, make sure to backup your changes in a different place though as currently any changes will be overwritten when I release version of this mod.
+
+  // Color elements range from 0 - 1, for example "color": {"r": 1","g": 1,"b": 0,"a": 1} will be yellow.
+
+  // "value" represents Kelvin (0 or more) at which the color should apply, any temperature in between is interpolated
+
+  // It's best to keep the game running in the background when you modify the config, as you can see the effect immediately when you save this file.
+
+  // You can set up to 8 values here.
+
   { // Exact Absolute Zero
     "color": {
       "r": 1,
@@ -28,21 +38,30 @@
   },
   { // Temperate
     "color": {
-      "r": 0,
+      "r": 0.2,
       "g": 1,
       "b": 0,
-      "a": 0.6
+      "a": 0.8
     },
     "value": 293
   },
   { // Warm
     "color": {
-      "r": 0.9,
-      "g": 0.6,
+      "r": 1,
+      "g": 1,
+      "b": 0,
+      "a": 0.85
+    },
+    "value": 308
+  },
+  { // Hot
+    "color": {
+      "r": 1,
+      "g": 0.5,
       "b": 0,
       "a": 0.75
     },
-    "value": 323
+    "value": 333
   },
   { // Hot Steam
     "color": {
@@ -61,5 +80,5 @@
       "a": 0.9
     },
     "value": 2273
-  },
+  }
 ]

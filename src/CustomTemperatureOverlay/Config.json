@@ -7,6 +7,8 @@
 
   // It's best to keep the game running in the background when you modify the config, as you can see the effect immediately when you save this file.
 
+  // You can set up to 8 values here.
+
   { // Exact Absolute Zero
     "color": {
       "r": 1,

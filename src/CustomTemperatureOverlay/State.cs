@@ -1,4 +1,5 @@
 ﻿using Common;
+using CustomTemperatureOverlay.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,48 +12,50 @@ namespace CustomTemperatureOverlay
     {
         public static Core Common = new Core("CustomTemperatureOverlay", "1878592057", null, true);
 
-        public static readonly SimDebugView.ColorThreshold[] DefaultThresholds = new[]
+        public const string ConfigFileName = "Config.json";
+
+        public static TemperatureStep[] Steps = new[]
         {
-            new SimDebugView.ColorThreshold // Exact Absolute Zero
-            {
-                color = new Color(1,1,1,0.85f),
-                value = 0
-            },
-            new SimDebugView.ColorThreshold // Near Absolute Zero
-            {
-                color = new Color(0.35f,0,1,0.9f),
-                value = 5
-            },
-            new SimDebugView.ColorThreshold // Coldest Ice Biome
-            {
-                color = new Color(0,0,1,0.8f),
-                value = 273-60
-            },
-            new SimDebugView.ColorThreshold // Temperate
-            {
-                color = new Color(0.2f,1,0,0.8f),
-                value = 273+20
-            },
-            new SimDebugView.ColorThreshold // Warm
-            {
-                color = new Color(1,1,0,0.85f),
-                value = 273+35
-            },
-            new SimDebugView.ColorThreshold // Hot
-            {
-                color = new Color(1,0.5f,0,0.75f),
-                value = 273+60
-            },
-            new SimDebugView.ColorThreshold // Hot Steam
-            {
-                color = new Color(0.9f,0,0,0.85f),
-                value = 273+125
-            },
-            new SimDebugView.ColorThreshold // Hot Magma
-            {
-                color = new Color(1,0,0.35f,0.9f),
-                value = 273+2000
-            },
+            new TemperatureStep // Exact Absolute Zero
+            (
+                new Color(1,1,1,0.85f),
+                0
+            ),
+            new TemperatureStep // Near Absolute Zero
+            (
+                new Color(0.35f,0,1,0.9f),
+                5
+            ),
+            new TemperatureStep // Coldest Ice Biome
+            (
+                new Color(0,0,1,0.8f),
+                273-60
+            ),
+            new TemperatureStep // Temperate
+            (
+                new Color(0.2f,1,0,0.8f),
+                273+20
+            ),
+            new TemperatureStep // Warm
+            (
+                new Color(1,1,0,0.85f),
+                273+35
+            ),
+            new TemperatureStep // Hot
+            (
+                new Color(1,0.5f,0,0.75f),
+                273+60
+            ),
+            new TemperatureStep // Hot Steam
+            (
+                new Color(0.9f,0,0,0.85f),
+                273+125
+            ),
+            new TemperatureStep // Hot Magma
+            (
+                new Color(1,0,0.35f,0.9f),
+                273+2000
+            ),
         };
     }
 }
