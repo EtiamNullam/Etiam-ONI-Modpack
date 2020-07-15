@@ -30,6 +30,38 @@ Does NOT require the [Modloader](https://github.com/javisar/ONI-Modloader) anymo
 
 [![Support me on Patreon](https://github.com/EtiamNullam/Etiam-ONI-Modpack-Previews/blob/master/become-a-patron.png)](https://www.patreon.com/bePatron?u=16564340)
 
+## FAQ
+
+### Game crashes with mod installed
+
+Its most likely Steam Workshop gives you old version of the mod. You can use [Mod Updater](https://steamcommunity.com/sharedfiles/filedetails/?id=2018291283) or [check mod version manually](#How-to-check-mod-version) and make sure you have the latest version.
+
+If Steam Workshop keeps giving you outdated mod you might want to download certain mod [directly from GitHub](https://github.com/EtiamNullam/Etiam-ONI-Modpack/tree/master/Mods).
+
+If there was some recent update to Oxygen Not Included it might broke one of my mods and I might not know about it yet. If you think this is the case [Submit a new issue](https://github.com/EtiamNullam/Etiam-ONI-Modpack/issues/new/choose) explain the problem and provide `output_log.txt`. First check if there is similar issue open - I might need your help dealing with that crash there.
+
+### How to check mod version
+
+There are two ways:
+
+- Look in `output_log.txt` (located in `~/AppData/LocalLow/Klei/Oxygen Not Included/output_log.txt`) after launching game for line this:
+
+```
+[21:09:11.057] [1] [INFO] GasOverlay: Initialized successfully. Version: 2.6.0.0, Path: C:\Users\<username>\Documents\Klei\OxygenNotIncluded\mods\Steam\1737859934, Config root: C:\Users\<username>\Documents\Klei\OxygenNotIncluded\mods\Steam\1737859934
+```
+
+- Find mod directory (for mod from Steam Workshop it will be inside `~\Documents\Klei\OxygenNotIncluded\mods\Steam`) then check `Properties -> Details` of the file or just hover mouse over it and look for `File version` or `Product version`.
+
+### Where to find `output_log.txt`
+
+Windows: `%appdata%/../LocalLow/Klei/Oxygen Not Included/output_log.txt`
+
+MacOS: `~/Library/Logs/Unity/Player.log`
+
+Linux: `~/.config/unity3d/Klei/Oxygen Not Included/Player.log`
+
+More info: [Logs and Useful Information for Bug-Reports](https://support.klei.com/hc/en-us/articles/360029555392-Logs-and-Useful-Information-for-Bug-Reports)
+
 ## Special thanks to:
 - [@pardeike](https://github.com/pardeike) for his patching library - [Harmony](https://github.com/pardeike/Harmony)
 - [@javisar](https://github.com/javisar) for taking care of my mods in [his repo](https://github.com/javisar/ONI-Modloader-Mods) while I was absent and for the [ModLoader](https://github.com/javisar/ONI-Modloader)
