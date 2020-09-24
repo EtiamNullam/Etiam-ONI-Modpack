@@ -25,6 +25,7 @@ namespace MaterialColor
         };
 
         private static readonly string ExcludeKeyword = "NoPaint";
+        private static readonly Tag ExcludedTag = new Tag("NoPaint");
 
         public static void Refresh()
         {
@@ -48,7 +49,7 @@ namespace MaterialColor
 
         public static void UpdateBuildingColor(BuildingComplete building)
         {
-            if (building.name == "PixelPackComplete" || building.name == "WallpaperComplete" || building.name.Contains(ExcludeKeyword))
+            if (building.name == "PixelPackComplete" || building.name == "WallpaperComplete" || building.name.Contains(ExcludeKeyword) || building.HasTag(ExcludedTag))
             {
                 return;
             }
