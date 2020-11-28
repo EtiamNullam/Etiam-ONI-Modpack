@@ -4,9 +4,6 @@ using System.Linq;
 
 namespace DraggablePanelMod
 {
-    /// <summary>
-    /// The draggable panel.
-    /// </summary>
     public class DraggablePanel : MonoBehaviour
     {
         public Vector2 Offset;
@@ -142,12 +139,14 @@ namespace DraggablePanelMod
         // use offset?
         private void SetPosition(Vector3 newPosition)
         {
-            if (this.Screen == null)
+            var rect = this.Screen?.GetComponentInParent<RectTransform>();
+
+            if (rect == null)
             {
                 return;
             }
 
-            this.Screen.GetComponentInParent<RectTransform>().anchoredPosition = newPosition;
+            rect.anchoredPosition = newPosition;
         }
     }
 }
