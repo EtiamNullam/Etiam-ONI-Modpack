@@ -57,9 +57,18 @@ namespace ChainedDeconstruction
                     .ToArray();
 
                 State.ChainAll = false;
-
-                State.Common.Logger.Log("Set chainables:", State.Chainables);
+                
+                State.Common.Logger.Log("Set chainables:", String.Join(", ", State.Chainables));
             }
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPriority(Priority.HigherThanNormal)]
+        public static bool StopExecutionIfInstanceIsNull(Deconstructable __instance)
+        {
+            var shouldContinue = __instance != null;
+
+            return shouldContinue;
         }
 
         public static void Postfix(Deconstructable __instance)
@@ -129,12 +138,14 @@ namespace ChainedDeconstruction
                 {
                     var cell = deconstructable.GetCell();
 
-                    if (false == CellsDeconstructed.Contains(cell))
+                    if (CellsDeconstructed.Contains(cell))
                     {
-                        ForceDeconstruct.Invoke(deconstructable, NullWorkerParameter);
-                        CellsDeconstructed.Add(cell);
-                        DeconstructAdjacent(deconstructable, name, layer);
+                        return;
                     }
+
+                    ForceDeconstruct.Invoke(deconstructable, NullWorkerParameter);
+                    CellsDeconstructed.Add(cell);
+                    DeconstructAdjacent(deconstructable, name, layer);
                 });
         }
 
