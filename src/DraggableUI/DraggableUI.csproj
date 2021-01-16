@@ -82,6 +82,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializeableVector2.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="mod_info.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>robocopy /E "$(TargetDir)..\$(ConfigurationName)" "$(SolutionDir)..\Mods\$(ProjectName)"
