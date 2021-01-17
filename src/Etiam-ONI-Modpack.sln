@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GasOverlay", "GasOverlay\GasOverlay.csproj", "{4475E088-4830-4BB4-BC97-FC8ACC18AFCB}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -29,8 +29,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearRegolith", "Tools\ClearRegolith\ClearRegolith.csproj", "{886D1096-5D6B-4F42-A793-1CDF6F73E96B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkGasOverlay", "Tools\BenchmarkGasOverlay\BenchmarkGasOverlay.csproj", "{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLockerDropPort", "SmartLockerDropPort\SmartLockerDropPort.csproj", "{6B6E34C1-57F7-46FE-AC44-ED49DDCF7E83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainedDeconstruction", "ChainedDeconstruction\ChainedDeconstruction.csproj", "{20DEA568-F78F-4891-9C9E-EA79D1403758}"
 EndProject
@@ -80,10 +78,6 @@ Global
 		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F10B8EE2-8869-46E1-A0F3-8BC189DFA55E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6B6E34C1-57F7-46FE-AC44-ED49DDCF7E83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B6E34C1-57F7-46FE-AC44-ED49DDCF7E83}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B6E34C1-57F7-46FE-AC44-ED49DDCF7E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B6E34C1-57F7-46FE-AC44-ED49DDCF7E83}.Release|Any CPU.Build.0 = Release|Any CPU
 		{20DEA568-F78F-4891-9C9E-EA79D1403758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{20DEA568-F78F-4891-9C9E-EA79D1403758}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20DEA568-F78F-4891-9C9E-EA79D1403758}.Release|Any CPU.ActiveCfg = Release|Any CPU
