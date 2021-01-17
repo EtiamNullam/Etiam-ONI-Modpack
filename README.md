@@ -38,7 +38,7 @@ Its most likely Steam Workshop gives you old version of the mod. You can use [Mo
 
 If Steam Workshop keeps giving you outdated mod you might want to download certain mod [directly from GitHub](https://github.com/EtiamNullam/Etiam-ONI-Modpack/tree/master/Mods).
 
-If there was some recent update to Oxygen Not Included it might broke one of my mods and I might not know about it yet. If you think this is the case [Submit a new issue](https://github.com/EtiamNullam/Etiam-ONI-Modpack/issues/new/choose) explain the problem and provide `output_log.txt`. First check if there is similar issue open - I might need your help dealing with that crash there.
+If there was some recent update to Oxygen Not Included it might broke one of my mods and I might not know about it yet. If you think this is the case [Submit a new issue](https://github.com/EtiamNullam/Etiam-ONI-Modpack/issues/new/choose) explain the problem and provide `Player.log`. First check if there is similar issue open - I might need your help dealing with that crash there.
 
 ### How to check mod version
 
@@ -52,15 +52,21 @@ There are two ways:
 
 - Find mod directory (for mod from Steam Workshop it will be inside `~\Documents\Klei\OxygenNotIncluded\mods\Steam`) then check `Properties -> Details` of the file or just hover mouse over it and look for `File version` or `Product version`.
 
-### Where to find `output_log.txt`
+### Where to find game logs
 
-Windows: `%appdata%/../LocalLow/Klei/Oxygen Not Included/output_log.txt`
+Game logs are very useful for troubleshooting so make sure to attach them when you are asking for help with errors or crashes.
 
-MacOS: `~/Library/Logs/Unity/Player.log`
+Windows: `%AppData%\..\LocalLow\klei\Oxygen Not Included\Player.log`
+
+MacOS: `~/Library/Logs/Klei/Oxygen Not Included/Player.log`
 
 Linux: `~/.config/unity3d/Klei/Oxygen Not Included/Player.log`
 
 More info: [Logs and Useful Information for Bug-Reports](https://support.klei.com/hc/en-us/articles/360029555392-Logs-and-Useful-Information-for-Bug-Reports)
+
+### If everything else fails
+
+If you can't find a solution for your problem go ahead and create a new issue. I will try to help the best I can.
 
 ## Special thanks to:
 - [@pardeike](https://github.com/pardeike) for his patching library - [Harmony](https://github.com/pardeike/Harmony)
