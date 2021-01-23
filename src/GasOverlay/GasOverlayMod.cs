@@ -97,7 +97,7 @@ namespace GasOverlay
                 return false;
             }
 
-            private static Color32 GetSubstanceColor(Element element)
+            public static Color32 GetSubstanceColor(Element element)
             {
                 var color = element.substance.colour;
                 return new Color32(color.r, color.g, color.b, byte.MaxValue);
@@ -141,6 +141,47 @@ namespace GasOverlay
             private static void TransitColor(ref Color newColor, Color lastColor)
             {
                 newColor = Color.LerpUnclamped(lastColor, newColor, State.Config.InterpFactor);
+            }
+        }
+
+        [HarmonyPatch(typeof(OverlayLegend), "OnSpawn")]
+        public static class OverlayLegend_OnSpawn
+        {
+            public static void Postfix(List<OverlayLegend.OverlayInfo> ___overlayInfoList)
+            {
+                var oxygenInfo = ___overlayInfoList.Find(i => i.mode == OverlayModes.Oxygen.ID);
+                oxygenInfo.name = "Gas Overlay";
+                var icon = oxygenInfo.infoUnits[0].icon;
+                oxygenInfo.infoUnits.Clear();
+
+                // Gas elements that evaporate at less than 200C
+                var gasElements = ElementLoader.elements.Where(e => !e.disabled && e.IsGas && e.lowTemp < 473.15f).ToList();
+                foreach(var gasElement in gasElements)
+                {
+                    oxygenInfo.infoUnits.Add(
+                        new OverlayLegend.OverlayInfoUnit(
+                            icon,
+                            Util.StripTextFormatting(gasElement.name),
+                            SimDebugView_GetOxygenMapColour.GetSubstanceColor(gasElement),
+                            Color.white
+                        )
+                    );
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(OverlayMenu), "InitializeToggles")]
+        public static class OverlayMenu_InitializeToggles
+        {
+            public static void Postfix(List<KIconToggleMenu.ToggleInfo> ___overlayToggleInfos)
+            {
+                var o2Toggle = ___overlayToggleInfos.Find(
+                    i => Traverse.Create(i).Field("simView").GetValue<HashedString>() == OverlayModes.Oxygen.ID
+                );
+
+                o2Toggle.text = "Gas Overlay";
+                o2Toggle.tooltipHeader = "Gas Overlay";
+                o2Toggle.tooltip = GameUtil.ReplaceHotkeyString("Displays gasses {Hotkey}", o2Toggle.hotKey);
             }
         }
     }
