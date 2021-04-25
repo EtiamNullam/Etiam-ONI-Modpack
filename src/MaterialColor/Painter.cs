@@ -93,7 +93,7 @@ namespace MaterialColor
                 Traverse.Create(ownable).Field("ownedTint").SetValue(color);
                 Traverse.Create(ownable).Method("UpdateTint").GetValue();
             }
-            else if ((treeFilterable = building.GetComponent<TreeFilterable>()) != null)
+            /*else if ((treeFilterable = building.GetComponent<TreeFilterable>()) != null)
             {
                 FilteredStorage filteredStorage = ExtractFilteredStorage(treeFilterable);
 
@@ -102,7 +102,7 @@ namespace MaterialColor
                     filteredStorage.filterTint = color;
                     filteredStorage.FilterChanged();
                 }
-            }
+            }*/
             else if ((kAnimBase = building.GetComponent<KAnimControllerBase>()) != null)
             {
                 kAnimBase.TintColour = color;
