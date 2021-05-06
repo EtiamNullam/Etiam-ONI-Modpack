@@ -49,22 +49,29 @@ namespace MaterialColor
 
         public static void UpdateBuildingColor(BuildingComplete building)
         {
-            if (building.name == "PixelPackComplete" || building.name == "WallpaperComplete" || building.name.Contains(ExcludeKeyword) || building.HasTag(ExcludedTag))
+            try
             {
-                return;
+                if (building.name == "PixelPackComplete" || building.name == "WallpaperComplete" || building.name.Contains(ExcludeKeyword) || building.HasTag(ExcludedTag))
+                {
+                    return;
+                }
+
+                Color color = ColorHelper.GetComponentMaterialColor(building);
+
+                Filter(building.name, ref color);
+
+                if (State.TileNames.Contains(building.name))
+                {
+                    ApplyColorToTile(building, color);
+                }
+                else
+                {
+                    ApplyColorToBuilding(building, color);
+                }
             }
-
-            Color color = ColorHelper.GetComponentMaterialColor(building);
-
-            Filter(building.name, ref color);
-
-            if (State.TileNames.Contains(building.name))
+            catch (Exception e)
             {
-                ApplyColorToTile(building, color);
-            }
-            else
-            {
-                ApplyColorToBuilding(building, color);
+                State.Common.Logger.LogOnce("Failed to update material building color", e);
             }
         }
 
@@ -72,11 +79,18 @@ namespace MaterialColor
         {
             foreach (Type storageType in StorageTypes)
             {
-                Component comp = building.GetComponent(storageType);
-
-                if (comp != null)
+                try
                 {
-                    return Traverse.Create(comp).Field<FilteredStorage>("filteredStorage").Value;
+                    Component comp = building.GetComponent(storageType);
+
+                    if (comp != null)
+                    {
+                        return Traverse.Create(comp).Field<FilteredStorage>("filteredStorage").Value;
+                    }
+                }
+                catch (Exception e)
+                {
+                    State.Common.Logger.LogOnce("Failed to find filteredStorage in " + storageType.ToString(), e);
                 }
             }
             return null;
@@ -95,13 +109,7 @@ namespace MaterialColor
             }
             else if ((treeFilterable = building.GetComponent<TreeFilterable>()) != null)
             {
-                FilteredStorage filteredStorage = ExtractFilteredStorage(treeFilterable);
-
-                if (filteredStorage != null)
-                {
-                    filteredStorage.filterTint = color;
-                    filteredStorage.FilterChanged();
-                }
+                TryApplyTintViaTreeFilterable(treeFilterable, color);
             }
             else if ((kAnimBase = building.GetComponent<KAnimControllerBase>()) != null)
             {
@@ -111,6 +119,28 @@ namespace MaterialColor
             {
                 State.Common.Logger.LogOnce($"Invalid building <{building}> and its not a registered tile.");
             }
+        }
+
+        private static bool TryApplyTintViaTreeFilterable(TreeFilterable treeFilterable, Color32 targetColor)
+        {
+            try
+            {
+                var traversedTreeFilterable = Traverse.Create(treeFilterable);
+
+                traversedTreeFilterable.Field("filterTint").SetValue(targetColor);
+
+                var tags = traversedTreeFilterable.Field<List<Tag>>("acceptedTags").Value.ToArray();
+
+                treeFilterable.OnFilterChanged(tags);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                State.Common.Logger.LogOnce("Failed to apply tint using TreeFiltertable traverse", e);
+            }
+
+            return false;
         }
 
         private static void ApplyColorToTile(BuildingComplete building, Color color)
