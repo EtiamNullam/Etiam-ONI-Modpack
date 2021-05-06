@@ -15,15 +15,6 @@ namespace MaterialColor
     /// </summary>
     public static class Painter
     {
-        private static readonly List<Type> StorageTypes = new List<Type>
-        {
-            typeof(RationBox),
-            typeof(Refrigerator),
-            typeof(SolidConduitInbox),
-            typeof(StorageLocker),
-            typeof(TinkerStation)
-        };
-
         private static readonly string ExcludeKeyword = "NoPaint";
         private static readonly Tag ExcludedTag = new Tag("NoPaint");
 
@@ -99,7 +90,7 @@ namespace MaterialColor
             }
         }
 
-        private static bool TryApplyTintViaOwnable(Ownable ownable, Color32 targetColor)
+        private static bool TryApplyTintViaOwnable(Ownable ownable, Color targetColor)
         {
             try
             {
