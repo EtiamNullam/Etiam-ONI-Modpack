@@ -75,27 +75,6 @@ namespace MaterialColor
             }
         }
 
-        private static FilteredStorage ExtractFilteredStorage(Component building)
-        {
-            foreach (Type storageType in StorageTypes)
-            {
-                try
-                {
-                    Component comp = building.GetComponent(storageType);
-
-                    if (comp != null)
-                    {
-                        return Traverse.Create(comp).Field<FilteredStorage>("filteredStorage").Value;
-                    }
-                }
-                catch (Exception e)
-                {
-                    State.Common.Logger.LogOnce("Failed to find filteredStorage in " + storageType.ToString(), e);
-                }
-            }
-            return null;
-        }
-
         private static void ApplyColorToBuilding(BuildingComplete building, Color color)
         {
             TreeFilterable treeFilterable;
@@ -104,8 +83,7 @@ namespace MaterialColor
 
             if ((ownable = building.GetComponent<Ownable>()) != null)
             {
-                Traverse.Create(ownable).Field("ownedTint").SetValue(color);
-                Traverse.Create(ownable).Method("UpdateTint").GetValue();
+                TryApplyTintViaOwnable(ownable, color);
             }
             else if ((treeFilterable = building.GetComponent<TreeFilterable>()) != null)
             {
@@ -119,6 +97,23 @@ namespace MaterialColor
             {
                 State.Common.Logger.LogOnce($"Invalid building <{building}> and its not a registered tile.");
             }
+        }
+
+        private static bool TryApplyTintViaOwnable(Ownable ownable, Color32 targetColor)
+        {
+            try
+            {
+                Traverse.Create(ownable).Field("ownedTint").SetValue(targetColor);
+                Traverse.Create(ownable).Method("UpdateTint").GetValue();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                State.Common.Logger.Log("Failed to apply tint via ownable", e);
+            }
+
+            return false;
         }
 
         private static bool TryApplyTintViaTreeFilterable(TreeFilterable treeFilterable, Color32 targetColor)
