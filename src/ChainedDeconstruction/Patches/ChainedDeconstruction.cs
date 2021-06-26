@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace ChainedDeconstruction
 {
     [HarmonyPatch(typeof(Deconstructable))]
     [HarmonyPatch("TriggerDestroy")]
-    public static class ChainedDeconstruction
+    public class ChainedDeconstruction : KMod.UserMod2
     {
         private static readonly MethodInfo ForceDeconstruct = AccessTools.Method(typeof(Deconstructable), "OnCompleteWork");
         private static readonly object[] NullWorkerParameter = new[] { (Worker)null };
@@ -23,8 +23,11 @@ namespace ChainedDeconstruction
 
         private static readonly List<int> CellsDeconstructed = new List<int>();
 
-        public static void OnLoad()
+        public override void OnLoad(Harmony harmony)
         {
+
+            base.OnLoad(harmony);
+
             if (State.Common.ConfigPath == null)
             {
                 return;
@@ -57,7 +60,7 @@ namespace ChainedDeconstruction
                     .ToArray();
 
                 State.ChainAll = false;
-                
+
                 State.Common.Logger.Log("Set chainables:", String.Join(", ", State.Chainables));
             }
         }
