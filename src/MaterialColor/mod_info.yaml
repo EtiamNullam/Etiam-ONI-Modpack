@@ -1,2 +1,3 @@
 supportedContent: ALL
-lastWorkingBuild: 447596
+minimumSupportedBuild: 447596
+APIVersion: 2
