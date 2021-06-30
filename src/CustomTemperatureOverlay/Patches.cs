@@ -5,16 +5,18 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Common;
-using Harmony;
+using HarmonyLib;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace CustomTemperatureOverlay
 {
-    public static class Patches
+    public class Patches : KMod.UserMod2
     {
-        public static void OnLoad()
+        public override void OnLoad(Harmony harmony)
         {
+            base.OnLoad(harmony);
+
             Mod.Config.Load();
             Mod.Config.Watch();
         }

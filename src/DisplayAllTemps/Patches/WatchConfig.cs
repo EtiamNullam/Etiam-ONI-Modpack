@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,10 +8,12 @@ using System.Text;
 
 namespace DisplayAllTemps.Patches
 {
-    public static class GameLaunch
+    public class GameLaunch : KMod.UserMod2
     {
-        public static void OnLoad()
+        public override void OnLoad(Harmony harmony)
         {
+            base.OnLoad(harmony);
+
             try
             {
                 if (State.Common.ConfigPath == null)

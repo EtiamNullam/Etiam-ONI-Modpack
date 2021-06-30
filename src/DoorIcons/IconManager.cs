@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -201,6 +201,7 @@ namespace DoorIcons
             }
         }
 
+        // TODO: remove also when removed via sandbox mode
         public static void RemoveIcon(Door door)
         {
             if (State.DoorIcons.TryGetValue(door, out var go))
