@@ -155,9 +155,10 @@ namespace GasOverlay
 
                 oxygenInfo.name = OverlayTitle.ToUpper();
                 oxygenInfo.infoUnits = ElementLoader.elements
-                    .Where(element =>!element.disabled
+                    .Where(element => !element.disabled
                         && element.IsGas
                         && element.lowTemp < 1000)
+                    .OrderBy(element => element.molarMass)
                     .Select(element => new OverlayLegend.OverlayInfoUnit(
                         icon,
                         Util.StripTextFormatting(element.name),
