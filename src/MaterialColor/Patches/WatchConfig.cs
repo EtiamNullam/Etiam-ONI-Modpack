@@ -1,5 +1,5 @@
 ﻿using Common;
-using Harmony;
+using HarmonyLib;
 using MaterialColor.Data;
 using MaterialColor.IO;
 using System;
@@ -10,15 +10,17 @@ using System.Text;
 
 namespace MaterialColor.Patches
 {
-    public static class WatchConfig
+    public class WatchConfig : KMod.UserMod2
     {
         private static PeriodicRefresher Refresher;
 
         private static readonly string MainConfigFilename = "Config.json";
         private static readonly string ElementColorsFilename = "ElementColors.json";
 
-        public static void OnLoad()
+        public override void OnLoad(Harmony harmony)
         {
+            base.OnLoad(harmony);
+
             if (State.Common.ConfigPath == null)
             {
                 return;
