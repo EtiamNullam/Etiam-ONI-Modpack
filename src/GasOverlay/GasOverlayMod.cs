@@ -64,7 +64,7 @@ namespace GasOverlay
             {
                 var element = Grid.Element[cell];
 
-                if (LastColors == null || cell > LastColors.Length)
+                if (LastColors == null || cell >= LastColors.Length)
                 {
                     ResetLastColors();
                 }
