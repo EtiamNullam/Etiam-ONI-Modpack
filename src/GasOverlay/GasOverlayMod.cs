@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Common;
 using HarmonyLib;
-using Newtonsoft.Json;
 using UnityEngine;
 
 namespace GasOverlay
 {
     public static class GasOverlayMod
     {
-        private static Color?[] LastColors;
+        private static Color[] LastColors;
         private const string ConfigFileName = "Config.json";
         private const string OverlayTitle = "Gas Overlay";
 
         private static void ResetLastColors()
         {
-            LastColors = new Color?[Grid.CellCount];
+            LastColors = Enumerable
+                .Repeat(State.Config.NotGasColor, Grid.CellCount)
+                .ToArray();
         }
 
         public static void OnLoad()
@@ -63,45 +62,47 @@ namespace GasOverlay
             // TODO: add error handling
             public static bool Prefix(int cell, ref Color __result)
             {
-                Element element = Grid.Element[cell];
+                var element = Grid.Element[cell];
 
-                if (element.IsGas)
+                if (LastColors == null || cell > LastColors.Length)
                 {
-                    if (LastColors == null || cell > LastColors.Length)
-                    {
-                        ResetLastColors();
-                    }
+                    ResetLastColors();
+                }
 
-                    float mass = Grid.Mass[cell];
-                    float maxMass = State.Config.MaxMass;
+                var color = element.IsGas
+                    ? GetGasColor(element, cell)
+                    : State.Config.NotGasColor;
 
-                    float pressureFraction = GetPressureFraction(mass, maxMass);
+                var lastColor = LastColors[cell];
 
-                    Color color = GetSubstanceColor(element);
-
-                    ScaleToPressure(ref color, pressureFraction);
-
-                    if (State.Config.ShowEarDrumPopMarker && mass > State.Config.EarPopMass)
-                    {
-                        MarkEarDrumPop(ref color, element.id, mass);
-                    }
-
-                    Color? lastColor = LastColors[cell];
-
-                    if (lastColor.HasValue)
-                    {
-                        TransitColor(ref color, lastColor.Value);
-                    }
-
+                if (lastColor != color)
+                {
+                    TransitColor(ref color, lastColor);
                     LastColors[cell] = color;
-                    __result = color;
                 }
-                else
-                {
-                    __result = State.Config.NotGasColor;
-                }
+
+                __result = color;
 
                 return false;
+            }
+
+            private static Color GetGasColor(Element element, int cellIndex)
+            {
+                float mass = Grid.Mass[cellIndex];
+                float maxMass = State.Config.MaxMass;
+
+                float pressureFraction = GetPressureFraction(mass, maxMass);
+
+                Color color = GetSubstanceColor(element);
+
+                ScaleToPressure(ref color, pressureFraction);
+
+                if (State.Config.ShowEarDrumPopMarker && mass > State.Config.EarPopMass)
+                {
+                    MarkEarDrumPop(ref color, element.id, mass);
+                }
+
+                return color;
             }
 
             private static float GetPressureFraction(float mass, float maxMass)
