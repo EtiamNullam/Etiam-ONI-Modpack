@@ -8,9 +8,10 @@ namespace GasOverlay
 {
     public static class GasOverlayMod
     {
-        private static Color[] LastColors;
         private const string ConfigFileName = "Config.json";
         private const string OverlayTitle = "Gas Overlay";
+
+        private static Color[] LastColors;
 
         private static void ResetLastColors()
         {
@@ -53,7 +54,14 @@ namespace GasOverlay
         private static Color32 GetSubstanceColor(Element element)
         {
             var color = element.substance.colour;
-            return new Color32(color.r, color.g, color.b, byte.MaxValue);
+
+            return new Color32
+            (
+                color.r,
+                color.g,
+                color.b,
+                byte.MaxValue
+            );
         }
 
         [HarmonyPatch(typeof(SimDebugView), "GetOxygenMapColour")]
@@ -91,15 +99,15 @@ namespace GasOverlay
                 float mass = Grid.Mass[cellIndex];
                 float maxMass = State.Config.MaxMass;
 
-                float pressureFraction = GetPressureFraction(mass, maxMass);
+                float pressure = GetPressureFraction(mass, maxMass);
 
                 Color color = GetSubstanceColor(element);
 
-                ScaleToPressure(ref color, pressureFraction);
+                ScaleToPressure(ref color, pressure);
 
                 if (State.Config.ShowEarDrumPopMarker && mass > State.Config.EarPopMass)
                 {
-                    MarkEarDrumPop(ref color, element.id, mass);
+                    MarkEarDrumPop(ref color, element.id);
                 }
 
                 return color;
@@ -122,7 +130,7 @@ namespace GasOverlay
                 color = Color.LerpUnclamped(Color.white, color, fraction);
             }
 
-            private static void MarkEarDrumPop(ref Color color, SimHashes elementID, float mass)
+            private static void MarkEarDrumPop(ref Color color, SimHashes elementID)
             {
                 switch (elementID)
                 {
@@ -151,14 +159,14 @@ namespace GasOverlay
         {
             public static void Postfix(List<OverlayLegend.OverlayInfo> ___overlayInfoList)
             {
-                var oxygenInfo = ___overlayInfoList.Find(i => i.mode == OverlayModes.Oxygen.ID);
-                var icon = oxygenInfo.infoUnits[0].icon;
+                var oxygenOverlay = ___overlayInfoList
+                    .Find(info => info.mode == OverlayModes.Oxygen.ID);
 
-                oxygenInfo.name = OverlayTitle.ToUpper();
-                oxygenInfo.infoUnits = ElementLoader.elements
-                    .Where(element => !element.disabled
-                        && element.IsGas
-                        && element.lowTemp < 1000)
+                var icon = oxygenOverlay.infoUnits[0].icon;
+
+                oxygenOverlay.name = OverlayTitle.ToUpper();
+                oxygenOverlay.infoUnits = ElementLoader.elements
+                    .Where(ShouldBeListedInOverlayLegend)
                     .OrderBy(element => element.molarMass)
                     .Select(element => new OverlayLegend.OverlayInfoUnit(
                         icon,
@@ -167,6 +175,11 @@ namespace GasOverlay
                         Color.white))
                     .ToList();
             }
+
+            private static bool ShouldBeListedInOverlayLegend(Element element)
+                => element.disabled == false
+                && element.IsGas
+                && element.lowTemp < 1000;
         }
 
         [HarmonyPatch(typeof(OverlayMenu), "InitializeToggles")]
@@ -174,13 +187,18 @@ namespace GasOverlay
         {
             public static void Postfix(List<KIconToggleMenu.ToggleInfo> ___overlayToggleInfos)
             {
-                var o2Toggle = ___overlayToggleInfos.Find(
-                    i => Traverse.Create(i).Field("simView").GetValue<HashedString>() == OverlayModes.Oxygen.ID
-                );
+                var toggle = ___overlayToggleInfos
+                    .Find(info => Traverse
+                        .Create(info)
+                        .Field("simView")
+                        .GetValue<HashedString>() == OverlayModes.Oxygen.ID);
 
-                o2Toggle.text = OverlayTitle;
-                o2Toggle.tooltipHeader = OverlayTitle;
-                o2Toggle.tooltip = GameUtil.ReplaceHotkeyString("Displays gasses {Hotkey}", o2Toggle.hotKey);
+                toggle.text = OverlayTitle;
+                toggle.tooltipHeader = OverlayTitle;
+                toggle.tooltip = GameUtil.ReplaceHotkeyString(
+                    "Displays gasses {Hotkey}",
+                    toggle.hotKey
+                );
             }
         }
     }
