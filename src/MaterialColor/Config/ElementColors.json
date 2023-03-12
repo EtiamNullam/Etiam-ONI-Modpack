@@ -88,11 +88,6 @@
     "Blue": 0.9,
     "DarkMode": true
   },
-  "Wolframite": {
-    "Red": 0,
-    "Green": 0,
-    "Blue": 0.2
-  },
   "GoldAmalgam": {
     "Red": 0.075,
     "Green": 0.1,
@@ -109,6 +104,11 @@
     "Green": 0.85,
     "Blue": 1,
     "DarkMode": true
+  },
+  "Wolframite": {
+    "Red": 0.1,
+    "Green": 0.1,
+    "Blue": 0.25
   },
   // Soil
   "Dirt": {
