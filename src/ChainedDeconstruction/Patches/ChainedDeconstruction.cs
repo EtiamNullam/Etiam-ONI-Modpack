@@ -10,7 +10,15 @@ using UnityEngine;
 namespace ChainedDeconstruction
 {
     [HarmonyPatch(typeof(Deconstructable))]
-    [HarmonyPatch("TriggerDestroy")]
+    [HarmonyPatch(
+        "TriggerDestroy",
+        new Type[] {
+            typeof(float),
+            typeof(byte),
+            typeof(int),
+            typeof(Worker),
+        }
+    )]
     public class ChainedDeconstruction : KMod.UserMod2
     {
         private static readonly MethodInfo ForceDeconstruct = AccessTools.Method(typeof(Deconstructable), "OnCompleteWork");
