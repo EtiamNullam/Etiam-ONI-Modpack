@@ -17,22 +17,6 @@
 
         public static bool ConfigChanged;
 
-        // TODO: load from file instead
-        [NotNull]
-        public static readonly List<string> TileNames = new List<string>
-        {
-            "Tile",
-            "MeshTile",
-            "GlassTile",
-            "BunkerTile",
-            "InsulationTile",
-            "GasPermeableMembrane",
-            "TilePOI",
-            "PlasticTile",
-            "MetalTile",
-            "CarpetTile",
-        }.Select(name => name + "Complete").ToList();
-
         public static Core Common = new Core("MaterialColor", "1739635014", "Config", false);
 
         private static Config _config = new Config();
