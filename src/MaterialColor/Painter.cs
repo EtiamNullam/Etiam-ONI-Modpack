@@ -51,7 +51,7 @@ namespace MaterialColor
 
                 Filter(building.name, ref color);
 
-                if (State.TileNames.Contains(building.name))
+                if (building.gameObject.TryGetComponent<KAnimGridTileVisualizer>(out _))
                 {
                     ApplyColorToTile(building, color);
                 }
@@ -117,7 +117,7 @@ namespace MaterialColor
 
                 var tags = traversedTreeFilterable.Field<List<Tag>>("acceptedTags").Value.ToArray();
 
-                treeFilterable.OnFilterChanged(tags);
+                treeFilterable.OnFilterChanged(new HashSet<Tag>(tags));
 
                 return true;
             }

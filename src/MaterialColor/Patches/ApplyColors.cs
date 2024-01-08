@@ -107,11 +107,11 @@ namespace MaterialColor.Patches
         [HarmonyPatch(typeof(Deconstructable), "OnCompleteWork")]
         public static class Deconstructable_OnCompleteWork_MatCol
         {
-            public static void Postfix(Deconstructable __instance)
+            public static void Prefix(Deconstructable __instance)
             {
                 try
                 {
-                    if (State.TileNames.Contains(__instance.name))
+                    if (__instance.gameObject.TryGetComponent<KAnimGridTileVisualizer>(out _))
                     {
                         State.TileColors[__instance.GetCell()] = null;
                     }

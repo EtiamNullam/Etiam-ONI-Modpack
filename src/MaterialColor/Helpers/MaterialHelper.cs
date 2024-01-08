@@ -8,7 +8,7 @@
     {
         public static bool CellIndexToElement(int cellIndex, out Element element)
         {
-            byte cellElementIndex = Grid.ElementIdx[cellIndex];
+            ushort cellElementIndex = Grid.ElementIdx[cellIndex];
 
             element = ElementLoader.elements?[cellElementIndex];
 
