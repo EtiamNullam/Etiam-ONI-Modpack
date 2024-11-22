@@ -16,13 +16,13 @@ namespace ChainedDeconstruction
             typeof(float),
             typeof(byte),
             typeof(int),
-            typeof(Worker),
+            typeof(StandardWorker),
         }
     )]
     public class ChainedDeconstruction : KMod.UserMod2
     {
         private static readonly MethodInfo ForceDeconstruct = AccessTools.Method(typeof(Deconstructable), "OnCompleteWork");
-        private static readonly object[] NullWorkerParameter = new[] { (Worker)null };
+        private static readonly object[] NullWorkerParameter = new[] { (StandardWorker)null };
         private static readonly AccessTools.FieldRef<Deconstructable, bool> DestroyedGetter = AccessTools.FieldRefAccess<Deconstructable, bool>("destroyed");
 
         private static readonly string ConfigFileName = "Chainables.json";
