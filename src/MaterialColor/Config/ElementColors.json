@@ -1,40 +1,45 @@
 {
   // Refined Metal
-	"Copper": {
-		"Red": 0.3,
-		"Green": 0.1,
-		"Blue": 0
-	},
-	"Iron": {
-		"Red": 0.1,
-		"Green": 0.1,
-		"Blue": 0.2
-	},
-	"Steel": {
-		"Red": 0.2,
-		"Green": 0.2,
-		"Blue": 0.2
-	},
-	"Gold": {
-		"Red": 0.2,
-		"Green": 0.15,
-		"Blue": 0
-	},
-	"Niobium": {
-		"Red": 0,
-		"Green": 0.2,
-		"Blue": 0.1
-	},
-	"TempConductorSolid": {
-		"Red": 0.3,
-		"Green": 0,
-		"Blue": 0
-	},
-	"Tungsten": {
-		"Red": 0.15,
-		"Green": 0.3,
-		"Blue": 0.5
-	},
+  "Copper": {
+    "Red": 0.3,
+    "Green": 0.1,
+    "Blue": 0
+  },
+  "Iron": {
+    "Red": 0.1,
+    "Green": 0.1,
+    "Blue": 0.2
+  },
+  "Steel": {
+    "Red": 0.2,
+    "Green": 0.2,
+    "Blue": 0.2
+  },
+  "Gold": {
+    "Red": 0.2,
+    "Green": 0.15,
+    "Blue": 0
+  },
+  "Niobium": {
+    "Red": 0,
+    "Green": 0.2,
+    "Blue": 0.1
+  },
+  "TempConductorSolid": {
+    "Red": 0.3,
+    "Green": 0,
+    "Blue": 0
+  },
+  "Tungsten": {
+    "Red": 0.15,
+    "Green": 0.3,
+    "Blue": 0.5
+  },
+  "Cobalt": {
+    "Red": 0,
+    "Green": 0.3,
+    "Blue": 0.5
+  },
   // Raw Mineral
   "Sandstone": {
     "Red": 1,
@@ -93,13 +98,19 @@
     "Green": 0.1,
     "Blue": 0.0
   },
-	"AluminumOre": {
+  "AluminumOre": {
     "Red": 1,
     "Green": 0.75,
     "Blue": 0.7,
     "DarkMode": true
-	},
-	// Soil
+  },
+  "Cobaltite": {
+    "Red": 0.4,
+    "Green": 0.85,
+    "Blue": 1,
+    "DarkMode": true
+  },
+  // Soil
   "Dirt": {
     "Red": 0.05,
     "Green": 0,
@@ -122,14 +133,14 @@
     "Blue": 1.0,
     "DarkMode": true
   },
-	"Glass": {
+  "Glass": {
     "Red": 0.0,
     "Green": 0.3,
     "Blue": 0.7
-	},
-	"Diamond": {
+  },
+  "Diamond": {
     "Red": 0.4,
     "Green": 0.0,
     "Blue": 0.5
-	}
+  }
 }
