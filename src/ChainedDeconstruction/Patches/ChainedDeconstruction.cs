@@ -153,8 +153,25 @@ namespace ChainedDeconstruction
                     {
                         return;
                     }
+                    
+                    var primaryElement = deconstructable.GetComponent<PrimaryElement>();
 
-                    ForceDeconstruct.Invoke(deconstructable, NullWorkerParameter);
+                    if (primaryElement)
+                    {
+                        if (primaryElement.Temperature > 0)
+                        {
+                            ForceDeconstruct.Invoke(deconstructable, NullWorkerParameter);
+                        }
+                        else
+                        {
+                            State.Common.Logger.LogOnce($"Temperature of {deconstructable.name} is {primaryElement.Temperature}, this is most likely an error. Skipping deconstruct to prevent crash.");
+                        }
+                    }
+                    else
+                    {
+                        State.Common.Logger.LogOnce($"PrimaryElement component of {deconstructable.name} is null, this is most likely an error. Skipping deconstruct to prevent possible crash.");
+                    }
+
                     CellsDeconstructed.Add(cell);
                     DeconstructAdjacent(deconstructable, name, layer);
                 });
