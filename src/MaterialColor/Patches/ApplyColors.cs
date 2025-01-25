@@ -111,7 +111,9 @@ namespace MaterialColor.Patches
             {
                 try
                 {
-                    if (__instance.gameObject.TryGetComponent<KAnimGridTileVisualizer>(out _))
+                    var isTile = __instance.TryGetComponent<KAnimGridTileVisualizer>(out _);
+
+                    if (isTile)
                     {
                         State.TileColors[__instance.GetCell()] = null;
                     }

@@ -42,7 +42,12 @@ namespace MaterialColor
         {
             try
             {
-                if (building.name == "PixelPackComplete" || building.name == "WallpaperComplete" || building.name.Contains(ExcludeKeyword) || building.HasTag(ExcludedTag))
+                var isExcluded = building.name == "PixelPackComplete"
+                    || building.name == "WallpaperComplete"
+                    || building.name.Contains(ExcludeKeyword)
+                    || building.HasTag(ExcludedTag);
+
+                if (isExcluded)
                 {
                     return;
                 }
@@ -51,7 +56,9 @@ namespace MaterialColor
 
                 Filter(building.name, ref color);
 
-                if (building.gameObject.TryGetComponent<KAnimGridTileVisualizer>(out _))
+                var isTile = building.TryGetComponent<KAnimGridTileVisualizer>(out _);
+
+                if (isTile)
                 {
                     ApplyColorToTile(building, color);
                 }
@@ -133,7 +140,7 @@ namespace MaterialColor
         {
             try
             {
-                State.TileColors[Grid.PosToCell(building.gameObject)] = color.ToTileColor();
+                State.TileColors[Grid.PosToCell(building)] = color.ToTileColor();
             }
             catch (Exception e)
             {
