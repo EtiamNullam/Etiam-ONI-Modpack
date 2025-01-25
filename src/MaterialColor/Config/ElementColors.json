@@ -40,6 +40,11 @@
     "Green": 0.3,
     "Blue": 0.5
   },
+  "FoolsGold": {
+    "Red": 0.175,
+    "Green": 0.1,
+    "Blue": 0
+  },
   // Raw Mineral
   "Sandstone": {
     "Red": 1,
@@ -54,9 +59,9 @@
     "DarkMode": true
   },
   "Granite": {
-    "Red": 0.15,
-    "Green": 0.15,
-    "Blue": 0.15
+    "Red": 0.05,
+    "Green": 0.05,
+    "Blue": 0
   },
   "SedimentaryRock": {
     "Red": 0.6,
@@ -110,6 +115,11 @@
     "Green": 0.1,
     "Blue": 0.25
   },
+  "Cinnabar": {
+    "Red": 0.25,
+    "Green": 0.25,
+    "Blue": 0.25
+  },
   // Soil
   "Dirt": {
     "Red": 0.05,
@@ -142,5 +152,10 @@
     "Red": 0.4,
     "Green": 0.0,
     "Blue": 0.5
+  },
+  "Ceramic": {
+    "Red": 0.15,
+    "Green": 0.15,
+    "Blue": 0
   }
 }
