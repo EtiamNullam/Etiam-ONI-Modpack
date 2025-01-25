@@ -54,36 +54,73 @@ namespace DoorIcons
 
             Util.KInstantiate(renderer, GameScreenManager.Instance.worldSpaceCanvas);
 
-            var pos = Grid.PosToXY(door.transform.position);
-            var rotatable = door.GetComponent<Rotatable>();
-
-            if (rotatable != null && rotatable.GetOrientation() == Orientation.R90)
-            {
-                renderer.transform.Rotate(0, 0, -90);
-
-                go.transform.position = new Vector3
-                (
-                    pos.X + 1f,
-                    pos.Y + 0.5f,
-                    Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
-                );
-            }
-            else
-            {
-                go.transform.position = new Vector3
-                (
-                    pos.X + 0.5f,
-                    pos.Y + 1f,
-                    Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
-                );
-            }
-
             go.transform.localScale = new Vector3
             (
                 0.005f,
                 0.005f,
                 1
             );
+
+            var pos = Grid.PosToXY(door.transform.position);
+
+            var anchorX = pos.X + 0.5f;
+            var anchorY = pos.Y + 0.5f;
+
+            var def = door.building.Def;
+
+            var width = def.WidthInCells;
+            var height = def.HeightInCells;
+
+            var rotatable = door.GetComponent<Rotatable>();
+
+            go.transform.position = new Vector3
+            (
+                anchorX + ((width - 1) / 2f),
+                anchorY + ((height - 1) / 2f),
+                Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
+            );
+
+            if (rotatable == null)
+            {
+                State.Common.Logger.LogOnce("Vanilla doors usually have Rotatable component");
+
+                return go;
+            }
+
+            switch (rotatable.GetOrientation())
+            {
+                case Orientation.R90:
+                    go.transform.position = new Vector3
+                    (
+                        anchorX + ((height - 1) / 2f),
+                        anchorY + ((width - 1) / 2f),
+                        Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
+                    );
+
+                    renderer.transform.Rotate(0, 0, -90);
+
+                    break;
+                case Orientation.R180:
+                    go.transform.position = new Vector3
+                    (
+                        anchorX - ((width - 1) / 2f),
+                        anchorY - ((height - 1) / 2f),
+                        Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
+                    );
+
+                    break;
+                case Orientation.R270:
+                    go.transform.position = new Vector3
+                    (
+                        anchorX - ((height - 1) / 2f),
+                        anchorY - ((width - 1) / 2f),
+                        Grid.GetLayerZ(Grid.SceneLayer.SceneMAX)
+                    );
+
+                    renderer.transform.Rotate(0, 0, -90);
+
+                    break;
+            }
 
             return go;
         }
