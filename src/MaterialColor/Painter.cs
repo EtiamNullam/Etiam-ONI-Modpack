@@ -118,19 +118,13 @@ namespace MaterialColor
         {
             try
             {
-                var traversedTreeFilterable = Traverse.Create(treeFilterable);
-
-                traversedTreeFilterable.Field("filterTint").SetValue(targetColor);
-
-                var tags = traversedTreeFilterable.Field<List<Tag>>("acceptedTags").Value.ToArray();
-
-                treeFilterable.OnFilterChanged(new HashSet<Tag>(tags));
+                treeFilterable.filterTint = targetColor;
 
                 return true;
             }
             catch (Exception e)
             {
-                State.Common.Logger.LogOnce("Failed to apply tint using TreeFiltertable traverse", e);
+                State.Common.Logger.LogOnce("Failed to apply tint via TreeFilterable", e);
             }
 
             return false;
