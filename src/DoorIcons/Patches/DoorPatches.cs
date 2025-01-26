@@ -53,6 +53,7 @@ namespace DoorIcons.Patches
                         __instance.gameObject.Subscribe((int)GameHashes.DoorStateChanged, data => IconManager.UpdateIcon(door));
                         __instance.gameObject.Subscribe((int)GameHashes.CopySettings, data => IconManager.UpdateIcon(door));
                         __instance.gameObject.Subscribe((int)GameHashes.DoorControlStateChanged, data => IconManager.UpdateIcon(door));
+                        __instance.gameObject.Subscribe((int)GameHashes.ObjectDestroyed, data => IconManager.RemoveIcon(door));
                     }
                 }
                 catch (Exception e)
