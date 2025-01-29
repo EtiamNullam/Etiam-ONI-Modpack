@@ -10,47 +10,6 @@ namespace CustomTemperatureOverlay
 {
     public static class Mod
     {
-        public static void UpdateColorSet()
-        {
-            try
-            {
-                var colorSet = GlobalAssets.Instance.colorSet;
-                var stepsLength = State.Steps.Length;
-                var thresholdFields = typeof(ColorSet)
-                    .GetFields()
-                    .Where(field => field.Name.StartsWith("temperatureThreshold"))
-                    .ToList();
-
-                for (int i = 0; i < 8; i++)
-                {
-                    var step = stepsLength > i
-                        ? State.Steps[i]
-                        : State.Steps[stepsLength - 1];
-
-                    thresholdFields[i].SetValue(colorSet, (Color32)step.color);
-                    SimDebugView.Instance.temperatureThresholds[i].value = step.value;
-                }
-            }
-            catch (Exception e)
-            {
-                State.Common.Logger.LogOnce("Failed to update ColorSet", e);
-            }
-        }
-
-        private static void UpdateGameColors()
-        {
-            var colorSet = Traverse.Create(GlobalAssets.Instance.colorSet)
-                .Field("namedLookup")
-                .SetValue(null);
-
-            colorSet
-                .Method("Init")
-                .GetValue();
-
-            Traverse.Create(SimDebugView.Instance)
-                .Method("OnSpawn")
-                .GetValue();
-        }
 
         public static class Config
         {
@@ -72,8 +31,6 @@ namespace CustomTemperatureOverlay
                 {
                     Config.Load(steps);
 
-                    Mod.UpdateColorSet();
-                    Mod.UpdateGameColors();
 
                     State.Common.Logger.Log("Config changed and reloaded");
                 }
