@@ -28,36 +28,7 @@ namespace CustomTemperatureOverlay
                         return true;
                     }
 
-                    var firstStep = State.Steps[0];
-
-                    if (actualTemperature <= firstStep.value)
-                    {
-                        __result = firstStep.color;
-
-                        return false;
-                    }
-
-                    var lastStep = State.Steps[State.Steps.Length - 1];
-
-                    if (actualTemperature >= lastStep.value)
-                    {
-                        __result = lastStep.color;
-
-                        return false;
-                    }
-
-                    FindStepsAround(actualTemperature, out var previousStep, out var nextStep);
-
-                    var previousToActualTemperatureDelta = actualTemperature - previousStep.value;
-                    var previousToNextDelta = nextStep.value - previousStep.value;
-
-                    var factor = previousToActualTemperatureDelta / previousToNextDelta;
-
-                    __result = Color.Lerp(
-                        previousStep.color,
-                        nextStep.color,
-                        factor
-                    );
+                    __result = Mod.GetTemperatureColor(actualTemperature);
 
                     return false;
                 }
@@ -67,30 +38,6 @@ namespace CustomTemperatureOverlay
                 }
 
                 return true;
-            }
-
-            private static void FindStepsAround(float temperature, out Data.TemperatureStep previousStep, out Data.TemperatureStep nextStep)
-            {
-                var stepsCount = State.Steps.Length;
-                var firstStep = State.Steps[0];
-                previousStep = firstStep;
-
-                var currentStep = 1;
-
-                while (currentStep < stepsCount - 1)
-                {
-                    var currentTemperatureStep = State.Steps[currentStep];
-
-                    if (currentTemperatureStep.value > temperature)
-                    {
-                        break;
-                    }
-
-                    previousStep = currentTemperatureStep;
-                    currentStep++;
-                }
-
-                nextStep = State.Steps[currentStep];
             }
         }
 
@@ -102,26 +49,7 @@ namespace CustomTemperatureOverlay
             {
                 try
                 {
-                    var stepsLength = State.Steps.Length;
-                    var legendLength = 8;
-
-                    for (int i = 0; i < legendLength; i++)
-                    {
-                        var step = stepsLength > i
-                            ? State.Steps[i]
-                            : State.Steps[stepsLength - 1];
-
-                        var formattedTemperature = GameUtil.GetFormattedTemperature(
-                            step.value,
-                            GameUtil.TimeSlice.None,
-                            GameUtil.TemperatureInterpretation.Absolute,
-                            true,
-                            false
-                        );
-
-                        ___temperatureLegend[legendLength - i - 1].colour = step.color;
-                        ___temperatureLegend[legendLength - i - 1].desc_arg = formattedTemperature;
-                    }
+                    Mod.UpdateTemperatureLegend(ref ___temperatureLegend);
                 }
                 catch (Exception e)
                 {
